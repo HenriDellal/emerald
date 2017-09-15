@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="appShortcutTypes">
+        <item>Text</item>
+        <item>Icon</item>
+        <item>Icon and text</item>
+    </string-array>
+    <string-array name="appShortcutValues" translatable="false">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+	<string-array name="themeTypes">
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
+    <string-array name="themeValues" translatable="false">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="orientationTypes">
+        <item>Portrait</item>
+        <item>Landscape</item>
+        <item>System</item>
+        <item>Always auto-rotate</item>
+    </string-array>
+    <string-array name="orientationValues" translatable="false">
+        <item>1</item>
+        <item>0</item>
+        <item>2</item>
+        <item>4</item>
+    </string-array>
+    <string-array name="fontStyleTypes">
+        <item>Normal</item>
+        <item>Bold</item>
+        <item>Italic</item>
+        <item>Bold and italic</item>
+    </string-array>
+    <string-array name="fontStyleValues" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+</resources>

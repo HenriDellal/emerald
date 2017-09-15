@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="portraitPrefs">Налаштування портретного режиму</string>
+	<string name="landscapePrefs">Налаштування ландшафтного режиму</string>
+
+	<string name="appShortcut">Ярлики додатків</string>
+	<string name="iconSize">Розмір піктограм</string>
+	<string name="columnWidth">Ширина колонки</string>
+	<string name="verticalSpacing">Вертикальний інтервал</string>
+	<string name="tileView">Вид плитки</string>
+	<string name="orientation">Орієнтація екрана</string>
+	<string name="theme">Тема</string>
+	<string name="iconPack">Пакет іконок</string>
+	<string name="defaultIconPack">За умовчанням</string>
+	<string name="historySize">Розмір історії</string>
+	<string name="password">Пароль</string>
+	<string name="passwordSummary">Заблокувати налаштування та приховані програми</string>
+	<string name="passwordHint">Залиште його порожнім, щоб вимкнути блокування</string>
+
+	<string name="createCategory">Нова категорія</string>
+	<string name="launcherSettings">Налаштування лаунчера</string>
+	<string name="rename">Перейменувати</string>
+	<string name="delete">Видалити</string>
+	<string name="accessHidden">Доступ до прихованих додатків</string>
+	<string name="fullScan">Повне сканування</string>
+	<string name="clear">Очистити </string>
+	<string name="uninstall">Видалити</string>
+
+</resources>

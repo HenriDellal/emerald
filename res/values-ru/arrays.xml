@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="themeTypes">
+        <item>Светлая</item>
+        <item>Тëмная</item>
+    </string-array>
+	
+	<string-array name="appShortcutTypes">
+        <item>Текст</item>
+        <item>Иконка</item>
+        <item>Иконка и текст</item>
+    </string-array>
+    <string-array name="orientationTypes">
+        <item>Портретная</item>
+        <item>Ландшафтная</item>
+        <item>Системная</item>
+        <item>Всегда поворачивать</item>
+    </string-array>
+    <string-array name="fontStyleTypes">
+        <item>Обычный</item>
+        <item>Жирный</item>
+        <item>Курсив</item>
+        <item>Жирный курсив</item>
+    </string-array>
+</resources>

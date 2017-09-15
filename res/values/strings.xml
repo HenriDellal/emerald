@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Emerald Launcher</string>
+	<string name="appearancePrefs">Appearance preferences</string>
+	<string name="portraitPrefs">Portrait mode preferences</string>
+	<string name="landscapePrefs">Landscape mode preferences</string>
+	
+	<string name="categoryManager">Category manager</string>
+	<string name="appShortcut">App shortcut</string>
+	<string name="iconSize">Icon size</string>
+	<string name="textSize">Text size</string>
+	<string name="fontStyle">Font style</string>
+	<string name="columnWidth">Column width</string>
+	<string name="verticalSpacing">Vertical spacing</string>
+	<string name="tileView">Grid</string>
+	<string name="scrollbar">Show letter hint on scroll</string>
+	<string name="orientation">Screen orientation</string>
+	<string name="theme">Theme</string>
+	<string name="appsBackground">Apps window background color</string>
+	<string name="barBackground">Top bar background color</string>
+	<string name="iconPack">Icon pack</string>
+	<string name="transformIcons">Transform icons</string>
+	<string name="transformIconsSummary">Edit icons according to icon pack settings</string>
+	<string name="defaultIconPack">Default</string>
+	<string name="fullscreen">Fullscreen mode</string>
+	<string name="historySize">History size</string>
+	<string name="password">Password</string>
+	<string name="passwordSummary">Lock settings and hidden apps</string>
+	<string name="passwordHint">Leave it empty to disable lock</string>
+	<string name="searchProvider">Search provider</string>
+	<string name="keepInMemory">Keep in memory</string>
+	<string name="backupPrefs">Backup preferences</string>
+	<string name="successfulBackup">Backup finished. Backup file can be found at </string>
+	<string name="successfulRestore">Successfully restored.</string>
+	<string name="restorePrefs">Restore preferences</string>
+	<string name="restart">Restart launcher</string>
+	<string name="restartToImplement">Restart launcher to implement changes</string>
+	
+	
+	<string name="launcherSettings">Launcher settings</string>
+	
+	<string name="createCategory">Create category</string>
+	<string name="rename">Rename</string>
+	<string name="editAppList">Edit application list</string>
+	<string name="findInMarket">Find in app market</string>
+	<string name="editAppCategories">Edit application categories</string>
+	<string name="delete">Delete</string>
+	<string name="setHome">Set as home</string>
+	<string name="hide">Hide</string>
+	<string name="unhide">Unhide</string>
+	
+	
+	<string name="accessHidden">Access hidden apps</string>
+	<string name="fullScan">Full scan</string>
+	<string name="clear">Clear</string>
+	
+	<string name="uninstall">Uninstall</string>
+	
+	<string name="aboutTitle">About</string>
+<string name="about">Emerald Launcher
+\n
+\nCopyright 2017 Anri Dellal
+\n
+\nLicensed under GPL-v3
+\nWant to help? Report bugs and submit suggestions via GitHub (https://www.github.com/HenriDellal/emerald) or Google Play listing(http://play.google.com/details?id=ru.henridellal.emerald).
+\n
+\nThanks to:
+\nTheAlaskaLinuxUser (http://thealaskalinuxuser.wordpress.com) for help with Nougat tests, searching and handling bugs.
+\nMax Kerekesha for Ukrainian translation.
+\nAll contributors.
+\n
+\nTinyLaunch
+\nCopyright (c) 2011-12, Alexander R. Pruss
+\nLicensed under BSD-3-Clause
+\nhttps://github.com/arpruss/tinylaunch
+\n
+\nCWAC ColorMixer
+\n
+\nLicensed under the Apache License 2.0.
+\nhttps://github.com/commonsguy/cwac-colormixer
+\n
+\nFont-Awesome
+\nThe font licensed under the SIL OFL 1.1.
+\nhttp://fontawesome.io/</string>
+
+	<!-- DEFAULT VALUES FOR SETTINGS -->
+	
+	<string name="defaultThemeValue" translatable="false">1</string>
+	
+</resources>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="appearancePrefs">Настройки вида</string>
+	<string name="portraitPrefs">Настройки портретного режима</string>
+	<string name="landscapePrefs">Настройки ландшафтного режима</string>
+
+	<string name="categoryManager">Управление категориями</string>
+	<string name="appShortcut">Вид ярлыка</string>
+	<string name="iconSize">Размер иконок</string>
+	<string name="textSize">Размер текста</string>
+	<string name="fontStyle">Шрифт</string>
+	<string name="columnWidth">Ширина столбца</string>
+	<string name="verticalSpacing">Вертикальный отступ</string>
+	<string name="tileView">Сетка</string>
+	<string name="orientation">Ориентация экрана</string>
+	<string name="scrollbar">Показывать подсказку при прокручивании списка</string>
+	<string name="theme">Тема оформления</string>
+	<string name="iconPack">Пакет иконок</string>
+	<string name="transformIcons">Преобразовать иконки</string>
+	<string name="transformIconsSummary">Изменяет иконки, отсутствующие в пакете, согласно настройкам пакета</string>
+	<string name="defaultIconPack">Стандартный</string>
+	<string name="historySize">Размер истории</string>
+	<string name="password">Пароль</string>
+	<string name="passwordSummary">Блокирует настройки и скрытые приложения</string>
+	<string name="passwordHint">Оставьте пустым, чтобы снять блокировку</string>
+	<string name="backupPrefs">Создать копию настроек</string>
+	<string name="restorePrefs">Восстановить настройки</string>
+	<string name="restart">Перезапустить лаунчер</string>
+	<string name="restartToImplement">Перезапустите лаунчер, чтобы осуществить изменения</string>
+	
+	<string name="createCategory">Создать категорию</string>
+	<string name="launcherSettings">Настройки лаунчера</string>
+	<string name="rename">Переименовать</string>
+	<string name="findInMarket">Найти в магазине приложений</string>
+	<string name="editAppList">Изменить список приложений</string>
+	<string name="editAppCategories">Изменить категории приложения</string>
+	<string name="delete">Удалить</string>
+	<string name="accessHidden">Скрытые приложения</string>
+	<string name="fullScan">Полное сканирование</string>
+	<string name="clear">Очистить</string>
+	<string name="setHome">Выбрать домашней категорией</string>
+	<string name="hide">Скрыть</string>
+	<string name="unhide">Убрать из скрытых</string>
+	<string name="appsBackground">Цвет фона приложения</string>
+	<string name="barBackground">Цвет фона верхнего бара</string>
+	<string name="searchProvider">Сайт для поиска в интернете</string>
+	
+	<string name="uninstall">Удалить</string>
+	
+	<string name="aboutTitle">О программе</string>
+	
+</resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+  <!--   <item android:title="Quick scan" android:id="@+id/scan"></item>  -->
+    <item android:title="@string/launcherSettings" android:id="@+id/options"></item>
+    <item android:title="@string/accessHidden" android:id="@+id/access_hidden"></item>
+    <item android:title="@string/fullScan" android:id="@+id/full_scan"/>
+</menu>
