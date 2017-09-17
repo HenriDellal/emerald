@@ -14,9 +14,9 @@ public class RestorePreference extends Preference {
 		super(c, attr);
 		context = c;
 	}
-	@Override
+	/*@Override
 	public void onClick() {
 		super.onClick();
 		((Options)context).restorePrefs();
-	}
+	}*/
 }

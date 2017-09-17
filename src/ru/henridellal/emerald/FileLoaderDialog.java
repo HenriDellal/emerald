@@ -31,6 +31,9 @@ public class FileLoaderDialog extends ListView
 	public int getMode() {
 		return mode;
 	}
+	private FileListAdapter getListAdapter() {
+		return adapter;
+	}
 	ListView fileList;
 	File[] fileArray = null;
 	ArrayList<File> files = new ArrayList<File>();
@@ -52,33 +55,17 @@ public class FileLoaderDialog extends ListView
 			private boolean isExtensionValid(File f) {
 				String filePath = f.getPath();
 				int i = filePath.lastIndexOf('.');
-				if (i > 0 && i < filePath.length()-1) {
-					return filePath.substring(i+1).equals("txt");
-				}
-				return false;
+				return (i > 0 && i < filePath.length()-1) ? filePath.substring(i+1).equals("txt") : false;
 			}
 			@Override
 			public boolean accept(File f) {
-				if (f.isHidden()) {
-					return false;
-				}
-				else if (f.isDirectory() || isExtensionValid(f)) {
-					return true;
-				} else {
-					return false;
-				}
+				return ((!f.isHidden()) && (f.isDirectory() || isExtensionValid(f)));
 			}
 		});
 		files.clear();
 		Collections.addAll(files, fileArray);
 	}
-	/*protected void sortFileList() {
-		Collections.sort(new ArrayList<File>(files), new Comparator<File>() {
-			public int compare(File first, File second) {
-				return first.getName().compareTo(second.getName());
-			}
-		});
-	}*/
+	
     public FileLoaderDialog(Context context, int mode)
 	{
 		super(context);
@@ -101,11 +88,11 @@ public class FileLoaderDialog extends ListView
         setAdapter(adapter);
     	setOnItemClickListener(new AdapterView.OnItemClickListener() {
     		public void onItemClick(AdapterView parent, View v, int position, long id) {
-    			File chosenFile = getFile(position);
+    			File chosenFile = getFile(position-1);
     			if (chosenFile.isDirectory()) {
     				setCurDirectory(chosenFile);
     				setFileList(curDirectory);
-    				((FileListAdapter)parent.getAdapter()).sort();
+    				((FileLoaderDialog)parent).getListAdapter().sort();
     			} else {
     				if (getMode() == 0) {
     					((Options)getContext()).backupPrefs(chosenFile);

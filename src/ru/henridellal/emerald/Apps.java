@@ -181,16 +181,14 @@ public class Apps extends Activity //implements OnGestureListener
 			else {
 	    		grid.setNumColumns(1);
 	    	}
-		}
-		else {
+		} else {
 			//Log.v(APP_TAG, "loadFilteredApps : orientation");
 			textSize = (int)(Integer.parseInt(options.getString(Options.PREF_TEXT_SIZE, "12")) * getResources().getDisplayMetrics().density);
 	    	iconSize = (int)(Integer.parseInt(options.getString(Options.PREF_ICON_SIZE_LANDSCAPE, "48")) * getResources().getDisplayMetrics().density);
 			grid.setVerticalSpacing((int)(Integer.parseInt(options.getString(Options.PREF_VERTICAL_SPACING_LANDSCAPE, "5")) * getResources().getDisplayMetrics().density));
 	    	if (options.getBoolean(Options.PREF_TILE, true)) {
 	    		grid.setColumnWidth((int)(Integer.parseInt(options.getString(Options.PREF_COLUMN_WIDTH_LANDSCAPE, "70")) * getResources().getDisplayMetrics().density));
-	    	}
-	    	else {
+	    	} else {
 	    		grid.setNumColumns(2);
 	    		grid.setColumnWidth(-1);
 	    	}
@@ -408,15 +406,13 @@ public class Apps extends Activity //implements OnGestureListener
 				public void onClick(DialogInterface dialog, int which) {
 					if (inputBox.getText().toString().equals(options.getString(Options.PREF_PASSWORD, ""))) {
 						openOptionsMenu();
-					}
-					else {
+					} else {
 						Toast.makeText(getApplicationContext(), "Password is wrong.", Toast.LENGTH_LONG).show();
 					}
 			} });
 			builder.setCancelable(true);
 			builder.show();
-		}
-		else {
+		} else {
 			openOptionsMenu();
 		}
 	}
@@ -497,8 +493,7 @@ public class Apps extends Activity //implements OnGestureListener
 		if (keyCode == KeyEvent.KEYCODE_MENU) {
 			menu();
 			return true;
-		}
-		else if (keyCode == KeyEvent.KEYCODE_BACK) {
+		} else if (keyCode == KeyEvent.KEYCODE_BACK) {
 			//Log.v(APP_TAG, "BACK pressed");
 			if (searchIsOpened) {
 				closeSearch();
@@ -604,8 +599,7 @@ public class Apps extends Activity //implements OnGestureListener
 				public void onScrollStateChanged(AbsListView view, int scrollState) {
 					if (scrollState == SCROLL_STATE_TOUCH_SCROLL || scrollState == SCROLL_STATE_FLING) {
 						findViewById(R.id.hint).setVisibility(View.VISIBLE);
-					}
-					else {
+					} else {
 						findViewById(R.id.hint).setVisibility(View.GONE);
 					}
 				}
@@ -668,11 +662,9 @@ public class Apps extends Activity //implements OnGestureListener
 				}*/
 				else if (key.equals(Options.PREF_BAR_BACKGROUND)) {
 					findViewById(R.id.topbar).setBackgroundColor(options.getInt(Options.PREF_BAR_BACKGROUND, 0));
-				}
-				else if (key.equals(Options.PREF_APPS_WINDOW_BACKGROUND)) {
+				} else if (key.equals(Options.PREF_APPS_WINDOW_BACKGROUND)) {
 					findViewById(R.id.appsWindow).setBackgroundColor(options.getInt(Options.PREF_APPS_WINDOW_BACKGROUND, 0));
-				}
-				else if (key.equals(Options.PREF_ICON_PACK) || key.equals(Options.PREF_TRANSFORM_DRAWABLE)) {
+				} else if (key.equals(Options.PREF_ICON_PACK) || key.equals(Options.PREF_TRANSFORM_DRAWABLE)) {
 					MyCache.deleteIcons(Apps.this);
 					ManagerContainer.getIconPackManager().setIconPack(sharedPreferences.getString(Options.PREF_ICON_PACK, "default"));
 					if (scanner != null && scanner.getStatus() == AsyncTask.Status.RUNNING)
@@ -682,8 +674,7 @@ public class Apps extends Activity //implements OnGestureListener
 					loadFilteredApps();
 					setSpinner();
 					return;
-				}
-				else if (key.equals(Options.PREF_DIRTY) && sharedPreferences.getBoolean(Options.PREF_DIRTY, false)) {
+				} else if (key.equals(Options.PREF_DIRTY) && sharedPreferences.getBoolean(Options.PREF_DIRTY, false)) {
 					if (scanner == null || scanner.getStatus() != AsyncTask.Status.RUNNING) {
 						scanner = new GetApps(Apps.this);
 						scanner.execute(false);
@@ -716,15 +707,13 @@ public class Apps extends Activity //implements OnGestureListener
 						loadFilteredApps();
 						setSpinner();
 						return true;
-					}
-					else if (x-e.getX() > 30.0 * density) {
+					} else if (x-e.getX() > 30.0 * density) {
 						categories.setCurCategory(categories.getNextCategory());
 						loadFilteredApps();
 						setSpinner();
 						//list.startAnimation(fadeIn);
 						return true;
-					}
-					else v.performClick();
+					} else v.performClick();
 				default:
 					return false;
 				}
@@ -837,8 +826,7 @@ public class Apps extends Activity //implements OnGestureListener
 			if (categories != null) {
 				if (!categories.getCurCategory().equals(categories.getHome())) {
 					categories.setCurCategory(categories.getHome());
-				}
-				else {
+				} else {
 					categories.setCurCategory(CategoryManager.ALL);
 					categories.clearHistory();
 				}
@@ -935,8 +923,7 @@ public class Apps extends Activity //implements OnGestureListener
 					v = inflater.inflate(R.layout.iconbutton, parent, false);
 				else
 					v = inflater.inflate(R.layout.oneline, parent, false);
-			}
-			else {
+			} else {
 				v = convertView;
 			}
 			a = toDisplay.get(position);
@@ -953,8 +940,7 @@ public class Apps extends Activity //implements OnGestureListener
 				tv.setTextSize(textSize);
 				if (theme == Options.LIGHT || theme == Options.WALLPAPER_DARK || theme == Options.DEFAULT_THEME){
 					tv.setTextColor(Color.BLACK);
-				}
-				else {
+				} else {
 					tv.setTextColor(Color.WHITE);
 				}
 				tv.setTypeface(Typeface.DEFAULT,
@@ -1013,8 +999,7 @@ public class Apps extends Activity //implements OnGestureListener
 					//				Log.e(APP_TAG, ""+e);
 					img.setImageResource(android.R.drawable.sym_def_app_icon);
 				}
-			}
-			else {
+			} else {
 				img.setImageResource(android.R.drawable.sym_def_app_icon);
 			}
 	
@@ -1052,8 +1037,7 @@ public class Apps extends Activity //implements OnGestureListener
 							public void onClick(DialogInterface dialog, int which) {
 								if (inputBox.getText().toString().equals(options.getString(Options.PREF_PASSWORD, ""))) {
 									((Apps)mContext).itemContextMenu((AppData)v.getTag());
-								}
-								else {
+								} else {
 									Toast.makeText(mContext, mContext.getResources().getString(R.string.wrong_password), Toast.LENGTH_LONG).show();
 								}
 							}
