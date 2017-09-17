@@ -30,6 +30,7 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 	final Apps	 context;
 	public final static String CACHE_NAME = "apps"; 
 	ProgressDialog progress;
+	String component;
 
 	GetApps(Apps c) {
 		this.context = c;
@@ -39,11 +40,27 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 //	private boolean profilable(ApplicationInfo a) {
 //		return true;
 //	}
-
+	private void writeIconTo(File iconFile, Drawable d) {
+		try {
+			Bitmap bmp;
+			IconPackManager ipm = ManagerContainer.getIconPackManager();
+			// get icon from icon pack
+			if (((bmp = ipm.getBitmap(component)) == null) && (d instanceof BitmapDrawable)) {
+				// edit drawable to match icon pack
+				bmp = ipm.transformDrawable(d);
+			}
+			// save icon in cache
+			FileOutputStream out = new FileOutputStream(iconFile);
+			bmp.compress(CompressFormat.PNG, 100, out);
+			out.close();
+		} catch (Exception e) {
+			iconFile.delete();
+		}
+	}
 	@Override
 	protected ArrayList<AppData> doInBackground(Boolean... slow) {
 		//		Log.v("getting", "installed");
-
+		
 		ArrayList<AppData> apps = new ArrayList<AppData>();
 
 		// use intent to get apps that can be launched
@@ -68,7 +85,6 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 		}
 		// get list of app info from system (only those that can be launched)
 		
-		String component;
 		String name;
 		boolean cacheValid;
 		
@@ -92,13 +108,6 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 				component = cn.flattenToString();
 				name = null;
 				cacheValid = false;
-				//versionCode = -1;
-	
-				//			try {
-				//				versionCode = pm.getPackageInfo(info.activityInfo.packageName, 0).versionCode;
-				//			} catch (NameNotFoundException e1) {
-				//			}
-				
 				// if cache is not empty
 				// get app data from cache
 				if (!slow[0]) {
@@ -117,17 +126,6 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 					if (name.equals("Emerald Launcher")) {
 						continue;
 					}
-				/*	if (name.equals("Angry Birds")) {
-						if(info.activityInfo.packageName.startsWith("com.rovio.angrybirdsrio")) {
-							name = name + " Rio";
-						}
-						else if (info.activityInfo.packageName.startsWith("com.rovio.angrybirdsseasons")) {
-							name = name + " Seasons";
-						}
-						else if (info.activityInfo.packageName.startsWith("com.rovio.angrybirdsspace")) {
-							name = name + " Space";
-						}
-					}*/
 				}
 				// add new appdata object to apps list
 				apps.add(new AppData(component, name));
@@ -137,41 +135,7 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 					File iconFile = MyCache.getIconFile(context, component);
 					// if there is no icon for app in cache
 					if (!cacheValid || !iconFile.exists()) { // || ((Apps)context).iconPackChanged()) {
-						//					Log.v("TinyLaunch", "finding icon for "+name);
-						try {
-							Bitmap bmp;
-							// try to get 
-							IconPackManager ipm = ManagerContainer.getIconPackManager();
-							// get icon from icon pack
-							if ((bmp = ipm.getBitmap(component)) != null) {
-								/*if (!(ipm.getIconPackName().equalsIgnoreCase("default"))) {
-									//bmp = ipm.resizeBitmap(bmp);
-								}*/
-							}
-							else {
-								// get icon from package manager
-								Drawable d = info.getIcon(0);
-							/*	Drawable d = pm.getResourcesForActivity(cn)
-									.getDrawable(pm.getPackageInfo(
-										info.activityInfo.packageName, 
-										0).applicationInfo.icon);
-								*/
-								if (d instanceof BitmapDrawable) {
-									//bmp = ((BitmapDrawable)d).getBitmap();
-									// edit drawable to match icon pack
-									bmp = ipm.transformDrawable(d);
-								}
-							}
-							// save icon in cache
-							FileOutputStream out = new FileOutputStream(iconFile);
-							bmp.compress(CompressFormat.PNG, 100, out);
-							out.close();
-							
-						} catch (Exception e) {
-							//						Log.e("TinyLaunch", ""+e);
-							// delete icon file if something gone wrong
-							iconFile.delete();
-						}
+						writeIconTo(iconFile, info.getIcon(0));
 					}
 				}
 			}
@@ -180,7 +144,6 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 			MyCache.write(context, CACHE_NAME, apps);
 			// clean icons of deleted apps
 			MyCache.cleanIcons(context, apps);
-	
 			publishProgress(list.size(), list.size());
 		} else {
 			List<ResolveInfo> list = 
@@ -199,13 +162,6 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 				component = cn.flattenToString();
 				name = null;
 				cacheValid = false;
-				//versionCode = -1;
-	
-				//			try {
-				//				versionCode = pm.getPackageInfo(info.activityInfo.packageName, 0).versionCode;
-				//			} catch (NameNotFoundException e1) {
-				//			}
-				
 				// if cache is not empty
 				// get app data from cache
 				if (!slow[0]) {
@@ -223,17 +179,6 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 					if (name.equals("Emerald Launcher")) {
 						continue;
 					}
-					if (name.equals("Angry Birds")) {
-						if(info.activityInfo.packageName.startsWith("com.rovio.angrybirdsrio")) {
-							name = name + " Rio";
-						}
-						else if (info.activityInfo.packageName.startsWith("com.rovio.angrybirdsseasons")) {
-							name = name + " Seasons";
-						}
-						else if (info.activityInfo.packageName.startsWith("com.rovio.angrybirdsspace")) {
-							name = name + " Space";
-						}
-					}
 				}
 				// add new appdata object to apps list
 				apps.add(new AppData(component, name));
@@ -243,40 +188,12 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 					File iconFile = MyCache.getIconFile(context, component);
 					// if there is no icon for app in cache
 					if (!cacheValid || !iconFile.exists()) { // || ((Apps)context).iconPackChanged()) {
-						//					Log.v("TinyLaunch", "finding icon for "+name);
 						try {
-							Bitmap bmp;
-							// try to get 
-							IconPackManager ipm = ManagerContainer.getIconPackManager();
-							// get icon from icon pack
-							if ((bmp = ipm.getBitmap(component)) != null) {
-								/*if (!(ipm.getIconPackName().equalsIgnoreCase("default"))) {
-									//bmp = ipm.resizeBitmap(bmp);
-								}*/
-							}
-							else {
-								// get icon from package manager
-								Drawable d = pm.getResourcesForActivity(cn)
-									.getDrawable(pm.getPackageInfo(
-										info.activityInfo.packageName, 
-										0).applicationInfo.icon);
-								
-								if (d instanceof BitmapDrawable) {
-									//bmp = ((BitmapDrawable)d).getBitmap();
-									// edit drawable to match icon pack
-									bmp = ipm.transformDrawable(d);
-								}
-							}
-							// save icon in cache
-							FileOutputStream out = new FileOutputStream(iconFile);
-							bmp.compress(CompressFormat.PNG, 100, out);
-							out.close();
-							
-						} catch (Exception e) {
-							//						Log.e("TinyLaunch", ""+e);
-							// delete icon file if something gone wrong
-							iconFile.delete();
-						}
+							writeIconTo(iconFile, pm.getResourcesForActivity(cn)
+													.getDrawable(pm.getPackageInfo(
+													info.activityInfo.packageName, 
+													0).applicationInfo.icon));
+						} catch (Exception e) {}
 					}
 				}
 			}

@@ -421,9 +421,9 @@ public class Apps extends Activity //implements OnGestureListener
 		}
 	}
 	
-	/*public void onMenuButton(View v) {
+	public void onMenuButton(View v) {
 		menu();
-	}*/
+	}
 	public void searchInWeb(String text) {
 		String site = options.getString(Options.PREF_SEARCH_PROVIDER, "");
 		String url = site + text;
@@ -486,8 +486,8 @@ public class Apps extends Activity //implements OnGestureListener
 				openSearch();
 				break;
 			case R.id.menuButton:
-				startActivity(new Intent(this, Options.class));
-				//menu();
+				//startActivity(new Intent(this, Options.class));
+				menu();
 				break;
 		}
 	}
@@ -1029,19 +1029,16 @@ public class Apps extends Activity //implements OnGestureListener
 			toDisplay = catData;
 			this.curMode = curMode;
 			onClickListener = new View.OnClickListener() {
-
 				@Override
 				public void onClick(View arg0) {
 					if (arg0.getTag() instanceof AppData)
 						((Apps)mContext).launch((AppData)arg0.getTag());
 				}
-
 			};
-			onLongClickListener = new View.OnLongClickListener() {
-
-				@Override
-				public boolean onLongClick(View arg0) {
-					if (lock) {
+			if (lock) {
+				onLongClickListener = new View.OnLongClickListener() {
+					@Override
+					public boolean onLongClick(View arg0) {
 						final View v = arg0;
 						AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 						//builder.setTitle("");
@@ -1054,22 +1051,27 @@ public class Apps extends Activity //implements OnGestureListener
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								if (inputBox.getText().toString().equals(options.getString(Options.PREF_PASSWORD, ""))) {
-									if (v.getTag() instanceof AppData)
-										((Apps)mContext).itemEdit((AppData)v.getTag());
+									((Apps)mContext).itemContextMenu((AppData)v.getTag());
 								}
 								else {
-									Toast.makeText(mContext, "Password is wrong.", Toast.LENGTH_LONG).show();
+									Toast.makeText(mContext, mContext.getResources().getString(R.string.wrong_password), Toast.LENGTH_LONG).show();
 								}
-						} });
+							}
+						});
 						builder.setCancelable(true);
 						builder.show();
+						return false;
 					}
-					else if (arg0.getTag() instanceof AppData)
+				};
+			} else {
+				onLongClickListener = new View.OnLongClickListener() {
+					@Override
+					public boolean onLongClick(View arg0) {
 						((Apps)mContext).itemContextMenu((AppData)arg0.getTag());
-					return false;
-				}
-
-			};
+						return false;
+					}
+				};
+			}
 			comparator = new Comparator<AppData>() {
 				@Override
 				public int compare(AppData first, AppData second) {

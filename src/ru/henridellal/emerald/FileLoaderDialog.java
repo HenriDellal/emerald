@@ -107,27 +107,19 @@ public class FileLoaderDialog extends ListView
     				setFileList(curDirectory);
     				((FileListAdapter)parent.getAdapter()).sort();
     			} else {
-    				try {
-    					if (getMode() == 0) {
-    						((Options)getContext()).backupPrefs(chosenFile);
-    					} else {
-    						((Options)getContext()).restorePrefs(chosenFile);
-    					}
-    					//dismiss();
-    				} catch (Exception e) {
+    				if (getMode() == 0) {
+    					((Options)getContext()).backupPrefs(chosenFile);
+    				} else {
+    					((Options)getContext()).restorePrefs(chosenFile);
     				}
     			}
-    			//runOnUiThread()
-    			//updateList();
     		}
     	});
-        //setView(fileList);
     }
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
     	if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
     		if (curDirectory.equals(Environment.getExternalStorageDirectory())) {
-	    		//dismiss();
 	    		return false;
 	    	}
 	    	else {
@@ -137,36 +129,12 @@ public class FileLoaderDialog extends ListView
 		    		adapter.sort();
 		    	} catch (Exception e) {
 		    		Toast.makeText(getContext(), ""+e, Toast.LENGTH_LONG).show();
-		    		//dismiss();
 		    	}
 	    	}
     		return true;
     	}
     	return super.dispatchKeyEvent(event);
     }
-    /*@Override
-	public void onClick(DialogInterface dialog, int which) {
-		if (which) {
-		
-		}
-	}*/
-    /*@Override
-    public void onBackPressed() {
-    	if (curDirectory.equals(Environment.getExternalStorageDirectory())) {
-    		//dismiss();
-    	}
-    	else {
-	    	try {
-	    		setFileList(new File(curDirectory.getParent()));
-	    		curDirectory = new File(curDirectory.getParent());
-	    		adapter.sort();
-	    	} catch (Exception e) {
-	    		Toast.makeText(getContext(), ""+e, Toast.LENGTH_LONG).show();
-	    		//dismiss();
-	    	}
-    	}
-    }*/
-    
     
     public class FileListAdapter extends BaseAdapter {
     	int resource;
