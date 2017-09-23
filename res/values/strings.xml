@@ -49,6 +49,7 @@
 	<string name="hide">Hide</string>
 	<string name="unhide">Unhide</string>
 	
+	<string name="save_here">Save in this folder</string>
 	
 	<string name="accessHidden">Access hidden apps</string>
 	<string name="fullScan">Full scan</string>
