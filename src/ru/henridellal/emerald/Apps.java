@@ -396,7 +396,7 @@ public class Apps extends Activity //implements OnGestureListener
 		if (lock) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			//builder.setTitle("");
-			builder.setMessage("Type password in:");
+			builder.setMessage(getResources().getString(R.string.type_password));
 			final EditText inputBox = new EditText(this);
 			inputBox.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD);
 			builder.setView(inputBox);
@@ -407,7 +407,7 @@ public class Apps extends Activity //implements OnGestureListener
 					if (inputBox.getText().toString().equals(options.getString(Options.PREF_PASSWORD, ""))) {
 						openOptionsMenu();
 					} else {
-						Toast.makeText(getApplicationContext(), "Password is wrong.", Toast.LENGTH_LONG).show();
+						Toast.makeText(getApplicationContext(), getResources().getString(R.string.wrong_password), Toast.LENGTH_LONG).show();
 					}
 			} });
 			builder.setCancelable(true);
@@ -837,12 +837,11 @@ public class Apps extends Activity //implements OnGestureListener
 
 		if (map.size() == 0) {
 			needReload = true;
-		}
-		else {
+		} else {
 			if ((Integer.parseInt(options.getString(Options.PREF_PREV_APP_SHORTCUT, "1")) == Options.TEXT) != (appShortcut == Options.TEXT)) {
-				if (appShortcut >= Options.ICON)
+				if (appShortcut >= Options.ICON) {
 					needReload = true;
-				else {
+				} else {
 					MyCache.deleteIcons(this);
 					options.edit().putString(Options.PREF_PREV_APP_SHORTCUT, ((Integer)appShortcut).toString()).commit();
 				}
@@ -1027,7 +1026,7 @@ public class Apps extends Activity //implements OnGestureListener
 						final View v = arg0;
 						AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 						//builder.setTitle("");
-						builder.setMessage("Type password in:");
+						builder.setMessage(mContext.getResources().getString(R.string.type_password));
 						final EditText inputBox = new EditText(mContext);
 						inputBox.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD);
 						builder.setView(inputBox);

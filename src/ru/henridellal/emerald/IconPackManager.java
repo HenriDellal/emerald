@@ -106,12 +106,10 @@ public class IconPackManager {
 		return result;
 	}
 	public Bitmap getBitmap(String component) {
-		//if (!(PreferenceManager.getSharedPreferences().getString(Options.PREF_ICON_PACK, "default").equals("default"))) {
 		if (iconsData.containsKey(component)) {
 			String drawableName = iconsData.get(component);
 			return loadBitmap(drawableName);
-		}//}
-		else {
+		} else {
 			return null;
 		}
 	}
@@ -165,22 +163,18 @@ public class IconPackManager {
 								component = parser.getAttributeValue(i);
 								int c = component.indexOf("{");
 								component = component.substring(c+1, component.length()-1);
-							}
-							else if (parser.getAttributeName(i).equals("drawable"))
+							} else if (parser.getAttributeName(i).equals("drawable")) {
 								drawable = parser.getAttributeValue(i);
+							}
 						}
 						iconsData.put(component, drawable);
-					}
-					else if (parser.getName().equals("iconback")) {
+					} else if (parser.getName().equals("iconback")) {
 						iconBack = loadBitmap(parser.getAttributeValue(0));
-					}
-					else if (parser.getName().equals("iconmask")) {
+					} else if (parser.getName().equals("iconmask")) {
 						iconMask = loadBitmap(parser.getAttributeValue(0));
-					}
-					else if (parser.getName().equals("iconupon")) {
+					} else if (parser.getName().equals("iconupon")) {
 						iconUpon = loadBitmap(parser.getAttributeValue(0));
-					}
-					else if (parser.getName().equals("scale")) {
+					} else if (parser.getName().equals("scale")) {
 						if (parser.getAttributeCount() > 0 && parser.getAttributeName(0).equals("factor")) {
 							factor = Float.valueOf(parser.getAttributeValue(0));
 						}

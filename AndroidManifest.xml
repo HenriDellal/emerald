@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      android:versionCode="13"
-      android:versionName="0.4.3" package="ru.henridellal.emerald"
+      android:versionCode="14"
+      android:versionName="0.4.3.1" package="ru.henridellal.emerald"
       >
 
     <!--android:configChanges="keyboard|keyboardHidden|orientation|screenSize"-->

@@ -240,9 +240,6 @@ public class CategoryManager {
 		}
 	}
 	
-	/*public void removeCurCategory() {
-		removeCategory(getCurCategory());
-	}*/
 	public void removeCategory(String catName) {
 		if (!isCustom(catName))
 			return;
@@ -256,9 +253,6 @@ public class CategoryManager {
 		setCurCategory(ALL);
 	}
 	//makes the current category empty
-	/*public void clearCurCategory() {
-		clearCategory(getCurCategory());
-	}*/
 	public void clearCategory(String cat) {
     	if (!isEditable(cat))
 			return;
@@ -467,46 +461,37 @@ public class CategoryManager {
 	//All > custom categories > Unclassified > History > Hidden
 	public void sortNames() {
 		Collections.sort(names, new Comparator<String>(){
+			//private Map<String, Integer> defaultRanks = new Map<String, Integer>();
 			@Override
 			public int compare(String lhs, String rhs) {
+				//int lhsNumber, rhsNumber;
 				if (lhs.equals(ALL)) {
 					if (rhs.equals(ALL))
 						return 0;
 					else
 						return -1;
-				}
-				else if (lhs.equals(HIDDEN)) {
+				} else if (lhs.equals(HIDDEN)) {
 					if (rhs.equals(HIDDEN)) 
 						return 0;
 					else
 						return 1;
-				}
-				else if (lhs.equals(UNCLASSIFIED)) {
+				} else if (lhs.equals(UNCLASSIFIED)) {
 					if (rhs.equals(UNCLASSIFIED)) 
 						return 0;
 					else if (rhs.equals(HIDDEN) || rhs.equals(HISTORY))
 						return -1;
 					else
 						return 1;
-				}
-				else if (lhs.equals(HISTORY)) {
+				} else if (lhs.equals(HISTORY)) {
 					if (rhs.equals(HISTORY))
 						return 0;
 					else if (rhs.equals(HIDDEN))
 						return -1;
 					else
 						return 1;
-				}
-				else if (rhs.equals(ALL)) {
+				} else if (rhs.equals(ALL)) {
 					return 1;
-				}
-				else if (rhs.equals(HIDDEN)) {
-					return -1;
-				}
-				else if (rhs.equals(UNCLASSIFIED)) {
-					return -1;
-				}
-				else if (rhs.equals(HISTORY)) {
+				} else if (rhs.equals(HIDDEN) || rhs.equals(UNCLASSIFIED) || rhs.equals(HISTORY)) {
 					return -1;
 				}
 				return lhs.compareToIgnoreCase(rhs);
@@ -555,9 +540,6 @@ public class CategoryManager {
 	}
 	//returns true if rename was successful
 	
-	public boolean renameCategory(String newName) {
-		return renameCategory(newName, getCurCategory());
-	}
 	public boolean renameCategory(String newName, String cat) {
 		if (newName.equals(cat))
 			return true;

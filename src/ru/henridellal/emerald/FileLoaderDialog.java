@@ -75,7 +75,7 @@ public class FileLoaderDialog extends ListView
 		this.mode = mode;
 		if (this.mode == 0) {
 			Button button = new Button(context);
-			button.setText("Save in this folder");
+			button.setText(context.getResources().getString(R.string.save_here));
 			button.setOnClickListener(new View.OnClickListener(){
 				public void onClick(View v) {
 					File chosenFile = new File(curDirectory, "preferences.txt");

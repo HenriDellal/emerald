@@ -53,7 +53,8 @@
 	<string name="accessHidden">Access hidden apps</string>
 	<string name="fullScan">Full scan</string>
 	<string name="clear">Clear</string>
-<string name="wrong_password">Wrong password.</string>
+	<string name="wrong_password">Wrong password.</string>
+	<string name="type_password">Type password</string>
 	
 	<string name="uninstall">Uninstall</string>
 	
