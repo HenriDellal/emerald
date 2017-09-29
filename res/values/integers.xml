@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<integer name="text_size_default">8</integer>
+	<integer name="text_size_land_default">8</integer>
+	<integer name="icon_size_default">48</integer>
+	<integer name="icon_size_land_default">48</integer>
+	<integer name="column_width_default">70</integer>
+	<integer name="column_width_land_default">70</integer>
+	<integer name="vertical_spacing_default">5</integer>
+	<integer name="vertical_spacing_land_default">5</integer>
+	<integer name="history_size_default">12</integer>
+</resources>
