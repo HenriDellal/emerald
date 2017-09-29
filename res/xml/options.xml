@@ -7,59 +7,48 @@
     <ru.henridellal.emerald.AboutPreference
     	android:title="@string/aboutTitle"
         android:key="about"/>
-   <!-- <ru.henridellal.emerald.EditIntPreference
-    	android:title="test int pref"
-        android:key="testIntPref"/>-->
     <PreferenceScreen android:title="@string/appearancePrefs">
 	    <ListPreference
 	        android:defaultValue="3"
 	        android:entries="@array/appShortcutTypes"
 	        android:entryValues="@array/appShortcutValues"
 	        android:title="@string/appShortcut"
-	        android:key="appShortcut"/>
+	        android:key="app_shortcut"/>
 	    <PreferenceScreen android:title="@string/portraitPrefs">
-		    <EditTextPreference
+		    <ru.henridellal.emerald.EditIntPreference
 		        android:title="@string/iconSize"
-		        android:defaultValue="48"
-		        android:inputType="number"
-		        android:key="iconSize"/>
-		    <EditTextPreference
+		        android:defaultValue="@integer/icon_size_default"
+		        android:key="icon_size"/>
+		    <ru.henridellal.emerald.EditIntPreference
 		        android:title="@string/textSize"
-		        android:defaultValue="8"
-		        android:inputType="number"
-		        android:key="textSize"/>
-		    <EditTextPreference
+		        android:defaultValue="@integer/text_size_default"
+		        android:key="text_size"/>
+		    <ru.henridellal.emerald.EditIntPreference
 		        android:title="@string/columnWidth"
-		        android:defaultValue="70"
-		        android:inputType="number"
-		        android:key="columnWidth"/>
-		    <EditTextPreference
+		        android:defaultValue="@integer/column_width_default"
+		        android:key="column_width"/>
+		    <ru.henridellal.emerald.EditIntPreference
 		        android:title="@string/verticalSpacing"
-		        android:defaultValue="10"
-		        android:inputType="number"
-		        android:key="verticalSpacing"/>
+		        android:defaultValue="@integer/vertical_spacing_default"
+		        android:key="vertical_spacing"/>
 	    </PreferenceScreen>
 	    <PreferenceScreen android:title="@string/landscapePrefs">
-		    <EditTextPreference
+		    <ru.henridellal.emerald.EditIntPreference
 		        android:title="@string/iconSize"
-		        android:defaultValue="48"
-		        android:inputType="number"
-		        android:key="iconSizeLand"/>
-		    <EditTextPreference
+		        android:defaultValue="@integer/icon_size_land_default"
+		        android:key="icon_size_land"/>
+		    <ru.henridellal.emerald.EditIntPreference
 		        android:title="@string/textSize"
-		        android:defaultValue="8"
-		        android:inputType="number"
-		        android:key="textSizeLand"/>
-		    <EditTextPreference
+		        android:defaultValue="@integer/text_size_land_default"
+		        android:key="text_size_land"/>
+		    <ru.henridellal.emerald.EditIntPreference
 		        android:title="@string/columnWidth"
-		        android:defaultValue="70"
-		        android:inputType="number"
-		        android:key="columnWidthLand"/>
-		    <EditTextPreference
+		        android:defaultValue="@integer/column_width_land_default"
+		        android:key="column_width_land"/>
+		    <ru.henridellal.emerald.EditIntPreference
 		    	android:title="@string/verticalSpacing"
-		        android:defaultValue="10"
-		        android:inputType="number"
-		        android:key="verticalSpacingLand"/>
+		        android:defaultValue="@integer/vertical_spacing_land_default"
+		        android:key="vertical_spacing_land"/>
 	    </PreferenceScreen>
 	    <CheckBoxPreference
 	    	android:title="@string/tileView"
@@ -81,7 +70,7 @@
 	        android:entries="@array/fontStyleTypes"
 	        android:entryValues="@array/fontStyleValues"
 	        android:title="@string/fontStyle"
-	        android:key="fontStyle"/>
+	        android:key="font_style"/>
 	    <ListPreference
 	        android:defaultValue="@string/defaultThemeValue"
 	        android:entries="@array/themeTypes"
@@ -89,30 +78,29 @@
 	        android:title="@string/theme"
 	        android:key="theme"/>
 	   <com.commonsware.cwac.colormixer.ColorPreference
-    		android:key="barBackground"
+    		android:key="bar_background"
     		android:defaultValue="0x22000000"
     		android:title="@string/barBackground"
     	/>
     	<com.commonsware.cwac.colormixer.ColorPreference
-    		android:key="appsBackground"
+    		android:key="apps_background"
     		android:defaultValue="0x00000000"
     		android:title="@string/appsBackground"
     	/>
 	   <ListPreference
 	        android:defaultValue="default"
 	        android:title="@string/iconPack"
-	        android:key="iconPack"/>
+	        android:key="icon_pack"/>
 	   <CheckBoxPreference
 	    	android:title="@string/transformIcons"
 	    	android:summary="@string/transformIconsSummary"
 	    	android:defaultValue="true"
-	    	android:key="transformDrawable"/>
+	    	android:key="transform_drawable"/>
     </PreferenceScreen>
-   <EditTextPreference
+   <ru.henridellal.emerald.EditIntPreference
         android:title="@string/historySize"
-        android:defaultValue="10"
-        android:inputType="number"
-        android:key="historySize"/>
+        android:defaultValue="@integer/history_size_default"
+        android:key="history_size"/>
    <!--<EditTextPreference
         android:title="Bar background color"
         android:defaultValue="0"
@@ -126,7 +114,7 @@
     <EditTextPreference
         android:title="@string/searchProvider"
         android:defaultValue="https://duckduckgo.com/?q="
-        android:key="searchProvider"/>
+        android:key="search_provider"/>
     <ru.henridellal.emerald.BackupPreference
     	android:title="@string/backupPrefs"
         android:key="backup"/>

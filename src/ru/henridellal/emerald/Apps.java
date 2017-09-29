@@ -172,22 +172,21 @@ public class Apps extends Activity //implements OnGestureListener
 	public void changePrefsOnRotate() {
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 			//Log.v(APP_TAG, "loadFilteredApps : Portrait orientation");
-			iconSize = (int)(Integer.parseInt(options.getString(Options.PREF_ICON_SIZE, "48")) * getResources().getDisplayMetrics().density);
-	    	textSize = (int)(Integer.parseInt(options.getString(Options.PREF_TEXT_SIZE, "12")) * getResources().getDisplayMetrics().density);
-	    	grid.setVerticalSpacing((int)(Integer.parseInt(options.getString(Options.PREF_VERTICAL_SPACING, "5")) * getResources().getDisplayMetrics().density));
+			iconSize = (int)(options.getInt(Options.PREF_ICON_SIZE, getResources().getInteger(R.integer.icon_size_default)) * getResources().getDisplayMetrics().density);
+	    	textSize = (int)(options.getInt(Options.PREF_TEXT_SIZE, getResources().getInteger(R.integer.text_size_default)) * getResources().getDisplayMetrics().density);
+	    	grid.setVerticalSpacing((int)(options.getInt(Options.PREF_VERTICAL_SPACING, getResources().getInteger(R.integer.vertical_spacing_default)) * getResources().getDisplayMetrics().density));
 	    	if (options.getBoolean(Options.PREF_TILE, true)) {
-	    		grid.setColumnWidth((int)(Integer.parseInt(options.getString(Options.PREF_COLUMN_WIDTH, "70")) * getResources().getDisplayMetrics().density));
-			}
-			else {
+	    		grid.setColumnWidth((int)(options.getInt(Options.PREF_COLUMN_WIDTH, getResources().getInteger(R.integer.column_width_default)) * getResources().getDisplayMetrics().density));
+			} else {
 	    		grid.setNumColumns(1);
 	    	}
 		} else {
 			//Log.v(APP_TAG, "loadFilteredApps : orientation");
-			textSize = (int)(Integer.parseInt(options.getString(Options.PREF_TEXT_SIZE, "12")) * getResources().getDisplayMetrics().density);
-	    	iconSize = (int)(Integer.parseInt(options.getString(Options.PREF_ICON_SIZE_LANDSCAPE, "48")) * getResources().getDisplayMetrics().density);
-			grid.setVerticalSpacing((int)(Integer.parseInt(options.getString(Options.PREF_VERTICAL_SPACING_LANDSCAPE, "5")) * getResources().getDisplayMetrics().density));
+			textSize = (int)(options.getInt(Options.PREF_TEXT_SIZE_LANDSCAPE, getResources().getInteger(R.integer.text_size_land_default)) * getResources().getDisplayMetrics().density);
+	    	iconSize = (int)(options.getInt(Options.PREF_ICON_SIZE_LANDSCAPE, getResources().getInteger(R.integer.icon_size_land_default)) * getResources().getDisplayMetrics().density);
+			grid.setVerticalSpacing((int)(options.getInt(Options.PREF_VERTICAL_SPACING_LANDSCAPE, getResources().getInteger(R.integer.vertical_spacing_land_default)) * getResources().getDisplayMetrics().density));
 	    	if (options.getBoolean(Options.PREF_TILE, true)) {
-	    		grid.setColumnWidth((int)(Integer.parseInt(options.getString(Options.PREF_COLUMN_WIDTH_LANDSCAPE, "70")) * getResources().getDisplayMetrics().density));
+	    		grid.setColumnWidth((int)(options.getInt(Options.PREF_COLUMN_WIDTH_LANDSCAPE, getResources().getInteger(R.integer.column_width_land_default)) * getResources().getDisplayMetrics().density));
 	    	} else {
 	    		grid.setNumColumns(2);
 	    		grid.setColumnWidth(-1);
@@ -855,7 +854,7 @@ public class Apps extends Activity //implements OnGestureListener
 				scanner.execute(false);
 			}
 		}
-		historySize = Integer.parseInt(options.getString(Options.PREF_HISTORY_SIZE, "10"));
+		historySize = options.getInt(Options.PREF_HISTORY_SIZE, 10);
 		boolean historySizeChanged = false;
 		while (categories.getCategoryData(CategoryManager.HISTORY).size() > historySize) {
 			historySizeChanged = true;

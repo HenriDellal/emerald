@@ -88,7 +88,7 @@ public class FileLoaderDialog extends ListView
         setAdapter(adapter);
     	setOnItemClickListener(new AdapterView.OnItemClickListener() {
     		public void onItemClick(AdapterView parent, View v, int position, long id) {
-    			File chosenFile = getFile(position-1);
+    			File chosenFile = getFile(getMode() == 0 ? position-1: position);
     			if (chosenFile.isDirectory()) {
     				setCurDirectory(chosenFile);
     				setFileList(curDirectory);

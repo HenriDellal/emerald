@@ -30,34 +30,34 @@ public class Options extends PreferenceActivity {
 	public static final int WALLPAPER_LIGHT = 3;
 	public static final int WALLPAPER_DARK = 4;
 	
-	public final static String PREF_BAR_BACKGROUND = "barBackground";
-	public final static String PREF_APPS_WINDOW_BACKGROUND = "appsBackground";
+	public final static String PREF_BAR_BACKGROUND = "bar_background";
+	public final static String PREF_APPS_WINDOW_BACKGROUND = "apps_background";
 	
-	public final static String PREF_ICON_PACK = "iconPack";
-	public final static String PREF_TRANSFORM_DRAWABLE = "transformDrawable";
-	public final static String PREF_APP_SHORTCUT = "appShortcut";
-	public final static String PREF_PREV_APP_SHORTCUT = "prevAppShortcut";
+	public final static String PREF_ICON_PACK = "icon_pack";
+	public final static String PREF_TRANSFORM_DRAWABLE = "transform_drawable";
+	public final static String PREF_APP_SHORTCUT = "app_shortcut";
+	public final static String PREF_PREV_APP_SHORTCUT = "prevApp_shortcut";
 	public final static String PREF_TILE = "tile";
 	
-	public final static String PREF_ICON_SIZE = "iconSize";
-	public final static String PREF_TEXT_SIZE = "textSize";
-	public final static String PREF_FONT_STYLE = "fontStyle";
-	public final static String PREF_COLUMN_WIDTH = "columnWidth";
-	public final static String PREF_VERTICAL_SPACING = "verticalSpacing";
+	public final static String PREF_ICON_SIZE = "icon_size";
+	public final static String PREF_TEXT_SIZE = "text_size";
+	public final static String PREF_FONT_STYLE = "font_style";
+	public final static String PREF_COLUMN_WIDTH = "column_width";
+	public final static String PREF_VERTICAL_SPACING = "vertical_spacing";
 	
-	public final static String PREF_ICON_SIZE_LANDSCAPE = "iconSizeLand";
-	public final static String PREF_TEXT_SIZE_LANDSCAPE = "textSizeLand";
-	public final static String PREF_COLUMN_WIDTH_LANDSCAPE = "columnWidthLand";
-	public final static String PREF_VERTICAL_SPACING_LANDSCAPE = "verticalSpacingLand";
+	public final static String PREF_ICON_SIZE_LANDSCAPE = "icon_size_land";
+	public final static String PREF_TEXT_SIZE_LANDSCAPE = "text_size_land";
+	public final static String PREF_COLUMN_WIDTH_LANDSCAPE = "column_width_land";
+	public final static String PREF_VERTICAL_SPACING_LANDSCAPE = "vertical_spacing_land";
 	
 	public static final String PREF_HOME = "home";
 	public static final String PREF_CATEGORY = "category";
 	public static final String PREF_DIRTY = "dirty";
 	public static final String PREF_ORIENTATION = "orientation";
-	public static final String PREF_SEARCH_PROVIDER = "searchProvider";
+	public static final String PREF_SEARCH_PROVIDER = "search_provider";
 	public static final String PREF_THEME = "theme";
 	public static final String PREF_PREV_THEME = "prevTheme";
-	public static final String PREF_HISTORY_SIZE = "historySize";
+	public static final String PREF_HISTORY_SIZE = "history_size";
 	public static final String PREF_PASSWORD = "password";
 	
 	@SuppressWarnings("deprecation")
@@ -95,7 +95,7 @@ public class Options extends PreferenceActivity {
 	}
 	
 	public void setIconPacksList(Map<String, String> iconPacks) {
-		ListPreference preference = (ListPreference)findPreference("iconPack");
+		ListPreference preference = (ListPreference)findPreference(PREF_ICON_PACK);
 		CharSequence[] e = new CharSequence[iconPacks.size()+1];
 		CharSequence[] v = new CharSequence[iconPacks.size()+1];
 		e[0] = getResources().getString(R.string.defaultIconPack);
