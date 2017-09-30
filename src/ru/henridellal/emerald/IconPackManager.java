@@ -17,6 +17,7 @@ import android.graphics.PorterDuff.Mode;
 import android.preference.PreferenceManager;
 //import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +26,8 @@ public class IconPackManager {
 	Context context;
 	String iconPackName;
 	private float factor = 1.0f;
-	Bitmap iconBack, iconMask, iconUpon;
+	ArrayList<Bitmap> iconBacks;
+	Bitmap iconMask, iconUpon;
 	boolean transformDrawable = true;
 	Map<String, String> iconsData;
 	private Resources iconPackRes;
@@ -73,15 +75,15 @@ public class IconPackManager {
 	}*/
 	public Bitmap transformDrawable(Drawable d) {
 		Bitmap b = ((BitmapDrawable) d).getBitmap();
-		if ((iconBack == null && iconMask == null && iconUpon == null && factor == 1.f) || !transformDrawable)
+		if ((iconBacks == null && iconMask == null && iconUpon == null && factor == 1.f) || !transformDrawable)
 		{
 			return b;
 		}
 		int w, h;
 		Paint paint;
-		if (iconBack != null) {
-			w = iconBack.getWidth();
-			h = iconBack.getHeight();
+		if (iconBacks != null) {
+			w = iconBacks.get(0).getWidth();
+			h = iconBacks.get(0).getHeight();
 		} else {
 			w = b.getWidth();
 			h = b.getHeight();
@@ -89,8 +91,8 @@ public class IconPackManager {
 		Bitmap result = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(result);
 		//Paint paint = new Paint();
-		if (iconBack != null) {
-			canvas.drawBitmap(iconBack, 0, 0, null);
+		if (iconBacks != null) {
+			canvas.drawBitmap(iconBacks.get((int)(Math.random()*iconBacks.size())), 0, 0, null);
 		}
 		paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		Bitmap scaledBitmap = Bitmap.createScaledBitmap(b, (int)(w*factor), (int)(h*factor), false);
@@ -132,7 +134,7 @@ public class IconPackManager {
 	}
 	public void setIcons() {
 		iconsData = new HashMap<String, String>();
-		iconBack = null;
+		iconBacks = null;
 		iconMask = null;
 		iconUpon = null;
 		factor = 1.0f;
@@ -144,6 +146,7 @@ public class IconPackManager {
 		String component = null;
 		String drawable = null;
 		PackageManager pm = context.getPackageManager();
+		iconBacks = new ArrayList<Bitmap>();
 		try {
 			iconPackRes = pm.getResourcesForApplication(iconPackName);
 		} catch (PackageManager.NameNotFoundException nameNotFound) {
@@ -169,7 +172,9 @@ public class IconPackManager {
 						}
 						iconsData.put(component, drawable);
 					} else if (parser.getName().equals("iconback")) {
-						iconBack = loadBitmap(parser.getAttributeValue(0));
+						for (int i = 0; i < parser.getAttributeCount(); i++) {
+							iconBacks.add(loadBitmap(parser.getAttributeValue(i)));
+						}
 					} else if (parser.getName().equals("iconmask")) {
 						iconMask = loadBitmap(parser.getAttributeValue(0));
 					} else if (parser.getName().equals("iconupon")) {
