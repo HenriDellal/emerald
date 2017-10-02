@@ -591,7 +591,15 @@ public class Apps extends Activity //implements OnGestureListener
 				String firstChar;
 				@Override
 				public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-					firstChar = adapter != null ? adapter.getAppName(firstVisibleItem).substring(0,1) : " ";
+					if (adapter != null) {
+						if (adapter.getCount() > 0) {
+							firstChar = adapter.getAppName(firstVisibleItem).substring(0,1);
+						} else {
+							firstChar = " ";
+						}
+					} else {
+						firstChar = " ";
+					}
 					((TextView)findViewById(R.id.hintText)).setText(firstChar);
 				}
 				@Override
