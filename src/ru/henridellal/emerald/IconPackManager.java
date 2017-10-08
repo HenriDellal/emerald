@@ -82,8 +82,13 @@ public class IconPackManager {
 		int w, h;
 		Paint paint;
 		if (iconBacks != null) {
-			w = iconBacks.get(0).getWidth();
-			h = iconBacks.get(0).getHeight();
+			if (iconBacks.size() > 0) {
+				w = iconBacks.get(0).getWidth();
+				h = iconBacks.get(0).getHeight();
+			} else {
+				w = b.getWidth();
+				h = b.getHeight();
+			}
 		} else {
 			w = b.getWidth();
 			h = b.getHeight();
@@ -92,7 +97,9 @@ public class IconPackManager {
 		Canvas canvas = new Canvas(result);
 		//Paint paint = new Paint();
 		if (iconBacks != null) {
-			canvas.drawBitmap(iconBacks.get((int)(Math.random()*iconBacks.size())), 0, 0, null);
+			if (iconBacks.size() > 0) {
+				canvas.drawBitmap(iconBacks.get((int)(Math.random()*iconBacks.size())), 0, 0, null);
+			}
 		}
 		paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		Bitmap scaledBitmap = Bitmap.createScaledBitmap(b, (int)(w*factor), (int)(h*factor), false);
@@ -176,9 +183,13 @@ public class IconPackManager {
 							iconBacks.add(loadBitmap(parser.getAttributeValue(i)));
 						}
 					} else if (parser.getName().equals("iconmask")) {
-						iconMask = loadBitmap(parser.getAttributeValue(0));
+						if (parser.getAttributeCount() > 0 && parser.getAttributeName(0).equals("iconmask")) {
+							iconMask = loadBitmap(parser.getAttributeValue(0));
+						}
 					} else if (parser.getName().equals("iconupon")) {
-						iconUpon = loadBitmap(parser.getAttributeValue(0));
+						if (parser.getAttributeCount() > 0 && parser.getAttributeName(0).equals("iconupon")) {
+							iconUpon = loadBitmap(parser.getAttributeValue(0));
+						}
 					} else if (parser.getName().equals("scale")) {
 						if (parser.getAttributeCount() > 0 && parser.getAttributeName(0).equals("factor")) {
 							factor = Float.valueOf(parser.getAttributeValue(0));
