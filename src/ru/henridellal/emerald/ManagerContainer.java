@@ -13,6 +13,12 @@ public class ManagerContainer {
 			.getString(Options.PREF_ICON_PACK, "default");
 		ipm = new IconPackManager(context, iconPack);
 	}
+	public static IconPackManager getIconPackManager(Context context) {
+		if (ipm == null) {
+			setIconPackManager(context);
+		}
+		return getIconPackManager();
+	}
 	public static IconPackManager getIconPackManager() {
 		return ipm;
 	}

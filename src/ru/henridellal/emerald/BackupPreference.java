@@ -18,7 +18,7 @@ public class BackupPreference extends DialogPreference {
 	}
 	@Override
 	protected View onCreateDialogView() {
-			dialog = new FileLoaderDialog(getContext(), getKey().equals("backup")? 0:1);
+		dialog = new FileLoaderDialog(getContext(), getKey().equals("backup")? 0:1);
 		return(dialog);
 	}
 	

@@ -75,13 +75,8 @@ public class MyCache {
 			ComponentName cn = ComponentName.unflattenFromString(componentName);
 			String packageName = cn.getPackageName();
 			PackageManager pm = c.getPackageManager();
-			//IconPackManager ipm = ManagerContainer.getIconPackManager();
 			Resources res = pm.getResourcesForActivity(cn);
-			Drawable icon;
-			/*if ((icon = ipm.getDrawable(componentName)) != null) ;
-			else */
-				icon = res.getDrawable(pm.getPackageInfo(packageName, 0).applicationInfo.icon);
-//			Drawable icon = pm.getPackageInfo(packageName, 0).applicationInfo.loadIcon(c.getPackageManager());
+			Drawable icon = res.getDrawable(pm.getPackageInfo(packageName, 0).applicationInfo.icon);
 			if (icon instanceof BitmapDrawable) {
 				Bitmap bmp = ((BitmapDrawable)icon).getBitmap();
 //				Log.v("TinyLaunch", "icon "+bmp.getWidth()+"x"+bmp.getHeight());
@@ -96,9 +91,6 @@ public class MyCache {
 		}		
 	}
 	public static File getIconFile(Context c, String componentName) {
-		/*if (c.options.getBoolean(Options.PREF_ICON_PACK, false) && ) {
-			return new File(, Uri.encode(componentName)+".png");
-		}*/
 		return new File(c.getCacheDir(), 
 				Uri.encode(componentName)+".icon.png");
 	}

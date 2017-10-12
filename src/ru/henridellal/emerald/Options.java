@@ -65,7 +65,7 @@ public class Options extends PreferenceActivity {
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		addPreferencesFromResource(R.xml.options);
-		setIconPacksList(ManagerContainer.getIconPackManager().getIconPacks());
+		setIconPacksList(ManagerContainer.getIconPackManager(this).getIconPacks());
 		/*int theme = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString(Options.PREF_THEME, getResources().getString(R.string.defaultThemeValue)));
 		switch (theme) {
 			case DEFAULT_THEME:

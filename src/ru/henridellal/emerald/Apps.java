@@ -13,6 +13,7 @@ import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.Notification;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -235,7 +236,11 @@ public class Apps extends Activity //implements OnGestureListener
 		i.setComponent(ComponentName.unflattenFromString(
 				a.getComponent()));
 		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-		startActivity(i);
+		try {
+			startActivity(i);
+		} catch (ActivityNotFoundException e) {
+			Toast.makeText(this, "Activity is not found", Toast.LENGTH_LONG).show();
+		}
 	}
 
 	private void makeAppGrid() {
@@ -585,6 +590,7 @@ public class Apps extends Activity //implements OnGestureListener
 	public void setScrollbar() {
 		if (options.getBoolean("scrollbar", false)) {
 			//grid.setFastScrollEnabled(true);
+			//grid.setFastScrollAlwaysVisible(true);
 			//grid.setScrollBarStyle(AbsListView.SCROLLBARS_OUTSIDE_INSET);
 			//grid.setSmoothScrollbarEnabled(true);
 			AbsListView.OnScrollListener onScrollListener = new AbsListView.OnScrollListener() {
@@ -817,12 +823,8 @@ public class Apps extends Activity //implements OnGestureListener
 		super.onResume();
 		setAppTheme();
 		//Log.v(APP_TAG, "onResume");
-		appShortcut = Integer.parseInt(options.getString(Options.PREF_APP_SHORTCUT, "1"));
-	    //iconSize = Integer.parseInt(options.getString(Options.PREF_ICON_SIZE, "48"));
+		appShortcut = Integer.parseInt(options.getString(Options.PREF_APP_SHORTCUT, "3"));
 	    lock = options.getString(Options.PREF_PASSWORD, "").length() > 0;
-	    //historySize = Integer.parseInt(options.getString(Options.PREF_HISTORY_SIZE, "10"));
-	    //findViewById(R.id.topbar).setBackgroundResource(Integer.parseInt(options.getString(Options.PREF_BAR_BACKGROUND, "0"), 16));
-		
 		loadList(false);
 		boolean needReload = false;
 		
@@ -845,7 +847,7 @@ public class Apps extends Activity //implements OnGestureListener
 		if (map.size() == 0) {
 			needReload = true;
 		} else {
-			if ((Integer.parseInt(options.getString(Options.PREF_PREV_APP_SHORTCUT, "1")) == Options.TEXT) != (appShortcut == Options.TEXT)) {
+			if ((Integer.parseInt(options.getString(Options.PREF_PREV_APP_SHORTCUT, "3")) == Options.TEXT) != (appShortcut == Options.TEXT)) {
 				if (appShortcut >= Options.ICON) {
 					needReload = true;
 				} else {
@@ -855,7 +857,7 @@ public class Apps extends Activity //implements OnGestureListener
 			}
 		}
 
-		if (needReload || map.size() == 0 || options.getBoolean(Options.PREF_DIRTY, false)) {
+		if (needReload || options.getBoolean(Options.PREF_DIRTY, false)) {
 			//			Log.v(APP_TAG, "scan");
 			if (scanner == null || scanner.getStatus() != Status.RUNNING) {
 				scanner = new GetApps(this);

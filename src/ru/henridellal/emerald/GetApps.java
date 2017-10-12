@@ -67,7 +67,7 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 		Intent launchIntent = new Intent(Intent.ACTION_MAIN);
 		launchIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-		int appShortcut = Integer.parseInt(context.options.getString(Options.PREF_APP_SHORTCUT, "1"));
+		int appShortcut = Integer.parseInt(context.options.getString(Options.PREF_APP_SHORTCUT, "3"));
 		boolean icons = appShortcut >= Options.ICON;
 		Map<String,AppData> cache = new HashMap<String,AppData>();
 		// delete icons from cache if they aren't used
@@ -100,11 +100,8 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 				
 				// get info of app located by index i in list
 				LauncherActivityInfo info = list.get(i);
-				//ResolveInfo info = list.get(i);
 				// get package name
 				ComponentName cn = info.getComponentName();
-			//	ComponentName cn = new ComponentName(info.activityInfo.packageName, 
-			//			info.activityInfo.name);
 				component = cn.flattenToString();
 				name = null;
 				cacheValid = false;
@@ -120,7 +117,6 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 				// if cache is not valid then set name from package manager
 				if (!cacheValid) {
 					name = info.getLabel().toString();
-					//name = (String) info.activityInfo.loadLabel(pm);
 					if (name == null)
 						name = component;
 					if (name.equals("Emerald Launcher")) {
@@ -134,7 +130,7 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 					// get icon file for app from cache
 					File iconFile = MyCache.getIconFile(context, component);
 					// if there is no icon for app in cache
-					if (!cacheValid || !iconFile.exists()) { // || ((Apps)context).iconPackChanged()) {
+					if (!cacheValid || !iconFile.exists()) {
 						writeIconTo(iconFile, info.getIcon(0));
 					}
 				}
@@ -154,7 +150,6 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 				publishProgress(i, list.size());
 				
 				// get info of app located by index i in list
-				// LauncherActivityInfo info = list.get(i);
 				ResolveInfo info = list.get(i);
 				// get package name
 				ComponentName cn = new ComponentName(info.activityInfo.packageName, 

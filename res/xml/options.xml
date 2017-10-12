@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
-	<ru.henridellal.emerald.CategoryManagerPreference
-    	android:title="@string/categoryManager"
-        android:key="categoryManager"/>
-    <ru.henridellal.emerald.AboutPreference
-    	android:title="@string/aboutTitle"
-        android:key="about"/>
+  <ru.henridellal.emerald.RestartPreference
+    	android:title="@string/restart"
+        android:key="restart"/>
     <PreferenceScreen android:title="@string/appearancePrefs">
 	    <ListPreference
 	        android:defaultValue="3"
@@ -97,20 +94,22 @@
 	    	android:defaultValue="true"
 	    	android:key="transform_drawable"/>
     </PreferenceScreen>
+    <ru.henridellal.emerald.CategoryManagerPreference
+    	android:title="@string/categoryManager"
+        android:key="categoryManager"/>
    <ru.henridellal.emerald.EditIntPreference
         android:title="@string/historySize"
         android:defaultValue="@integer/history_size_default"
         android:key="history_size"/>
-   <!--<EditTextPreference
-        android:title="Bar background color"
-        android:defaultValue="0"
-        android:key="barBackground"/>-->
    <EditTextPreference
         android:title="@string/password"
         android:dialogTitle="@string/passwordHint"
    	 android:summary="@string/passwordSummary"
         android:defaultValue=""
         android:key="password"/>
+    <ru.henridellal.emerald.AboutPreference
+    	android:title="@string/aboutTitle"
+        android:key="about"/>
     <EditTextPreference
         android:title="@string/searchProvider"
         android:defaultValue="https://duckduckgo.com/?q="
@@ -121,13 +120,9 @@
     <ru.henridellal.emerald.BackupPreference
     	android:title="@string/restorePrefs"
         android:key="restore"/>
-   
    <CheckBoxPreference
 		android:title="@string/keepInMemory"
 	    android:summary="Only for Android 3.0+"
 	    android:defaultValue="false"
 		android:key="keepInMemory"/>
-   <ru.henridellal.emerald.RestartPreference
-    	android:title="@string/restart"
-        android:key="restart"/>
 </PreferenceScreen>
