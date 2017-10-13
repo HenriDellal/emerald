@@ -425,13 +425,16 @@ public class Apps extends Activity //implements OnGestureListener
 		menu();
 	}
 	public void searchInWeb(String text) {
-		String site = options.getString(Options.PREF_SEARCH_PROVIDER, "");
+		String site = options.getString(Options.PREF_SEARCH_PROVIDER, "https://duckduckgo.com/?q=");
 		String url = site + text;
 		//String url = text;
 		Intent intent = new Intent(Intent.ACTION_VIEW);
 		intent.setData(Uri.parse(url));
-		startActivity(intent);
-		//Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+		try {
+			startActivity(intent);
+		} catch (ActivityNotFoundException e) {
+			Toast.makeText(this, "Cannot handle "+ url + " request", Toast.LENGTH_LONG).show();
+		}
 	}
 	public void openSearch() {
 		//Log.v(APP_TAG, "Start searching");
