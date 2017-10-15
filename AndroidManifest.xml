@@ -37,6 +37,7 @@
         			android:excludeFromRecents="true"
       			  android:launchMode="singleInstance"
       			  android:configChanges="orientation|keyboardHidden|screenSize"
+      			  android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
                   android:theme="@style/AppTheme.Default"
                   android:label="@string/app_name">
             <intent-filter>

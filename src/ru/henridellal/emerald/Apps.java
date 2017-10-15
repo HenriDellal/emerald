@@ -443,7 +443,7 @@ public class Apps extends Activity //implements OnGestureListener
 		findViewById(R.id.tabs).setVisibility(View.GONE);
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		if (imm != null) {
-			imm.showSoftInput(grid, 0);
+			imm.showSoftInput(grid, InputMethodManager.SHOW_IMPLICIT);
 		}
 		findViewById(R.id.searchBar).setVisibility(View.VISIBLE);
 		final EditText text = (EditText)findViewById(R.id.textField);

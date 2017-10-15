@@ -3,92 +3,98 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent">
-	<LinearLayout 
+	<RelativeLayout 
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
-	    android:orientation="vertical"
+	    
 	    android:id="@+id/appsWindow">
 	
-	    <LinearLayout 
+		<RelativeLayout 
 	        android:id="@+id/topbar"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:background="#2000"
-	        android:orientation="horizontal"
+	        android:layout_toStartOf="@id/appsWindow"
 	        >
-	    	<LinearLayout 
+	    	<RelativeLayout 
 	        	android:id="@+id/tabs"
 	        	android:layout_width="fill_parent"
 	        	android:layout_height="wrap_content"
-	        	android:orientation="horizontal">
+	        	>
 	        	<Button 
 	        		android:id="@+id/menuButton"
 			        android:layout_width="32dp"
 			        android:layout_height="32dp"
-			    	android:layout_gravity="center_vertical"
+			        android:layout_centerVertical="true"
 			    	android:onClick="onMyClick"
 			    	android:background="@drawable/menu_bg"
+			    	android:layout_alignParentLeft="true"
 			        />
 			    <Spinner
 			        android:id="@+id/category"
-			        android:layout_width="0dp"
-			        android:layout_weight="1"
+			        android:layout_width="match_parent"
 			        android:layout_height="40dp"
+			        android:layout_toRightOf="@id/menuButton"
 			        android:layout_marginLeft="5dp"
-			        android:layout_marginRight="5dp"
-			        android:gravity="center"
+			        android:layout_marginRight="37dp"
+			        android:layout_centerVertical="true"
 			        />
 			    <Button 
 			    	android:id="@+id/searchButton"
 			        android:layout_width="32dp"
 			        android:layout_height="32dp"
-			    	android:layout_gravity="center_vertical"
-			    	
+			    	android:layout_centerVertical="true"
 			    	android:onClick="onMyClick"
+			    	android:layout_alignParentRight="true"
 			        android:background="@drawable/search_bg"
 			        />
-			</LinearLayout>
-		    <LinearLayout 
+			    
+			</RelativeLayout>
+		    <RelativeLayout 
 	        	android:id="@+id/searchBar"
 	        	android:layout_width="fill_parent"
 	        	android:layout_height="wrap_content"
-	        	android:orientation="horizontal"
 	        	android:visibility="gone"
 			    >
-			    <EditText
-			        android:id="@+id/textField"
-			        android:maxLines="1"
-			    	android:layout_width="0dp"
-			    	android:visibility="gone"
-			    	android:layout_weight="1"
-			        android:layout_height="wrap_content"
-			        android:textSize="14sp"
-			    />
 			    <Button 
 			        android:id="@+id/webSearchButton"
 			        android:layout_width="32dp"
 			        android:layout_height="32dp"
-			    	android:layout_gravity="center_vertical"
+			    	android:layout_centerVertical="true"
 			    	android:visibility="gone"
+			    	android:layout_alignParentRight="true"
 			        android:background="@drawable/web_search_bg"
 			        />
-	    	</LinearLayout>
+			    <EditText
+			        android:id="@+id/textField"
+			        android:maxLines="1"
+			    	android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			    	android:visibility="gone"
+			        android:textSize="14sp"
+			    	android:layout_alignParentLeft="true"
+			    	android:layout_marginRight="40dp"
+			    	android:layout_toStartOf="@id/searchBar"
+			    />
+			    
+	    	</RelativeLayout>
 	    	
-	    </LinearLayout>
+	    </RelativeLayout>
+	    
 	    <GridView
 	        android:id="@+id/appsGrid"
 	        android:layout_width="fill_parent"
-	        android:layout_height="0px"
-	        android:layout_weight="1"
+	        android:layout_height="wrap_content"
 	        android:numColumns="auto_fit"
 	        android:columnWidth="70dp"
 	        android:verticalSpacing="10dp"
 	        android:stretchMode="columnWidth"
+	        android:layout_below="@id/topbar"
 	        android:layout_marginTop="10dp"
 	        android:layout_marginLeft="5dp"
 	        android:layout_marginRight="5dp" />
-	
-	</LinearLayout>
+	        
+	</RelativeLayout>
 	<FrameLayout
 		android:id="@+id/hint"
 		android:layout_gravity="center"
