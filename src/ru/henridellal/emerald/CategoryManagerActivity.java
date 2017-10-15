@@ -29,6 +29,10 @@ public class CategoryManagerActivity extends Activity{
 	private static final int COMMAND_RENAME = 4;
 	private static final int COMMAND_EDIT = 5;
 	
+	public ArrayAdapter<String> getAdapter() {
+		return adapter;
+	}
+	
 	@Override
 	public void onDestroy() {
 		cm = null;
@@ -141,7 +145,7 @@ public class CategoryManagerActivity extends Activity{
 			new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					cm.removeCategory(category);
-					adapter.notifyDataSetChanged();
+					getAdapter().notifyDataSetChanged();
 				}
 			}).setNegativeButton(android.R.string.no,
 			new DialogInterface.OnClickListener() {
@@ -184,6 +188,7 @@ public class CategoryManagerActivity extends Activity{
 				public void onClick(DialogInterface dialog, int which) {
 					if (cm.renameCategory(inputBox.getText().toString(), category)) {
 						Toast.makeText(CategoryManagerActivity.this, "Successfully renamed", Toast.LENGTH_LONG).show();
+						adapter.notifyDataSetChanged();
 					} else {
 						Toast.makeText(CategoryManagerActivity.this, "Name already in use", Toast.LENGTH_LONG).show();    				
 					}
