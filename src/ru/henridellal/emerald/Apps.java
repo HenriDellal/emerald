@@ -208,12 +208,7 @@ public class Apps extends Activity //implements OnGestureListener
 		//Log.v(APP_TAG, "filtering");
 		curCatData = categories.filterApps(map);
 		//Log.v(APP_TAG, "filtered");
-		if (options.getBoolean(Options.PREF_TILE, true)) {
-			makeAppGrid();
-		} else {
-			makeAppList();
-		}
-		
+		adapter.update(curCatData);
 		//Log.v(APP_TAG, "loadFilteredApps : finished");
 	}
 	//handles history filling
@@ -252,13 +247,15 @@ public class Apps extends Activity //implements OnGestureListener
 		}
 	}
 
-	private void makeAppGrid() {
+	private void initGrid() {
 		//Log.v(APP_TAG, "Make a grid");
 		grid.setAdapter(null);
 
 		// -1 is a value of AUTO_FIT constant
-		grid.setNumColumns(GridView.AUTO_FIT);
-		adapter = new CustomAdapter(this, curCatData, GRID);
+		if (options.getBoolean(Options.PREF_TILE, true)) {
+			grid.setNumColumns(GridView.AUTO_FIT);
+		}
+		adapter = new CustomAdapter(this);
 
 		grid.setAdapter(adapter);
 	/*	grid.setOnItemClickListener(null);
@@ -267,15 +264,6 @@ public class Apps extends Activity //implements OnGestureListener
 			grid.setBackgroundColor(Color.WHITE);
 	}
 	
-	private void makeAppList() {
-		//Log.v(APP_TAG, "Make a list");
-		grid.setAdapter(null);
-		adapter = new CustomAdapter(this, curCatData, LIST);
-		grid.setAdapter(adapter);
-		if (theme == Options.LIGHT)
-			grid.setBackgroundColor(Color.WHITE);
-	}
-
 	//launches popup window for editing apps
 	private void itemEdit(final AppData item) {
 		//Log.v(APP_TAG, "Open app edit window");
@@ -513,6 +501,7 @@ public class Apps extends Activity //implements OnGestureListener
 				v.setVisibility(View.GONE);
 				findViewById(R.id.tabs).setVisibility(View.VISIBLE);
 				loadFilteredApps();
+				setSpinner();
 				break;
 		}
 	}
@@ -532,8 +521,10 @@ public class Apps extends Activity //implements OnGestureListener
 			if (categories.getCurCategory().equals(CategoryManager.HIDDEN)) {
 				findViewById(R.id.quit_hidden_apps).setVisibility(View.GONE);
 				findViewById(R.id.tabs).setVisibility(View.VISIBLE);
+				categories.setCurCategory(CategoryManager.ALL);
+			} else {
+				categories.prevCategory();
 			}
-			categories.prevCategory();
 			loadFilteredApps();
 			setSpinner();
 			return true;
@@ -731,6 +722,7 @@ public class Apps extends Activity //implements OnGestureListener
 			}
 		};
 		options.registerOnSharedPreferenceChangeListener(prefListener);
+		initGrid();
 		setScrollbar();
 		fixPadding();
 	//	Log.v(APP_TAG, "onCreate setTheme");
@@ -969,7 +961,7 @@ public class Apps extends Activity //implements OnGestureListener
 
 			if (convertView == null) {
 				LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				if (curMode == GRID)
+				if (options.getBoolean(Options.PREF_TILE, true))
 					v = inflater.inflate(R.layout.iconbutton, parent, false);
 				else
 					v = inflater.inflate(R.layout.oneline, parent, false);
@@ -1039,14 +1031,17 @@ public class Apps extends Activity //implements OnGestureListener
 		public long getItemId(int position) {
 			return 0;
 		}			
-		
-		public CustomAdapter(Context context, ArrayList<AppData> curCatData, int curMode) {
+		public void update(ArrayList<AppData> curCatData) {
+			this.catData = curCatData;
+			toDisplay = catData;
+			notifyDataSetChanged();
+		}
+		public CustomAdapter(Context context) {
 			super();
 			//Log.v(APP_TAG, "custom adapter created");
 			this.mContext = context;
-			this.catData = curCatData;
-			toDisplay = catData;
-			this.curMode = curMode;
+			curCatData = new ArrayList<AppData>();
+			toDisplay = new ArrayList<AppData>();
 			onClickListener = new View.OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
