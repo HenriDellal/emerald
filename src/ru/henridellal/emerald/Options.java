@@ -31,6 +31,7 @@ public class Options extends PreferenceActivity {
 	public static final int WALLPAPER_DARK = 4;
 	
 	public final static String PREF_BAR_BACKGROUND = "bar_background";
+	public final static String PREF_DOCK_BACKGROUND = "dock_background";
 	public final static String PREF_APPS_WINDOW_BACKGROUND = "apps_background";
 	
 	public final static String PREF_ICON_PACK = "icon_pack";
@@ -49,6 +50,8 @@ public class Options extends PreferenceActivity {
 	public final static String PREF_TEXT_SIZE_LANDSCAPE = "text_size_land";
 	public final static String PREF_COLUMN_WIDTH_LANDSCAPE = "column_width_land";
 	public final static String PREF_VERTICAL_SPACING_LANDSCAPE = "vertical_spacing_land";
+	
+	public static final String PREF_DOCK_IN_LANDSCAPE = "show_dock_in_landscape";
 	
 	public static final String PREF_HOME = "home";
 	public static final String PREF_CATEGORY = "category";
@@ -117,13 +120,6 @@ public class Options extends PreferenceActivity {
 		super.onStop();
 	}
 	
-	public void backupPrefs() {
-		try {
-			File sdPath = Environment.getExternalStorageDirectory();
-			String backupPath = "/Android/data/ru.henridellal.emerald/files/preferences.txt";
-			backupPrefs(new File(sdPath, backupPath));
-		} catch (Exception e) {}
-	}
 	public void backupPrefs(File backupFile) {
 		FileOutputStream output = null;
 		try {
@@ -177,15 +173,6 @@ public class Options extends PreferenceActivity {
 		}
 	}
 	
-	public void restorePrefs() {
-		try {
-			String backupPath = "/Android/data/ru.henridellal.emerald/files/preferences.txt";
-			File sdPath = Environment.getExternalStorageDirectory();
-			File backupFile = new File(sdPath, backupPath);
-			restorePrefs(backupFile);
-		} catch (Exception e) {}
-		
-	}
 	public void restorePrefs(File backupFile) {
 		BufferedReader input = null;
 		SharedPreferences.Editor prefsEditor = PreferenceManager.getDefaultSharedPreferences(this).edit();
@@ -195,7 +182,6 @@ public class Options extends PreferenceActivity {
 		argTypes.add("BOOLEAN");
 		argTypes.add("FLOAT");
 		try {
-			
 			input = new BufferedReader(new FileReader(backupFile));
 			String key, value, line, prefType = null;
 			while ((line = input.readLine()).indexOf("END") == -1) {

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<!--<style name="AppTheme.Preferences.Light" parent="@android:style/Theme.Material.Light">
+	<!--<style name="AppTheme.Preferences.Light" parent="@android:style/Theme.Holo.Light">
 	</style>
-	<style name="AppTheme.Preferences.Dark" parent="@android:style/Theme.Material">
+	<style name="AppTheme.Preferences.Dark" parent="@android:style/Theme.Holo">
 	</style>-->
-	<style name="AppTheme.Light" parent="@android:style/Theme.Material.Light.NoActionBar">
+	<style name="AppTheme.Light" parent="@android:style/Theme.Holo.Light.NoActionBar">
 	</style>
-	<style name="AppTheme.Dark" parent="@android:style/Theme.Material.NoActionBar">
+	<style name="AppTheme.Dark" parent="@android:style/Theme.Holo.NoActionBar">
 	</style>
 	<style name="AppTheme.Dark.Wallpaper" parent="AppTheme.Dark">
 		<item name="android:windowTranslucentNavigation">true</item>
@@ -22,10 +22,10 @@
 		<item name="android:windowShowWallpaper">true</item>
 		<item name="android:spinnerItemStyle">@style/spinnerItem</item>
 	</style>
-	<style name="spinnerItem" parent="@android:style/Widget.Material.TextView.SpinnerItem">
+	<style name="spinnerItem" parent="@android:style/Widget.Holo.TextView.SpinnerItem">
 		<item name="android:textColor">#FFF</item>
 	</style>
-	<style name="spinnerItem.Dark" parent="@android:style/Widget.Material.TextView.SpinnerItem">
+	<style name="spinnerItem.Dark" parent="@android:style/Widget.Holo.TextView.SpinnerItem">
 		<item name="android:textColor">#000</item>
 	</style>
 	<style name="AppTheme.Default" parent="AppTheme.Light.Wallpaper">

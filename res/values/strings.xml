@@ -50,13 +50,22 @@
 	<string name="unhide">Unhide</string>
 	
 	<string name="save_here">Save in this folder</string>
+	<string name="dock_is_full">Dock is full</string>
+	<string name="dock_preferences">Dock preferences</string>
+	<string name="dock_height">Dock height</string>
+	<string name="dock_icon_size">Dock icon size</string>
+	<string name="show_dock_in_landscape">Show dock in landscape mode</string>
+	<string name="dock_background">Dock background</string>
 	
 	<string name="accessHidden">Access hidden apps</string>
+	<string name="quit_hidden_apps">Quit hidden apps</string>
 	<string name="fullScan">Full scan</string>
 	<string name="clear">Clear</string>
 	<string name="wrong_password">Wrong password.</string>
 	<string name="type_password">Type password</string>
 	
+	<string name="add_to_dock">Add to dock</string>
+	<string name="remove_from_dock">Remove from dock</string>
 	<string name="uninstall">Uninstall</string>
 	
 	<string name="aboutTitle">About</string>

@@ -79,6 +79,7 @@ public class Apps extends Activity //implements OnGestureListener
 	
 	//ArrayAdapter<AppData> adapter;
 	GridView grid;
+	Dock dock;
 	
 	Map<String,AppData> map;
 	public SharedPreferences options;
@@ -181,6 +182,10 @@ public class Apps extends Activity //implements OnGestureListener
 			} else {
 	    		grid.setNumColumns(1);
 	    	}
+	    	if (!(options.getBoolean(Options.PREF_DOCK_IN_LANDSCAPE, true))) {
+	    		dock.setAlwaysHide(false);
+	    		dock.unhide();
+	    	}
 		} else {
 			//Log.v(APP_TAG, "loadFilteredApps : orientation");
 			textSize = (int)(options.getInt(Options.PREF_TEXT_SIZE_LANDSCAPE, getResources().getInteger(R.integer.text_size_land_default)) * getResources().getDisplayMetrics().density);
@@ -191,6 +196,10 @@ public class Apps extends Activity //implements OnGestureListener
 	    	} else {
 	    		grid.setNumColumns(2);
 	    		grid.setColumnWidth(-1);
+	    	}
+	    	if (!(options.getBoolean(Options.PREF_DOCK_IN_LANDSCAPE, true))) {
+	    		dock.hide();
+	    		dock.setAlwaysHide(true);
 	    	}
 		}
 	}
@@ -261,7 +270,6 @@ public class Apps extends Activity //implements OnGestureListener
 	private void makeAppList() {
 		//Log.v(APP_TAG, "Make a list");
 		grid.setAdapter(null);
-
 		adapter = new CustomAdapter(this, curCatData, LIST);
 		grid.setAdapter(adapter);
 		if (theme == Options.LIGHT)
@@ -331,7 +339,10 @@ public class Apps extends Activity //implements OnGestureListener
 			getResources().getString(R.string.aboutTitle),
 			getResources().getString(R.string.findInMarket),
 			getResources().getString(R.string.editAppCategories),
-			getResources().getString(R.string.uninstall)
+			getResources().getString(R.string.uninstall),
+			(dock.hasApp(item)) ? 
+				getResources().getString(R.string.remove_from_dock): 
+				getResources().getString(R.string.add_to_dock)
 		};
 		builder.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, commands),
 		new DialogInterface.OnClickListener(){
@@ -346,7 +357,6 @@ public class Apps extends Activity //implements OnGestureListener
 					case 1:
 						uri = Uri.parse("market://details?id="+ComponentName.unflattenFromString(
 							item.getComponent()).getPackageName());
-						
 						startActivity(new Intent(Intent.ACTION_VIEW, uri));
 						break;
 					case 2:
@@ -357,13 +367,23 @@ public class Apps extends Activity //implements OnGestureListener
 							item.getComponent()).getPackageName());
 						startActivity(new Intent(Intent.ACTION_DELETE, uri));
 						break;
+					case 4:
+						if (dock.hasApp(item)) {
+							dock.remove(item);
+						} else {
+							if (!dock.isFull()) {
+								dock.add(item);
+							} else {
+								Toast.makeText(Apps.this, getResources().getString(R.string.dock_is_full), Toast.LENGTH_LONG).show();
+							}
+						}
+						dock.update();
+						break;
 				}
 			}
 		});
-		
 		builder.create().show();
 	}
-
 //	@Override
 //	public boolean dispatchKeyEvent(KeyEvent event) {
 //		Log.v(APP_TAG, "key "+event);
@@ -378,15 +398,6 @@ public class Apps extends Activity //implements OnGestureListener
 //		}
 //		return super.dispatchKeyEvent(event);
 //	}
-	
-	
-	/*@Override
-	protected void onNewIntent(Intent intent) {
-		//Log.v(APP_TAG, "onNewIntent called");
-		homePressed = true;
-		super.onNewIntent(intent);
-	}*/
-	
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		//Log.v(APP_TAG, "Configuration changed");
@@ -450,7 +461,9 @@ public class Apps extends Activity //implements OnGestureListener
 		text.setVisibility(View.VISIBLE);
 		findViewById(R.id.webSearchButton).setVisibility(View.VISIBLE);
 		//grid.setTextFilterEnabled(true);
-		
+		if (dock.isVisible()) {
+			dock.hide();
+		}
 		text.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void afterTextChanged(Editable s) {}
@@ -480,6 +493,9 @@ public class Apps extends Activity //implements OnGestureListener
 		findViewById(R.id.webSearchButton).setVisibility(View.GONE);
 		text.setVisibility(View.GONE);
 		findViewById(R.id.tabs).setVisibility(View.VISIBLE);
+		if (!dock.isEmpty()) {
+			dock.unhide();
+		}
 		searchIsOpened=false;
 	}
 	
@@ -492,6 +508,12 @@ public class Apps extends Activity //implements OnGestureListener
 				//startActivity(new Intent(this, Options.class));
 				menu();
 				break;
+			case R.id.quit_hidden_apps:
+				categories.setCurCategory(CategoryManager.ALL);
+				v.setVisibility(View.GONE);
+				findViewById(R.id.tabs).setVisibility(View.VISIBLE);
+				loadFilteredApps();
+				break;
 		}
 	}
 	
@@ -501,10 +523,15 @@ public class Apps extends Activity //implements OnGestureListener
 			menu();
 			return true;
 		} else if (keyCode == KeyEvent.KEYCODE_BACK) {
+			//onBackPressed
 			//Log.v(APP_TAG, "BACK pressed");
 			if (searchIsOpened) {
 				closeSearch();
 				searchIsOpened = false;
+			}
+			if (categories.getCurCategory().equals(CategoryManager.HIDDEN)) {
+				findViewById(R.id.quit_hidden_apps).setVisibility(View.GONE);
+				findViewById(R.id.tabs).setVisibility(View.VISIBLE);
 			}
 			categories.prevCategory();
 			loadFilteredApps();
@@ -578,16 +605,18 @@ public class Apps extends Activity //implements OnGestureListener
 		setBarTheme(theme);
 	}
 	private void fixPadding() {
-		float density = getResources().getDisplayMetrics().density;
-		if (Build.VERSION.SDK_INT >= 21) {
-			findViewById(R.id.topbar).setPadding((int)(8 * density), (int)(24 * density), (int)(8 * density), (int)(2 * density));
+		if (Build.VERSION.SDK_INT >= 19) {
 			int id;
 			if ((id = getResources().getIdentifier("navigation_bar_height", "dimen", "android")) > 0) {
 				int navBarHeight = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK) ? 0 : getResources().getDimensionPixelSize(id);
-				grid.setPadding(grid.getPaddingLeft(), grid.getPaddingTop(), grid.getPaddingRight(), navBarHeight);
+				View dummyBottomView = findViewById(R.id.dummy_bottom_view);
+				ViewGroup.LayoutParams p = dummyBottomView.getLayoutParams();
+				p.height = navBarHeight;
+				dummyBottomView.setLayoutParams(p);
+				if (navBarHeight > 0) {
+					dummyBottomView.setVisibility(View.VISIBLE);
+				}
 			}
-		} else {
-			findViewById(R.id.topbar).setPadding((int)(8 * density), (int)(2 * density), (int)(8 * density), (int)(2 * density));
 		}
 	}
 	public void setScrollbar() {
@@ -653,6 +682,9 @@ public class Apps extends Activity //implements OnGestureListener
 		setContentView(R.layout.apps);
 		findViewById(R.id.appsWindow).setBackgroundColor(options.getInt(Options.PREF_APPS_WINDOW_BACKGROUND, 0));
 		findViewById(R.id.topbar).setBackgroundColor(options.getInt(Options.PREF_BAR_BACKGROUND, 0x22000000));
+		findViewById(R.id.dummy_top_view).setBackgroundColor(options.getInt(Options.PREF_BAR_BACKGROUND, 0x22000000));
+		findViewById(R.id.dummy_bottom_view).setBackgroundColor(options.getInt(Options.PREF_BAR_BACKGROUND, 0x22000000));
+		findViewById(R.id.dock_bar).setBackgroundColor(options.getInt(Options.PREF_DOCK_BACKGROUND, 0x22000000));
 		grid = (GridView)findViewById(R.id.appsGrid);
 		//fadeIn = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
 		/*detector = new GestureDetector(this);
@@ -698,7 +730,6 @@ public class Apps extends Activity //implements OnGestureListener
 				}
 			}
 		};
-		
 		options.registerOnSharedPreferenceChangeListener(prefListener);
 		setScrollbar();
 		fixPadding();
@@ -736,6 +767,7 @@ public class Apps extends Activity //implements OnGestureListener
 			}
 		};
 		spin.setOnTouchListener(swipeListener);
+		dock = new Dock(this);
 		changePrefsOnRotate();
 		/*list.setOnTouchListener(new View.OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent e) {
@@ -808,6 +840,12 @@ public class Apps extends Activity //implements OnGestureListener
 			return true;
 		case R.id.access_hidden:
 			categories.setCurCategory(CategoryManager.HIDDEN);
+			findViewById(R.id.searchBar).setVisibility(View.GONE);
+			findViewById(R.id.tabs).setVisibility(View.GONE);
+			findViewById(R.id.quit_hidden_apps).setVisibility(View.VISIBLE);
+			if (searchIsOpened) {
+				closeSearch();
+			}
 			loadFilteredApps();
 			return true;
 		default:
@@ -876,6 +914,7 @@ public class Apps extends Activity //implements OnGestureListener
 		if (historySizeChanged && categories.getCurCategory().equals(CategoryManager.HISTORY)) {
 			loadFilteredApps();
 		}
+		dock.initApps(map);
 	}
 
 	public class CustomAdapter extends BaseAdapter// implements SectionIndexer
@@ -960,7 +999,8 @@ public class Apps extends Activity //implements OnGestureListener
 				tv.setVisibility(View.GONE);
 			}
 			if (appShortcut >= Options.ICON) {
-				setIcon(img, a);
+				IconPackManager.setIcon(Apps.this, img, a);
+				img.setVisibility(View.VISIBLE);
 				ViewGroup.LayoutParams p = img.getLayoutParams();
 				p.width = iconSize;
 				p.height = iconSize;
@@ -999,23 +1039,6 @@ public class Apps extends Activity //implements OnGestureListener
 		public long getItemId(int position) {
 			return 0;
 		}			
-		//sets icon from cache in ImageView
-		void setIcon(ImageView img, AppData a) {
-			File iconFile = MyCache.getIconFile(Apps.this, a.getComponent());
-			if (iconFile.exists()) {
-				try {
-					img.setImageDrawable(Drawable.createFromStream(
-							new FileInputStream(iconFile), null));
-				} catch (Exception e) {
-					//				Log.e(APP_TAG, ""+e);
-					img.setImageResource(android.R.drawable.sym_def_app_icon);
-				}
-			} else {
-				img.setImageResource(android.R.drawable.sym_def_app_icon);
-			}
-	
-			img.setVisibility(View.VISIBLE);
-		}
 		
 		public CustomAdapter(Context context, ArrayList<AppData> curCatData, int curMode) {
 			super();

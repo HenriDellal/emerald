@@ -70,7 +70,7 @@ public class CategoryManager {
 	public String getPrevCategory() {
 		int result;
 		boolean finished = false;
-		if (!curCategory.equals("Hidden")) {
+		if (!curCategory.equals(HIDDEN)) {
 			result = names.indexOf(curCategory);
 			while (!finished) {
 				result--;
@@ -88,7 +88,7 @@ public class CategoryManager {
 	public String getNextCategory() {
 		int result;
 		boolean finished = false;
-		if (!curCategory.equals("Hidden")) {
+		if (!curCategory.equals(HIDDEN)) {
 			result = names.indexOf(curCategory);
 			while (!finished) {
 				result++;
@@ -451,7 +451,7 @@ public class CategoryManager {
 				data.addAll(c);
 			}
 		}
-		
+		//if (customSorting) {}
 		if (!curCategory.equals(HISTORY))
 			Collections.sort(data, AppData.NameComparator);
 		

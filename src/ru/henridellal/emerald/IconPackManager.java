@@ -15,8 +15,12 @@ import android.graphics.Canvas;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.PorterDuff.Mode;
 import android.preference.PreferenceManager;
+import android.widget.ImageView;
+
 //import android.util.Log;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
@@ -138,6 +142,21 @@ public class IconPackManager {
 			iconPacks.put(iconPackName, iconPackPackage);
 		}
 		return iconPacks;
+	}
+	//sets icon from cache in ImageView
+	public static void setIcon(Context c, ImageView img, AppData a) {
+		File iconFile = MyCache.getIconFile(c, a.getComponent());
+		if (iconFile.exists()) {
+			try {
+				img.setImageDrawable(Drawable.createFromStream(
+					new FileInputStream(iconFile), null));
+			} catch (Exception e) {
+				//				Log.e(APP_TAG, ""+e);
+				img.setImageResource(android.R.drawable.sym_def_app_icon);
+			}
+		} else {
+			img.setImageResource(android.R.drawable.sym_def_app_icon);
+		}
 	}
 	public void setIcons() {
 		iconsData = new HashMap<String, String>();

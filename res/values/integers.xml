@@ -9,4 +9,6 @@
 	<integer name="vertical_spacing_default">5</integer>
 	<integer name="vertical_spacing_land_default">5</integer>
 	<integer name="history_size_default">12</integer>
+	<integer name="dock_height_default">56</integer>
+	<integer name="dock_icon_size_default">48</integer>
 </resources>

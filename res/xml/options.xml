@@ -47,6 +47,24 @@
 		        android:defaultValue="@integer/vertical_spacing_land_default"
 		        android:key="vertical_spacing_land"/>
 	    </PreferenceScreen>
+	    <PreferenceScreen android:title="@string/dock_preferences">
+	    	<!--<ru.henridellal.emerald.EditIntPreference
+		    	android:title="@string/dock_height"
+			    android:defaultValue="@integer/dock_height_default"
+			    android:key="dock_height"/>
+			<ru.henridellal.emerald.EditIntPreference
+		    	android:title="@string/dock_icon_size"
+			    android:defaultValue="@integer/dock_icon_size_default"
+			    android:key="dock_icon_size"/>-->
+			<CheckBoxPreference
+	    		android:title="@string/show_dock_in_landscape"
+	    		android:defaultValue="true"
+	    		android:key="show_dock_in_landscape"/>
+	    	<com.commonsware.cwac.colormixer.ColorPreference
+    			android:key="dock_background"
+    			android:defaultValue="0x22000000"
+    			android:title="@string/dock_background" />
+	    </PreferenceScreen>
 	    <CheckBoxPreference
 	    	android:title="@string/tileView"
 	    	android:defaultValue="true"
@@ -55,7 +73,6 @@
 	    	android:title="@string/scrollbar"
 	    	android:defaultValue="false"
 	    	android:key="scrollbar"/>
-	    
 	    <ListPreference
 	        android:defaultValue="1"
 	        android:entries="@array/orientationTypes"

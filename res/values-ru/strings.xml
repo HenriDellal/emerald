@@ -28,6 +28,13 @@
 	<string name="restart">Перезапустить лаунчер</string>
 	<string name="restartToImplement">Перезапустите лаунчер, чтобы осуществить изменения</string>
 	
+	<string name="dock_is_full">Док заполнен</string>
+	<string name="dock_preferences">Настройки дока</string>
+	<string name="dock_height">Высота дока</string>
+	<string name="dock_icon_size">Размер иконок дока</string>
+	<string name="show_dock_in_landscape">Показывать в ландшафтном режиме</string>
+	<string name="dock_background">Цвет фона дока</string>
+	
 	<string name="createCategory">Создать категорию</string>
 	<string name="launcherSettings">Настройки лаунчера</string>
 	<string name="rename">Переименовать</string>
@@ -44,7 +51,13 @@
 	<string name="appsBackground">Цвет фона приложения</string>
 	<string name="barBackground">Цвет фона верхнего бара</string>
 	<string name="searchProvider">Сайт для поиска в интернете</string>
+	<string name="keepInMemory">Держать в памяти</string>
+	<string name="save_here">Сохранить в этой папке</string>
 	
+	<string name="wrong_password">Неправильный пароль</string>
+	<string name="type_password">Введите пароль</string>
+	<string name="add_to_dock">Добавить в док</string>
+	<string name="remove_from_dock">Удалить из дока</string>
 	<string name="uninstall">Удалить</string>
 	
 	<string name="aboutTitle">О программе</string>
