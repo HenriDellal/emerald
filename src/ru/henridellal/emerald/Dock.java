@@ -99,6 +99,9 @@ public class Dock {
 		BufferedReader reader = null;
 		File f = new File(context.getFilesDir(), "dock");
 		try {
+			if (!f.exists()) {
+				f.createNewFile();
+			}
 			reader = new BufferedReader(new FileReader(f));
 			
 			String d;
