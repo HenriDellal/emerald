@@ -65,7 +65,6 @@ public class CategoryManagerActivity extends Activity{
 					newCategory();
 				}
 			});
-		
 	}
 	
 	private void buildMenu(final String category) {

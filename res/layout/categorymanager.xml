@@ -3,13 +3,13 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:orientation="vertical" >
-	<ListView
-		android:id="@+id/categoryList"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"/>
 	<Button
 		android:id="@+id/addCategoryButton"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/createCategory"/>
+	<ListView
+		android:id="@+id/categoryList"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"/>
 </LinearLayout>
