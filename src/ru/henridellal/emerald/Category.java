@@ -6,6 +6,7 @@ public class Category {
 	private boolean isHidden, hasCustomName;
 	private ArrayList<AppData> entries;
 	private String name;
+	//private int stringResource;
 	public Category(String name, ArrayList<AppData> entries) {
 		this(name, entries, true);
 	}
@@ -44,6 +45,9 @@ public class Category {
 	}
 	/*public File getPath() {
 		return new File(context.getFilesDir()+"/"+URLEncoder.encode(category)+".cat");
+	}*/
+	/*public String getRepresentName() {
+		return hasCustomName ? name : getResources().getString(stringResource);
 	}*/
 	public String getName() {
 		return name;
