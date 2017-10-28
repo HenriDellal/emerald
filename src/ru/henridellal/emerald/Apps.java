@@ -27,6 +27,7 @@ import android.content.res.Configuration;
 //import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ColorDrawable;
@@ -45,6 +46,7 @@ import android.text.TextWatcher;
 //import android.view.animation.AnimationUtils;
 //import android.view.GestureDetector;
 //import android.view.GestureDetector.OnGestureListener;
+import android.view.Display;
 import android.view.inputmethod.InputMethodManager;
 import android.view.KeyEvent;
 import android.view.KeyCharacterMap;
@@ -54,6 +56,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 //import android.widget.AdapterView.OnItemClickListener;
@@ -93,13 +96,20 @@ public class Apps extends Activity //implements OnGestureListener
 	GetApps scanner = null;
 	private OnSharedPreferenceChangeListener prefListener;
 	private boolean lock, homePressed, searchIsOpened;
-	private int iconSize, textSize, historySize, appShortcut, theme;
+	int iconSize, textSize;
+	private int historySize, appShortcut, theme;
 	private View.OnTouchListener swipeListener;
 	
 	public void loadList(boolean cleanCategory) {
 		ArrayList<AppData> data = new ArrayList<AppData>(); 
 		MyCache.read(this, GetApps.CACHE_NAME, data);
 		loadList(data, cleanCategory);
+	}
+	public Dock getDock() {
+		return dock;
+	}
+	public boolean hasApp(AppData app) {
+		return (map.get(app.getComponent()) != null);
 	}
 	/*returns map with pairs of package names 
 	and AppData related to them*/
@@ -595,18 +605,26 @@ public class Apps extends Activity //implements OnGestureListener
 		}
 		setBarTheme(theme);
 	}
-	private void fixPadding() {
-		if (Build.VERSION.SDK_INT >= 19) {
-			int id;
-			if ((id = getResources().getIdentifier("navigation_bar_height", "dimen", "android")) > 0) {
-				int navBarHeight = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK) ? 0 : getResources().getDimensionPixelSize(id);
-				View dummyBottomView = findViewById(R.id.dummy_bottom_view);
-				ViewGroup.LayoutParams p = dummyBottomView.getLayoutParams();
-				p.height = navBarHeight;
-				dummyBottomView.setLayoutParams(p);
-				if (navBarHeight > 0) {
-					dummyBottomView.setVisibility(View.VISIBLE);
-				}
+	private void setWindowDecorations() {
+		if (Build.VERSION.SDK_INT >= 21) {
+			getWindow().setStatusBarColor(options.getInt(Options.PREF_BAR_BACKGROUND, 0x22000000));
+			getWindow().setNavigationBarColor(options.getInt(Options.PREF_BAR_BACKGROUND, 0x22000000));
+		} else {
+			findViewById(R.id.dummy_top_view).setBackgroundColor(options.getInt(Options.PREF_BAR_BACKGROUND, 0x22000000));
+			Display display = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+			Point size = new Point();
+			Point realSize = new Point();
+			display.getSize(size);
+			display.getRealSize(realSize);
+			//Toast.makeText(this, " "+(size.y-realSize.y), Toast.LENGTH_LONG).show();
+			int navBarHeight = size.y-realSize.y;
+			View dummyBottomView = findViewById(R.id.dummy_bottom_view);
+			ViewGroup.LayoutParams p = dummyBottomView.getLayoutParams();
+			p.height = navBarHeight;
+			dummyBottomView.setLayoutParams(p);
+			if (navBarHeight > 0) {
+				dummyBottomView.setVisibility(View.VISIBLE);
+				dummyBottomView.setBackgroundColor(options.getInt(Options.PREF_DOCK_BACKGROUND, 0x22000000));
 			}
 		}
 	}
@@ -673,8 +691,6 @@ public class Apps extends Activity //implements OnGestureListener
 		setContentView(R.layout.apps);
 		findViewById(R.id.appsWindow).setBackgroundColor(options.getInt(Options.PREF_APPS_WINDOW_BACKGROUND, 0));
 		findViewById(R.id.topbar).setBackgroundColor(options.getInt(Options.PREF_BAR_BACKGROUND, 0x22000000));
-		findViewById(R.id.dummy_top_view).setBackgroundColor(options.getInt(Options.PREF_BAR_BACKGROUND, 0x22000000));
-		findViewById(R.id.dummy_bottom_view).setBackgroundColor(options.getInt(Options.PREF_BAR_BACKGROUND, 0x22000000));
 		findViewById(R.id.dock_bar).setBackgroundColor(options.getInt(Options.PREF_DOCK_BACKGROUND, 0x22000000));
 		grid = (GridView)findViewById(R.id.appsGrid);
 		//fadeIn = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
@@ -724,7 +740,9 @@ public class Apps extends Activity //implements OnGestureListener
 		options.registerOnSharedPreferenceChangeListener(prefListener);
 		initGrid();
 		setScrollbar();
-		fixPadding();
+		if (Build.VERSION.SDK_INT >= 19) {
+			setWindowDecorations();
+		}
 	//	Log.v(APP_TAG, "onCreate setTheme");
 		
 		categories = null;

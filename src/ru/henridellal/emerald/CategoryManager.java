@@ -435,10 +435,12 @@ public class CategoryManager {
 		if (!isEditable(curCategory)) {
 			data.addAll(map.values());
 			if (curCategory == UNCLASSIFIED) {
-				for (Category c : categories.values())
-					data.removeAll(c.getData());
-			}
-			else {
+				for (Category c : categories.values()) {
+					if (!c.getName().equals(HISTORY)) {
+						data.removeAll(c.getData());
+					}
+				}
+			} else {
 				ArrayList<AppData> c = categories.get(HIDDEN).getData();
 				if (c != null)
 					data.removeAll(c);

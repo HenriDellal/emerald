@@ -168,7 +168,7 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 				}
 				// if cache is not valid then set name from package manager
 				if (!cacheValid) {
-					name = (String) info.activityInfo.loadLabel(pm);
+					name = info.activityInfo.loadLabel(pm).toString();
 					if (name == null)
 						name = component;
 					if (name.equals("Emerald Launcher")) {
@@ -238,5 +238,6 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 		}
 		context.loadFilteredApps();
 		context.setSpinner();
+		context.getDock().update();
 	}
 }

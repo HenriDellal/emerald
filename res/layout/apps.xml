@@ -9,7 +9,7 @@
 		<RelativeLayout
 			android:id="@+id/dummy_top_view"
 			android:layout_width="fill_parent"
-			android:layout_height="24dp"
+			android:layout_height="@dimen/top_bar_height"
 	        android:layout_toStartOf="@id/appsWindow"
 			android:background="#2000">
 		</RelativeLayout>
@@ -101,8 +101,8 @@
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:numColumns="auto_fit"
-	        android:columnWidth="70dp"
-	        android:verticalSpacing="10dp"
+	        android:columnWidth="@dimen/column_width"
+	        android:verticalSpacing="@dimen/vertical_spacing"
 	        android:stretchMode="columnWidth"
 	        android:layout_below="@id/topbar"
 	        android:layout_above="@+id/dock_bar"
@@ -115,13 +115,13 @@
 	    	android:id="@+id/dock_bar"
 		    android:layout_centerInParent="true"
 	    	android:layout_width="fill_parent"
-	    	android:layout_height="56dp"
+		    android:layout_height="@dimen/dock_height"
 	    	android:layout_above="@+id/dummy_bottom_view"
 	    	android:background="#2000">
 	    	<ImageView
 	    		android:id="@+id/button1"
 	    		android:layout_width="0dp"
-	    		android:layout_height="48dp"
+	    		android:layout_height="@dimen/dock_icon_size"
 	    		android:layout_gravity="center_vertical"
 	    		android:layout_weight="1"
 	    		android:visibility="invisible"
@@ -131,7 +131,7 @@
 	    	<ImageView
 	    		android:id="@+id/button2"
 	    		android:layout_width="0dp"
-	    		android:layout_height="48dp"
+	    		android:layout_height="@dimen/dock_icon_size"
 	    		android:layout_gravity="center_vertical"
 	    		android:layout_weight="1"
 	    		android:visibility="gone"
@@ -140,7 +140,7 @@
 	    		<ImageView
 	    		android:id="@+id/button3"
 	    		android:layout_width="0dp"
-	    		android:layout_height="48dp"
+	    		android:layout_height="@dimen/dock_icon_size"
 	    		android:layout_gravity="center_vertical"
 	    		android:layout_weight="1"
 	    		android:visibility="gone"
@@ -149,7 +149,7 @@
 	    		<ImageView
 	    		android:id="@+id/button4"
 	    		android:layout_width="0dp"
-	    		android:layout_height="48dp"
+	    		android:layout_height="@dimen/dock_icon_size"
 	    		android:layout_gravity="center_vertical"
 	    		android:layout_weight="1"
 	    		android:visibility="gone"
@@ -158,7 +158,7 @@
 	    	<ImageView
 	    		android:id="@+id/button5"
 	    		android:layout_width="0dp"
-	    		android:layout_height="48dp"
+	    		android:layout_height="@dimen/dock_icon_size"
 	    		android:layout_gravity="center_vertical"
 	    		android:layout_weight="1"
 	    		android:visibility="gone"

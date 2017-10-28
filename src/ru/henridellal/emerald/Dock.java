@@ -29,7 +29,7 @@ public class Dock {
 	private Context context;
 	private LinearLayout dockBar;
 	private int defaultHeight;
-	public boolean alwaysHide = false;
+	private boolean alwaysHide = false;
 	
 	public Dock(Context context) {
 		this.context = context;
@@ -81,10 +81,6 @@ public class Dock {
 		//dockContentHolder.removeView(dockContentHolder.findViewWithTag(app));
 		saveApps();
 	}
-	/*public void remove(int position) {
-		apps.remove(position);
-		putEntries(apps);
-	}*/
 	// returns true if all button layouts are filled
 	// must be removed after implementation of "unlimited" dock
 	public boolean isFull() {
@@ -101,6 +97,8 @@ public class Dock {
 		try {
 			if (!f.exists()) {
 				f.createNewFile();
+				update();
+				return;
 			}
 			reader = new BufferedReader(new FileReader(f));
 			
@@ -179,7 +177,7 @@ public class Dock {
 	public void update() {
 		for (int i=0; i<buttons.size(); i++) {
 			ImageView button = buttons.get(i);
-			if (i<apps.size()) {
+			if (i<apps.size() && ((Apps)context).hasApp(apps.get(i))) {
 				button.setVisibility(View.VISIBLE);
 				IconPackManager.setIcon(context, buttons.get(i), apps.get(i));
 				button.setTag(apps.get(i));

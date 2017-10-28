@@ -9,16 +9,22 @@
 	<style name="AppTheme.Dark" parent="@android:style/Theme.Material.NoActionBar">
 	</style>
 	<style name="AppTheme.Dark.Wallpaper" parent="AppTheme.Dark">
-		<item name="android:windowTranslucentNavigation">true</item>
-		<item name="android:windowTranslucentStatus">true</item>
+		<item name="android:windowDrawsSystemBarBackgrounds">true</item>
+		<item name="android:windowTranslucentNavigation">false</item>
+		<item name="android:windowTranslucentStatus">false</item>
 		<item name="android:windowBackground">@android:color/transparent</item>
+		<item name="android:statusBarColor">@android:color/transparent</item>
+		<item name="android:navigationBarColor">@android:color/transparent</item>
 		<item name="android:windowShowWallpaper">true</item>
 		<item name="android:spinnerItemStyle">@style/spinnerItem.Dark</item>
 	</style>
 	<style name="AppTheme.Light.Wallpaper" parent="AppTheme.Light">
-		<item name="android:windowTranslucentNavigation">true</item>
-		<item name="android:windowTranslucentStatus">true</item>
+		<item name="android:windowDrawsSystemBarBackgrounds">true</item>
+		<item name="android:windowTranslucentNavigation">false</item>
+		<item name="android:windowTranslucentStatus">false</item>
 		<item name="android:windowBackground">@android:color/transparent</item>
+		<item name="android:statusBarColor">@android:color/transparent</item>
+		<item name="android:navigationBarColor">@android:color/transparent</item>
 		<item name="android:windowShowWallpaper">true</item>
 		<item name="android:spinnerItemStyle">@style/spinnerItem</item>
 	</style>
