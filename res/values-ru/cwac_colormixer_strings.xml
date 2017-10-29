@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="cwac_colormixer_alpha">Прозрачность</string>
+  <string name="cwac_colormixer_red">Красный</string>
+  <string name="cwac_colormixer_green">Зелëный</string>
+  <string name="cwac_colormixer_blue">Синий</string>
+  <string name="cwac_colormixer_set">Установить</string>
+  <string name="cwac_colormixer_cancel">Отмена</string>
+</resources>

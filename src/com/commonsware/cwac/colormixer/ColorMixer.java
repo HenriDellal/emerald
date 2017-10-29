@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import ru.henridellal.emerald.R;
 
@@ -36,6 +37,7 @@ public class ColorMixer extends RelativeLayout {
   private SeekBar red=null;
   private SeekBar blue=null;
   private SeekBar green=null;
+  private TextView alphaValue, redValue, greenValue, blueValue;
   private OnColorChangedListener listener=null;
 
   public ColorMixer(Context context) {
@@ -71,9 +73,13 @@ public class ColorMixer extends RelativeLayout {
 
   public void setColor(int color) {
     alpha.setProgress(Color.alpha(color));
+    alphaValue.setText(((Integer)Color.alpha(color)).toString());
     red.setProgress(Color.red(color));
+    redValue.setText(((Integer)Color.red(color)).toString());
     green.setProgress(Color.green(color));
+    greenValue.setText(((Integer)Color.green(color)).toString());
     blue.setProgress(Color.blue(color));
+    blueValue.setText(((Integer)Color.blue(color)).toString());
   }
 
   private void initMixer(AttributeSet attrs) {
@@ -95,18 +101,22 @@ public class ColorMixer extends RelativeLayout {
     swatch=findViewById(R.id.swatch);
 
     alpha=(SeekBar)findViewById(R.id.alpha);
+    alphaValue=(TextView)findViewById(R.id.alphaValue);
     alpha.setMax(0xFF);
     alpha.setOnSeekBarChangeListener(onMix);
     
     red=(SeekBar)findViewById(R.id.red);
+    redValue=(TextView)findViewById(R.id.redValue);
     red.setMax(0xFF);
     red.setOnSeekBarChangeListener(onMix);
 
     green=(SeekBar)findViewById(R.id.green);
+    greenValue=(TextView)findViewById(R.id.greenValue);
     green.setMax(0xFF);
     green.setOnSeekBarChangeListener(onMix);
 
     blue=(SeekBar)findViewById(R.id.blue);
+    blueValue=(TextView)findViewById(R.id.blueValue);
     blue.setMax(0xFF);
     blue.setOnSeekBarChangeListener(onMix);
 
@@ -144,6 +154,20 @@ public class ColorMixer extends RelativeLayout {
         public void onProgressChanged(SeekBar seekBar, int progress,
                                       boolean fromUser) {
           int color=getColor();
+          switch (seekBar.getId()) {
+            case R.id.alpha:
+              alphaValue.setText(((Integer)Color.alpha(color)).toString());
+              break;
+            case R.id.red:
+              redValue.setText(((Integer)Color.red(color)).toString());
+              break;
+            case R.id.green:
+              greenValue.setText(((Integer)Color.green(color)).toString());
+              break;
+            case R.id.blue:
+              blueValue.setText(((Integer)Color.blue(color)).toString());
+              break;
+          }
 
           swatch.setBackgroundColor(color);
 
