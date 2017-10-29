@@ -6,13 +6,13 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
 	    android:id="@+id/appsWindow">
-		<RelativeLayout
+		<View
 			android:id="@+id/dummy_top_view"
 			android:layout_width="fill_parent"
 			android:layout_height="@dimen/top_bar_height"
 	        android:layout_toStartOf="@id/appsWindow"
-			android:background="#2000">
-		</RelativeLayout>
+			android:background="#2000"
+		/>
 		<FrameLayout 
 	        android:id="@+id/topbar"
 	        android:layout_width="fill_parent"
@@ -165,14 +165,14 @@
 	    		android:layout_toRightOf="@id/button4"
 	    	/>
 		</LinearLayout>
-		<RelativeLayout
+		<View
 			android:id="@+id/dummy_bottom_view"
 			android:layout_width="fill_parent"
 			android:layout_height="0dp"
 			android:visibility="invisible"
 	        android:layout_alignParentBottom="true"
-			android:background="#2000">
-		</RelativeLayout>
+			android:background="#2000"
+		/>
 	</RelativeLayout>
 	<FrameLayout
 		android:id="@+id/hint"

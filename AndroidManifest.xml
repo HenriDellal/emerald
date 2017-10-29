@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      android:versionCode="21"
-      android:versionName="0.5.1.1" package="ru.henridellal.emerald"
+      android:versionCode="22"
+      android:versionName="0.5.2" package="ru.henridellal.emerald"
       >
 
     <!--android:configChanges="keyboard|keyboardHidden|orientation|screenSize"-->
 
-	<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="21"/>
+	<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="26"/>
 	 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
      <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
           <supports-screens
@@ -16,9 +16,10 @@
                   android:anyDensity="true"/>
        
   <application 
+  android:appCategory="productivity"
   android:label="@string/app_name"
   android:icon="@drawable/icon">
-        
+      
  		<activity android:name=".AboutActivity" android:label="@string/aboutTitle">
  		</activity>
  		<activity android:name=".CategoryManagerActivity" android:label="@string/categoryManager">
@@ -30,10 +31,9 @@
             <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>-->
-            <!--<nougat>android:resizeableActivity="false"-->
-            <!--<oreo>android:appCategory="productivity"-->
          </activity>
         <activity android:name=".Apps"
+            		android:resizeableActivity="false"
         			android:excludeFromRecents="true"
       			  android:launchMode="singleInstance"
       			  android:configChanges="orientation|keyboardHidden|screenSize"

@@ -16,8 +16,13 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.PorterDuff.Mode;
 import android.preference.PreferenceManager;
 import android.widget.ImageView;
-
 //import android.util.Log;
+
+/* Oreo imports */
+
+import android.graphics.drawable.AdaptiveIconDrawable;
+import android.graphics.drawable.LayerDrawable;
+
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -77,8 +82,32 @@ public class IconPackManager {
 		canvas.drawBitmap(b, 0, 0, new Paint(Paint.ANTI_ALIAS_FLAG));
 		return base;
 	}*/
+	/* Returns Bitmap for default icon pack.
+	 * Includes code for retrieving Oreo+ adaptive icons.
+	 * Credits to Vishnu Prasad: 
+	 *   https://stackoverflow.com/questions/46130594/android-get-apps-adaptive-icons-from-package-manager
+	 */
+	public Bitmap getDefaultBitmap(Drawable d) {
+		if (d instanceof BitmapDrawable) {
+			return ((BitmapDrawable) d).getBitmap();
+		} else if (d instanceof AdaptiveIconDrawable) {
+			Drawable bgDrawable = ((AdaptiveIconDrawable)d).getBackground();
+			Drawable fgDrawable = ((AdaptiveIconDrawable)d).getForeground();
+			Drawable[] layers = new Drawable[]{bgDrawable, fgDrawable};
+			LayerDrawable layerDrawable = new LayerDrawable(layers);
+			int w = layerDrawable.getIntrinsicWidth();
+			int h = layerDrawable.getIntrinsicHeight();
+			Bitmap result = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+			Canvas canvas = new Canvas(result);
+			layerDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+			layerDrawable.draw(canvas);
+			return result;
+		} else {
+			return null;
+		}
+	}
 	public Bitmap transformDrawable(Drawable d) {
-		Bitmap b = ((BitmapDrawable) d).getBitmap();
+		Bitmap b = getDefaultBitmap(d);
 		if ((iconBacks == null && iconMask == null && iconUpon == null && factor == 1.f) || !transformDrawable)
 		{
 			return b;
