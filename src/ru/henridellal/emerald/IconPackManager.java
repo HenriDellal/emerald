@@ -18,8 +18,10 @@ import android.preference.PreferenceManager;
 import android.widget.ImageView;
 //import android.util.Log;
 
-/* Oreo imports */
-
+/* Imports required by Oreo adaptive icons
+ * Comment them to compile with older aapt versions
+*/
+import android.os.Build;
 import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.LayerDrawable;
 
@@ -90,21 +92,25 @@ public class IconPackManager {
 	public Bitmap getDefaultBitmap(Drawable d) {
 		if (d instanceof BitmapDrawable) {
 			return ((BitmapDrawable) d).getBitmap();
-		} else if (d instanceof AdaptiveIconDrawable) {
-			Drawable bgDrawable = ((AdaptiveIconDrawable)d).getBackground();
-			Drawable fgDrawable = ((AdaptiveIconDrawable)d).getForeground();
-			Drawable[] layers = new Drawable[]{bgDrawable, fgDrawable};
-			LayerDrawable layerDrawable = new LayerDrawable(layers);
-			int w = layerDrawable.getIntrinsicWidth();
-			int h = layerDrawable.getIntrinsicHeight();
-			Bitmap result = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-			Canvas canvas = new Canvas(result);
-			layerDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-			layerDrawable.draw(canvas);
-			return result;
-		} else {
-			return null;
+		} else if (Build.VERSION.SDK_INT >= 26) {
+			if (d instanceof AdaptiveIconDrawable) {
+				Drawable bgDrawable = ((AdaptiveIconDrawable)d).getBackground();
+				Drawable fgDrawable = ((AdaptiveIconDrawable)d).getForeground();
+				Drawable[] layers = new Drawable[]{bgDrawable, fgDrawable};
+				LayerDrawable layerDrawable = new LayerDrawable(layers);
+				int w = layerDrawable.getIntrinsicWidth();
+				int h = layerDrawable.getIntrinsicHeight();
+				Bitmap result = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+				Canvas canvas = new Canvas(result);
+				layerDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+				layerDrawable.draw(canvas);
+				return result;
+			}
 		}
+		float density = context.getResources().getDisplayMetrics().density;
+		int defaultWidth = (int)(48* density);
+		int defaultHeight = (int)(48* density);
+		return Bitmap.createBitmap(defaultWidth, defaultHeight, Bitmap.Config.ARGB_8888);
 	}
 	public Bitmap transformDrawable(Drawable d) {
 		Bitmap b = getDefaultBitmap(d);
