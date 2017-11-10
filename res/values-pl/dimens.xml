@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<dimen name="top_bar_height">0dp</dimen>
+	<dimen name="text_size">8sp</dimen>
+	<dimen name="icon_size">48dp</dimen>
+	<dimen name="column_width">70dp</dimen>
+	<dimen name="vertical_spacing">5dp</dimen>
+	<dimen name="dock_height">56dp</dimen>
+	<dimen name="dock_icon_size">48dp</dimen>
+</resources>
