@@ -5,18 +5,9 @@
         <item>Ikony</item>
         <item>Ikony i tekst</item>
     </string-array>
-    <string-array name="appShortcutValues" translatable="false">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
 	<string-array name="themeTypes">
         <item>Jasny</item>
         <item>Ciemny</item>
-    </string-array>
-    <string-array name="themeValues" translatable="false">
-        <item>1</item>
-        <item>2</item>
     </string-array>
     <string-array name="orientationTypes">
         <item>Pionowo</item>
@@ -24,22 +15,10 @@
         <item>Ustawienia systemowe</item>
         <item>Zawsze obracaj</item>
     </string-array>
-    <string-array name="orientationValues" translatable="false">
-        <item>1</item>
-        <item>0</item>
-        <item>2</item>
-        <item>4</item>
-    </string-array>
     <string-array name="fontStyleTypes">
         <item>Normalna</item>
         <item>Pogrubiona</item>
         <item>Kursywa</item>
         <item>Pogrubiona i kursywa</item>
-    </string-array>
-    <string-array name="fontStyleValues" translatable="false">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
     </string-array>
 </resources>
