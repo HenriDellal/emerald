@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Emerald Launcher</string>
+	<string name="appearancePrefs">Preferencje wyglądu</string>
+	<string name="portraitPrefs">Preferencje układu poziomego</string>
+	<string name="landscapePrefs">Preferencje układu pionowego</string>
+
+	<string name="categoryManager">Menedżer kategorii</string>
+	<string name="appShortcut">Dodaj skrót</string>
+	<string name="iconSize">Rozmiar ikon</string>
+	<string name="textSize">Rozmiar tekstu</string>
+	<string name="fontStyle">Styl czcionki</string>
+	<string name="columnWidth">Szerokość kolumny</string>
+	<string name="verticalSpacing">Interlinia</string>
+	<string name="tileView">Siatka</string>
+	<string name="scrollbar">Pokazuj litery podczas przewijania</string>
+	<string name="orientation">Orientacja ekranu</string>
+	<string name="theme">Styl</string>
+	<string name="appsBackground">Kolor tła okien aplikacji</string>
+	<string name="barBackground">Kolor głównego paska</string>
+	<string name="iconPack">Paczki ikon</string>
+	<string name="transformIcons">Zmień ikony</string>
+	<string name="transformIconsSummary">Edytuj ikony, nawiązując do ustawień paczki ikon</string>
+	<string name="defaultIconPack">Domyślna</string>
+	<string name="fullscreen">Tryb pełnoekranowy</string>
+	<string name="historySize">Ilość wyników w historii wyszukiwania</string>
+	<string name="password">Hasło</string>
+	<string name="passwordSummary">Zablokuj ustawienia oraz ukryte aplikacje</string>
+	<string name="passwordHint">Pozostaw puste, aby wyłączyć tę funkcję</string>
+	<string name="searchProvider">Dostawca wyszukiwania</string>
+	<string name="keepInMemory">Trzymaj w pamięci</string>
+	<string name="backupPrefs">Zrób kopię zapasową preferencji</string>
+	<string name="successfulBackup">Zakończono tworzenie kopii zapasowej. Plik może zostać znaleziony w </string>
+	<string name="successfulRestore">Pomyślnie przywrócono</string>
+	<string name="restorePrefs">Przywróć preferencje</string>
+	<string name="restart">Uruchom ponownie launcher</string>
+	<string name="restartToImplement">Uruchom ponownie launcher w celu wprowadzenia zmian</string>
+
+
+	<string name="launcherSettings">Ustawienia Launcher Emerald</string>
+
+	<string name="createCategory">Utwórz kategorię</string>
+	<string name="rename">Zmień nazwę</string>
+	<string name="editAppList">Edytuj listę aplikacji</string>
+	<string name="findInMarket">Znajdź w sklepie aplikacji</string>
+	<string name="editAppCategories">Edytuj kategorie aplikacji</string>
+	<string name="delete">Usuń</string>
+	<string name="setHome">Ustaw jako główny</string>
+	<string name="hide">Ukryj</string>
+	<string name="unhide">Pokaż</string>
+
+	<string name="save_here">Zapisz w tym katalogu</string>
+	<string name="dock_is_full">Przybornik jest pełny</string>
+	<string name="dock_preferences">Preferencje przybornika</string>
+	<string name="dock_height">Wysokość przybornika</string>
+	<string name="dock_icon_size">Rozmiar ikon przybornika</string>
+	<string name="show_dock_in_landscape">Pokazuj przybornik w układzie pionowym</string>
+	<string name="dock_background">Tło przybornika</string>
+
+	<string name="accessHidden">Uzyskaj dostęp do ukrytych aplikacji</string>
+	<string name="quit_hidden_apps">Wyjdź z ukrytych aplikacji</string>
+	<string name="fullScan">Pełne skanowanie</string>
+	<string name="clear">Wyczyść</string>
+	<string name="wrong_password">Nieprawidłowe hasło.</string>
+	<string name="type_password">Wprowadź hasło</string>
+
+	<string name="add_to_dock">Dodaj do przybornika</string>
+	<string name="remove_from_dock">Usuń z przybornika</string>
+	<string name="uninstall">Odinstaluj</string>
+
+	<string name="aboutTitle">O...</string>
+<string name="about" translatable="false">Emerald Launcher
+\n
+\nCopyright 2017 Anri Dellal
+\n
+\nLicensed under GPL-v3
+\nWant to help? Report bugs and submit suggestions via GitHub (https://www.github.com/HenriDellal/emerald) or Google Play listing(http://play.google.com/details?id=ru.henridellal.emerald).
+\n
+\nThanks to:
+\nTheAlaskaLinuxUser (http://thealaskalinuxuser.wordpress.com) for help with Nougat tests, searching and handling bugs.
+\nMax Kerekesha for Ukrainian translation.
+\nAll contributors.
+\n
+\nTinyLaunch
+\nCopyright (c) 2011-12, Alexander R. Pruss
+\nLicensed under BSD-3-Clause
+\nhttps://github.com/arpruss/tinylaunch
+\n
+\nCWAC ColorMixer
+\n
+\nLicensed under the Apache License 2.0.
+\nhttps://github.com/commonsguy/cwac-colormixer
+\n
+\nFont-Awesome
+\nThe font licensed under the SIL OFL 1.1.
+\nhttp://fontawesome.io/</string>
+
+	<!-- DEFAULT VALUES FOR SETTINGS -->
+
+	<string name="defaultThemeValue" translatable="false">1</string>
+
+</resources>
