@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
-  <View android:id="@+id/swatch"
-    android:layout_width="fill_parent"
+ <EditText android:id="@+id/hexColorText"
+    android:layout_width="100dp"
     android:layout_height="40dip"
     android:layout_alignParentLeft="true"
+    android:layout_alignParentTop="true"
+    android:layout_margin="3dip"
+  />
+  <View android:id="@+id/swatch"
+    android:layout_width="0dp"
+    android:layout_height="40dip"
+    android:layout_toRightOf="@id/hexColorText"
+    android:layout_alignParentRight="true"
     android:layout_alignParentTop="true"
     android:layout_margin="3dip"
   />
   <TextView android:id="@+id/alphaLabel"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_below="@id/swatch"
+    android:layout_below="@id/hexColorText"
     android:layout_marginLeft="10dip"
     android:text="@string/cwac_colormixer_alpha"
     android:textSize="10pt"

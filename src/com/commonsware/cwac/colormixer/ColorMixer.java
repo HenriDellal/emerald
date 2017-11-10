@@ -20,9 +20,12 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -38,6 +41,7 @@ public class ColorMixer extends RelativeLayout {
   private SeekBar blue=null;
   private SeekBar green=null;
   private TextView alphaValue, redValue, greenValue, blueValue;
+  private EditText hexColorText;
   private OnColorChangedListener listener=null;
 
   public ColorMixer(Context context) {
@@ -120,6 +124,22 @@ public class ColorMixer extends RelativeLayout {
     blue.setMax(0xFF);
     blue.setOnSeekBarChangeListener(onMix);
 
+    hexColorText=(EditText)findViewById(R.id.hexColorText);
+    hexColorText.setText(Integer.toHexString(getColor()));
+	hexColorText.addTextChangedListener(new TextWatcher() {
+      @Override
+      public void afterTextChanged(Editable s) {}
+      @Override
+      public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+      @Override
+      public void onTextChanged(CharSequence s, int start, int count, int after) {
+        try {
+          setColor(Integer.parseInt(s.toString(), 16));
+        } catch (Exception e) {
+        
+        }
+      }
+    });
     if (attrs != null) {
       int[] styleable=R.styleable.ColorMixer;
       TypedArray a=
@@ -154,6 +174,7 @@ public class ColorMixer extends RelativeLayout {
         public void onProgressChanged(SeekBar seekBar, int progress,
                                       boolean fromUser) {
           int color=getColor();
+          hexColorText.setText(Integer.toHexString(color));
           switch (seekBar.getId()) {
             case R.id.alpha:
               alphaValue.setText(((Integer)Color.alpha(color)).toString());
