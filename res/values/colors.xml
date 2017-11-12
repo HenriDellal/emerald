@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <color name="selector">#4000</color>    
+<color name="dropdownTextColor">#fff</color>    
+<color name="dropdownBackground">#000</color>    
 </resources>

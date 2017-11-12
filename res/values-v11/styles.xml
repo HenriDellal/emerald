@@ -11,6 +11,7 @@
 	<style name="AppTheme.Dark.Wallpaper" parent="AppTheme.Dark">
 		<item name="android:windowBackground">@android:color/transparent</item>
 		<item name="android:windowShowWallpaper">true</item>
+		<item name="android:spinnerDropDownItemStyle">@style/spinnerDropDownItem</item>
 		<item name="android:spinnerItemStyle">@style/spinnerItem.Dark</item>
 	</style>
 	<style name="AppTheme.Light.Wallpaper" parent="AppTheme.Light">
@@ -18,8 +19,12 @@
 		<item name="android:windowShowWallpaper">true</item>
 		<item name="android:spinnerItemStyle">@style/spinnerItem</item>
 	</style>
-	<style name="spinnerItem" parent="@android:style/Widget.Holo.TextView.SpinnerItem">
+	<style name="spinnerItem" parent="@android:style/Widget.Holo.Light.TextView.SpinnerItem">
 		<item name="android:textColor">#FFF</item>
+	</style>
+	<style name="spinnerDropDownItem" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
+		<item name="android:textColor">@color/dropdownTextColor</item>
+		<item name="android:background">@color/dropdownBackground</item>
 	</style>
 	<style name="spinnerItem.Dark" parent="@android:style/Widget.Holo.TextView.SpinnerItem">
 		<item name="android:textColor">#000</item>
