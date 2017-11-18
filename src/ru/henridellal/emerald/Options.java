@@ -30,6 +30,8 @@ public class Options extends PreferenceActivity {
 	public static final int WALLPAPER_LIGHT = 3;
 	public static final int WALLPAPER_DARK = 4;
 	
+	public final static String SHOW_TUTORIAL = "show_tutorial";
+	
 	public final static String PREF_BAR_BACKGROUND = "bar_background";
 	public final static String PREF_DOCK_BACKGROUND = "dock_background";
 	public final static String PREF_APPS_WINDOW_BACKGROUND = "apps_background";
@@ -69,34 +71,11 @@ public class Options extends PreferenceActivity {
 		super.onCreate(icicle);
 		addPreferencesFromResource(R.xml.options);
 		setIconPacksList(ManagerContainer.getIconPackManager(this).getIconPacks());
-		/*int theme = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString(Options.PREF_THEME, getResources().getString(R.string.defaultThemeValue)));
-		switch (theme) {
-			case DEFAULT_THEME:
-			case LIGHT:
-			case WALLPAPER_LIGHT:
-				setTheme(R.style.AppTheme_Preferences_Light);
-				break;
-			default:
-				setTheme(R.style.AppTheme_Preferences_Dark);
-		}*/
-		
-			
 	}
 	@Override
-	public void onResume() {
-		super.onResume();
-		//setRequestedOrientation(Integer.parseInt(PreferenceManager
-		//	.getDefaultSharedPreferences(this)
-		//	.getString(Options.PREF_ORIENTATION, "1")));
-	/*	int theme = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this)
-			.getString(Options.PREF_THEME, "0"));
-		if (theme == Options.DEFAULT_THEME || theme == Options.LIGHT || theme == Options.WALLPAPER_LIGHT) {
-			setTheme(R.style.AppTheme);
-		} else {
-			setTheme(R.style.AppTheme_Dark);
-		}*/
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 	}
-	
 	public void setIconPacksList(Map<String, String> iconPacks) {
 		ListPreference preference = (ListPreference)findPreference(PREF_ICON_PACK);
 		CharSequence[] e = new CharSequence[iconPacks.size()+1];
@@ -120,17 +99,14 @@ public class Options extends PreferenceActivity {
 		super.onStop();
 	}
 	
-	public void backupPrefs(File backupFile) {
+	public void backupPrefs(File file) {
 		FileOutputStream output = null;
 		try {
-			//File sdPath = Environment.getExternalStorageDirectory();
-			//String backupPath = "/Android/data/ru.henridellal.emerald/files/preferences.txt";
-			//File backupFile = new File(sdPath, backupPath);
-			if (!backupFile.exists()) {
-				backupFile.getParentFile().mkdirs();
-				backupFile.createNewFile();
+			if (!file.exists()) {
+				file.getParentFile().mkdirs();
+				file.createNewFile();
 			}
-			output = new FileOutputStream(backupFile);
+			output = new FileOutputStream(file);
 			Set<? extends Map.Entry<? extends String, ? extends Object>> prefEntrySet = PreferenceManager.getDefaultSharedPreferences(this).getAll().entrySet();
 			for (Map.Entry<? extends String, ? extends Object> entry: prefEntrySet) {
 				String key = entry.getKey();
@@ -162,7 +138,7 @@ public class Options extends PreferenceActivity {
 			}
 			byte[] buffer = "END".getBytes();
 			output.write(buffer, 0, buffer.length);
-			Toast.makeText(this, getResources().getString(R.string.successfulBackup)+backupFile.getPath(), Toast.LENGTH_LONG).show();
+			Toast.makeText(this, getResources().getString(R.string.successfulBackup)+file.getPath(), Toast.LENGTH_LONG).show();
 		} catch (Exception e) {
 			Toast.makeText(this, "Backup failed: " + e, Toast.LENGTH_LONG).show();
 		} finally {
@@ -173,7 +149,7 @@ public class Options extends PreferenceActivity {
 		}
 	}
 	
-	public void restorePrefs(File backupFile) {
+	public void restorePrefs(File file) {
 		BufferedReader input = null;
 		SharedPreferences.Editor prefsEditor = PreferenceManager.getDefaultSharedPreferences(this).edit();
 		ArrayList<String> argTypes = new ArrayList<String>();
@@ -182,7 +158,7 @@ public class Options extends PreferenceActivity {
 		argTypes.add("BOOLEAN");
 		argTypes.add("FLOAT");
 		try {
-			input = new BufferedReader(new FileReader(backupFile));
+			input = new BufferedReader(new FileReader(file));
 			String key, value, line, prefType = null;
 			while ((line = input.readLine()).indexOf("END") == -1) {
 				if (argTypes.contains(line.trim())) {
@@ -206,7 +182,7 @@ public class Options extends PreferenceActivity {
 				}
 			}
 			prefsEditor.commit();
-			Toast.makeText(this, getResources().getString(R.string.successfulRestore)+backupFile.getPath(), Toast.LENGTH_LONG).show();
+			Toast.makeText(this, getResources().getString(R.string.successfulRestore)+file.getPath(), Toast.LENGTH_LONG).show();
 		} catch (Exception e) {
 			Toast.makeText(this, "Restore failed: "+ e, Toast.LENGTH_LONG).show();
 		} finally {

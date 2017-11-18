@@ -47,7 +47,6 @@ public class IconPackManager {
 	}
 	public IconPackManager(Context context, String iconPack) {
 		this.context = context;
-		iconsData = new HashMap<String, String>();
 		setIconPack(iconPack);
 	}
 	public Map<String, String> getIcons() {
@@ -61,29 +60,12 @@ public class IconPackManager {
 		setIcons();
 	}
 	private Bitmap loadBitmap(String drawableName) {
-		
 		int id = iconPackRes.getIdentifier(drawableName, "drawable", iconPackName);
 		if (id > 0)
-		/*
-		return getActivities(null, Process.myUserHandle()).get(0).get();
-		
-		
-		*/
 			return ((BitmapDrawable)iconPackRes.getDrawable(id)).getBitmap();
 		else
 			return null;
 	}
-	/*public Bitmap resizeBitmap(Bitmap b) {
-		int w = b.getWidth();
-		int h = b.getHeight();
-		Bitmap base = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-		Canvas canvas = new Canvas(base);
-		Bitmap bitmap = Bitmap.createScaledBitmap(b, (int)(w*factor), (int)(h*factor), false);
-		base.eraseColor(0);
-		//canvas.drawBitmap(b, w*(1-factor)/2, h*(1-factor)/2, new Paint(Paint.ANTI_ALIAS_FLAG));
-		canvas.drawBitmap(b, 0, 0, new Paint(Paint.ANTI_ALIAS_FLAG));
-		return base;
-	}*/
 	/* Returns Bitmap for default icon pack.
 	 * Includes code for retrieving Oreo+ adaptive icons.
 	 * Credits to Vishnu Prasad: 
@@ -112,6 +94,9 @@ public class IconPackManager {
 		int defaultHeight = (int)(48* density);
 		return Bitmap.createBitmap(defaultWidth, defaultHeight, Bitmap.Config.ARGB_8888);
 	}
+	/* transforms an Drawable object to Bitmap
+	 * and adds effects from icon pack
+	 */
 	public Bitmap transformDrawable(Drawable d) {
 		Bitmap b = getDefaultBitmap(d);
 		if ((iconBacks == null && iconMask == null && iconUpon == null && factor == 1.f) || !transformDrawable)
@@ -134,7 +119,6 @@ public class IconPackManager {
 		}
 		Bitmap result = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(result);
-		//Paint paint = new Paint();
 		if (iconBacks != null) {
 			if (iconBacks.size() > 0) {
 				canvas.drawBitmap(iconBacks.get((int)(Math.random()*iconBacks.size())), 0, 0, null);
@@ -161,6 +145,7 @@ public class IconPackManager {
 			return null;
 		}
 	}
+	/* used by Options class to list all icon packs available*/
 	public Map<String, String> getIconPacks() {
 		Map<String, String> iconPacks = new HashMap<String, String>();
 		PackageManager pm = context.getPackageManager();
@@ -193,6 +178,7 @@ public class IconPackManager {
 			img.setImageResource(android.R.drawable.sym_def_app_icon);
 		}
 	}
+	/* sets icons data */
 	public void setIcons() {
 		iconsData = new HashMap<String, String>();
 		iconBacks = null;

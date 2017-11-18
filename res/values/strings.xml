@@ -69,6 +69,21 @@
 	<string name="uninstall">Uninstall</string>
 	
 	<string name="aboutTitle">About</string>
+	<string name="how_to_use">How to use</string>
+	<string name="close_tutorial">Close tutorial</string>
+<string name="tutorial">Swipe on the category name to switch to the next/previous category. Click on it to see the full list of categories.
+\n
+\nOpen Launcher settings/Category manager to edit categories.
+\n
+\nClick on the search button to search through all apps (except hidden). To search in the web, open search, type ... and click an arrow at the right of the text field.
+\n
+\nLong-press an app icon to open the popup menu.
+\n
+\nPress Home button to open home category. Press once again to open all apps list.
+\n
+\nPress Back button to switch to the previously opened category.
+</string>
+	
 <string name="about" translatable="false">Emerald Launcher
 \n
 \nCopyright 2017 Anri Dellal

@@ -1,7 +1,5 @@
 package ru.henridellal.emerald;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -26,11 +24,8 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
 //import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
@@ -49,7 +44,7 @@ import android.text.TextWatcher;
 import android.view.Display;
 import android.view.inputmethod.InputMethodManager;
 import android.view.KeyEvent;
-import android.view.KeyCharacterMap;
+//import android.view.KeyCharacterMap;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -66,7 +61,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.SectionIndexer;
+//import android.widget.SectionIndexer;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -436,7 +431,6 @@ public class Apps extends Activity //implements OnGestureListener
 	public void searchInWeb(String text) {
 		String site = options.getString(Options.PREF_SEARCH_PROVIDER, "https://duckduckgo.com/?q=");
 		String url = site + text;
-		//String url = text;
 		Intent intent = new Intent(Intent.ACTION_VIEW);
 		intent.setData(Uri.parse(url));
 		try {
@@ -458,7 +452,6 @@ public class Apps extends Activity //implements OnGestureListener
 		final EditText text = (EditText)findViewById(R.id.textField);
 		text.setVisibility(View.VISIBLE);
 		findViewById(R.id.webSearchButton).setVisibility(View.VISIBLE);
-		//grid.setTextFilterEnabled(true);
 		if (dock.isVisible()) {
 			dock.hide();
 		}
@@ -575,15 +568,27 @@ public class Apps extends Activity //implements OnGestureListener
 			case Options.DEFAULT_THEME:
 			case Options.LIGHT:
 			case Options.WALLPAPER_LIGHT:
-				menuButton.setBackground(getResources().getDrawable(R.drawable.menu_bg));
-				searchButton.setBackground(getResources().getDrawable(R.drawable.search_bg));
-				webSearchButton.setBackground(getResources().getDrawable(R.drawable.web_search_bg));
+				if (Build.VERSION.SDK_INT >= 16) {
+					menuButton.setBackground(getResources().getDrawable(R.drawable.menu_bg));
+					searchButton.setBackground(getResources().getDrawable(R.drawable.search_bg));
+					webSearchButton.setBackground(getResources().getDrawable(R.drawable.web_search_bg));
+				} else {
+					menuButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.menu_bg));
+					searchButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.search_bg));
+					webSearchButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.web_search_bg));
+				}
 				searchField.setTextColor(Color.WHITE);
 				break;
 			default:
-				menuButton.setBackground(getResources().getDrawable(R.drawable.menu_dark_bg));
-				searchButton.setBackground(getResources().getDrawable(R.drawable.search_dark_bg));
-				webSearchButton.setBackground(getResources().getDrawable(R.drawable.web_search_dark_bg));
+				if (Build.VERSION.SDK_INT >= 16) {
+					menuButton.setBackground(getResources().getDrawable(R.drawable.menu_dark_bg));
+					searchButton.setBackground(getResources().getDrawable(R.drawable.search_dark_bg));
+					webSearchButton.setBackground(getResources().getDrawable(R.drawable.web_search_dark_bg));
+				} else {
+					menuButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.menu_dark_bg));
+					searchButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.search_dark_bg));
+					webSearchButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.web_search_dark_bg));
+				}
 				searchField.setTextColor(Color.BLACK);
 		}
 	}
@@ -676,6 +681,9 @@ public class Apps extends Activity //implements OnGestureListener
 		//Log.v(APP_TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		options = PreferenceManager.getDefaultSharedPreferences(this);
+		if (options.getBoolean(Options.SHOW_TUTORIAL, true)) {
+			startActivity(new Intent(this, TutorialActivity.class));
+		}
 		if (Build.VERSION.SDK_INT >= 11 && options.getBoolean("keepInMemory", false)) {
 			Notification noti = new Notification.Builder(this)
 				.setContentTitle("Emerald")

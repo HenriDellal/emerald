@@ -22,16 +22,14 @@
       
  		<activity android:name=".AboutActivity" android:label="@string/aboutTitle">
  		</activity>
+ 		<activity android:name=".TutorialActivity" android:label="@string/how_to_use">
+ 		</activity>
  		<activity android:name=".CategoryManagerActivity" android:label="@string/categoryManager">
- 		<!--	android:theme="@style/AppTheme.Preferences.Light"-->
  		</activity>
  		<activity android:name=".Options" android:label="@string/launcherSettings">
- 		<!--	android:theme="@style/AppTheme.Preferences.Light"-->
-            <!--<intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
          </activity>
+            <!--
+            -->
         <activity android:name=".Apps"
             		android:resizeableActivity="false"
         			android:excludeFromRecents="true"
@@ -48,15 +46,14 @@
             </intent-filter>
        
         </activity>
-                <receiver android:name="DirtinessReceiver">
-        <intent-filter>
-        <action android:name="android.intent.action.PACKAGE_INSTALL"/>
-        <action android:name="android.intent.action.PACKAGE_ADDED"/>
-        <action android:name="android.intent.action.PACKAGE_REMOVED"/>
-        <action android:name="android.intent.action.PACKAGE_REPLACED"/>
-        <data android:scheme="package"/>
-        </intent-filter> 
+        <receiver android:name="DirtinessReceiver">
+        	<intent-filter>
+        	<action android:name="android.intent.action.PACKAGE_INSTALL"/>
+        	<action android:name="android.intent.action.PACKAGE_ADDED"/>
+        	<action android:name="android.intent.action.PACKAGE_REMOVED"/>
+        	<action android:name="android.intent.action.PACKAGE_REPLACED"/>
+        	<data android:scheme="package"/>
+        	</intent-filter> 
         </receiver>
-       
     </application>
 </manifest>

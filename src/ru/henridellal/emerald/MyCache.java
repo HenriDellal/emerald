@@ -4,20 +4,12 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.Log;
 
@@ -66,30 +58,6 @@ public class MyCache {
 		File dir = c.getCacheDir();
 		return dir.getPath() + "/" + name + ".MyCache"; 
 	}	
-	public static void saveIcon(Context c, String componentName) {
-		if (componentName.startsWith(" "))
-			return;
-		
-		deleteIcon(c, componentName);
-		try {
-			ComponentName cn = ComponentName.unflattenFromString(componentName);
-			String packageName = cn.getPackageName();
-			PackageManager pm = c.getPackageManager();
-			Resources res = pm.getResourcesForActivity(cn);
-			Drawable icon = res.getDrawable(pm.getPackageInfo(packageName, 0).applicationInfo.icon);
-			if (icon instanceof BitmapDrawable) {
-				Bitmap bmp = ((BitmapDrawable)icon).getBitmap();
-//				Log.v("TinyLaunch", "icon "+bmp.getWidth()+"x"+bmp.getHeight());
-				File iconFile = getIconFile(c, componentName);
-				FileOutputStream out = new FileOutputStream(iconFile);
-				bmp.compress(CompressFormat.PNG, 100, out);
-				out.close();
-//				Log.v("TinyLaunch", "saved icon");
-			}
-		} catch (Exception e) {
-			deleteIcon(c, componentName);
-		}		
-	}
 	public static File getIconFile(Context c, String componentName) {
 		return new File(c.getCacheDir(), 
 				Uri.encode(componentName)+".icon.png");
@@ -102,7 +70,7 @@ public class MyCache {
 //			Log.v("TinyLaunch", "successful delete of "+componentName+" icon");
 		}
 	}
-	
+	/* removes icons of deleted apps */
 	public static void cleanIcons(Context c, ArrayList<AppData> data) {
 		ArrayList<String> components = new ArrayList<String>();
 		for (AppData a : data)
@@ -116,7 +84,7 @@ public class MyCache {
 				f.delete();
 		}
 	}
-	
+	/* removes all icons in cache */
 	public static void deleteIcons(Context c) {
 		File[] dirs = c.getCacheDir().listFiles();
 		
