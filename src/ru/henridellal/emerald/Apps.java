@@ -24,7 +24,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
 //import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -41,7 +40,6 @@ import android.text.TextWatcher;
 //import android.view.animation.AnimationUtils;
 //import android.view.GestureDetector;
 //import android.view.GestureDetector.OnGestureListener;
-import android.view.Display;
 import android.view.inputmethod.InputMethodManager;
 import android.view.KeyEvent;
 //import android.view.KeyCharacterMap;
@@ -51,13 +49,11 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 //import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -92,7 +88,7 @@ public class Apps extends Activity //implements OnGestureListener
 	private OnSharedPreferenceChangeListener prefListener;
 	private boolean lock, homePressed, searchIsOpened;
 	int iconSize, textSize;
-	private int historySize, appShortcut, theme;
+	private int historySize, appShortcut;
 	private View.OnTouchListener swipeListener;
 	
 	public void loadList(boolean cleanCategory) {
@@ -265,7 +261,7 @@ public class Apps extends Activity //implements OnGestureListener
 		grid.setAdapter(adapter);
 	/*	grid.setOnItemClickListener(null);
 		grid.setOnItemLongClickListener(null);*/
-		if (theme == Options.LIGHT)
+		if (Themer.theme == Options.LIGHT)
 			grid.setBackgroundColor(Color.WHITE);
 	}
 	
@@ -320,7 +316,7 @@ public class Apps extends Activity //implements OnGestureListener
 		}
 		builder.create().show();
 	}
-	private void itemContextMenu(final AppData item) {
+	public void itemContextMenu(final AppData item) {
 		//Log.v(APP_TAG, "Open app edit window");
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -489,7 +485,6 @@ public class Apps extends Activity //implements OnGestureListener
 		}
 		searchIsOpened=false;
 	}
-	
 	public void onMyClick(View v) {
 		switch(v.getId()) {
 			case R.id.searchButton:
@@ -519,7 +514,7 @@ public class Apps extends Activity //implements OnGestureListener
 			//Log.v(APP_TAG, "BACK pressed");
 			if (searchIsOpened) {
 				closeSearch();
-				searchIsOpened = false;
+			//	searchIsOpened = false;
 			}
 			if (categories.getCurCategory().equals(CategoryManager.HIDDEN)) {
 				findViewById(R.id.quit_hidden_apps).setVisibility(View.GONE);
@@ -559,80 +554,6 @@ public class Apps extends Activity //implements OnGestureListener
 		super.onDestroy();
 	}
 	
-	private void setBarTheme(int theme) {
-		Button menuButton = (Button)findViewById(R.id.menuButton);
-		Button searchButton = (Button)findViewById(R.id.searchButton);
-		Button webSearchButton = (Button)findViewById(R.id.webSearchButton);
-		EditText searchField = (EditText)findViewById(R.id.textField);
-		switch (theme) {
-			case Options.DEFAULT_THEME:
-			case Options.LIGHT:
-			case Options.WALLPAPER_LIGHT:
-				if (Build.VERSION.SDK_INT >= 16) {
-					menuButton.setBackground(getResources().getDrawable(R.drawable.menu_bg));
-					searchButton.setBackground(getResources().getDrawable(R.drawable.search_bg));
-					webSearchButton.setBackground(getResources().getDrawable(R.drawable.web_search_bg));
-				} else {
-					menuButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.menu_bg));
-					searchButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.search_bg));
-					webSearchButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.web_search_bg));
-				}
-				searchField.setTextColor(Color.WHITE);
-				break;
-			default:
-				if (Build.VERSION.SDK_INT >= 16) {
-					menuButton.setBackground(getResources().getDrawable(R.drawable.menu_dark_bg));
-					searchButton.setBackground(getResources().getDrawable(R.drawable.search_dark_bg));
-					webSearchButton.setBackground(getResources().getDrawable(R.drawable.web_search_dark_bg));
-				} else {
-					menuButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.menu_dark_bg));
-					searchButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.search_dark_bg));
-					webSearchButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.web_search_dark_bg));
-				}
-				searchField.setTextColor(Color.BLACK);
-		}
-	}
-	private void setAppTheme() {
-		theme = Integer.parseInt(options.getString(Options.PREF_THEME, getResources().getString(R.string.defaultThemeValue)));
-		switch (theme) {
-			case Options.LIGHT:
-				setTheme(R.style.AppTheme_Light);
-				break;
-			case Options.DARK:
-				setTheme(R.style.AppTheme_Dark);
-				break;
-			case Options.WALLPAPER_LIGHT:
-				setTheme(R.style.AppTheme_Light_Wallpaper);
-				break;
-			case Options.WALLPAPER_DARK:
-				setTheme(R.style.AppTheme_Dark_Wallpaper);
-				break;
-		}
-		setBarTheme(theme);
-	}
-	private void setWindowDecorations() {
-		if (Build.VERSION.SDK_INT >= 21) {
-			getWindow().setStatusBarColor(options.getInt(Options.PREF_BAR_BACKGROUND, 0x22000000));
-			getWindow().setNavigationBarColor(options.getInt(Options.PREF_BAR_BACKGROUND, 0x22000000));
-		} else {
-			findViewById(R.id.dummy_top_view).setBackgroundColor(options.getInt(Options.PREF_BAR_BACKGROUND, 0x22000000));
-			Display display = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-			Point size = new Point();
-			Point realSize = new Point();
-			display.getSize(size);
-			display.getRealSize(realSize);
-			//Toast.makeText(this, " "+(size.y-realSize.y), Toast.LENGTH_LONG).show();
-			int navBarHeight = size.y-realSize.y;
-			View dummyBottomView = findViewById(R.id.dummy_bottom_view);
-			ViewGroup.LayoutParams p = dummyBottomView.getLayoutParams();
-			p.height = navBarHeight;
-			dummyBottomView.setLayoutParams(p);
-			if (navBarHeight > 0) {
-				dummyBottomView.setVisibility(View.VISIBLE);
-				dummyBottomView.setBackgroundColor(options.getInt(Options.PREF_DOCK_BACKGROUND, 0x22000000));
-			}
-		}
-	}
 	public void setScrollbar() {
 		if (options.getBoolean("scrollbar", false)) {
 			//grid.setFastScrollEnabled(true);
@@ -681,6 +602,7 @@ public class Apps extends Activity //implements OnGestureListener
 		//Log.v(APP_TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		options = PreferenceManager.getDefaultSharedPreferences(this);
+		Themer.theme = Integer.parseInt(options.getString(Options.PREF_THEME, getResources().getString(R.string.defaultThemeValue)));
 		if (options.getBoolean(Options.SHOW_TUTORIAL, true)) {
 			startActivity(new Intent(this, TutorialActivity.class));
 		}
@@ -749,7 +671,7 @@ public class Apps extends Activity //implements OnGestureListener
 		initGrid();
 		setScrollbar();
 		if (Build.VERSION.SDK_INT >= 19) {
-			setWindowDecorations();
+			Themer.setWindowDecorations(this, options);
 		}
 	//	Log.v(APP_TAG, "onCreate setTheme");
 		
@@ -880,7 +802,7 @@ public class Apps extends Activity //implements OnGestureListener
 	@Override
 	public void onResume() {
 		super.onResume();
-		setAppTheme();
+		Themer.applyTheme(this, options);
 		//Log.v(APP_TAG, "onResume");
 		appShortcut = Integer.parseInt(options.getString(Options.PREF_APP_SHORTCUT, "3"));
 	    lock = options.getString(Options.PREF_PASSWORD, "").length() > 0;
@@ -944,7 +866,7 @@ public class Apps extends Activity //implements OnGestureListener
 		//ArrayList<String> sectionData;
 		//HashMap<Integer, Integer> indexData;
 		//String[] sections;
-		int curMode;
+		int curMode, textColor;
 		ImageView img;
 		TextView tv;
 		String searchInput;
@@ -1006,11 +928,7 @@ public class Apps extends Activity //implements OnGestureListener
 				}
 				tv.setText(a.name);
 				tv.setTextSize(textSize);
-				if (theme == Options.LIGHT || theme == Options.WALLPAPER_DARK || theme == Options.DEFAULT_THEME){
-					tv.setTextColor(Color.BLACK);
-				} else {
-					tv.setTextColor(Color.WHITE);
-				}
+				tv.setTextColor(textColor);
 				tv.setTypeface(Typeface.DEFAULT,
 					Integer.parseInt(options.getString(Options.PREF_FONT_STYLE, "0")));
 			} else {
@@ -1066,15 +984,11 @@ public class Apps extends Activity //implements OnGestureListener
 			super();
 			//Log.v(APP_TAG, "custom adapter created");
 			this.mContext = context;
+			int theme = Themer.theme;
+			textColor = (theme == Options.LIGHT || theme == Options.WALLPAPER_DARK || theme == Options.DEFAULT_THEME) ? Color.BLACK : Color.WHITE;
 			curCatData = new ArrayList<AppData>();
 			toDisplay = new ArrayList<AppData>();
-			onClickListener = new View.OnClickListener() {
-				@Override
-				public void onClick(View arg0) {
-					if (arg0.getTag() instanceof AppData)
-						((Apps)mContext).launch((AppData)arg0.getTag());
-				}
-			};
+			onClickListener = new OnAppClickListener((Apps)context);
 			if (lock) {
 				onLongClickListener = new View.OnLongClickListener() {
 					@Override
@@ -1103,13 +1017,7 @@ public class Apps extends Activity //implements OnGestureListener
 					}
 				};
 			} else {
-				onLongClickListener = new View.OnLongClickListener() {
-					@Override
-					public boolean onLongClick(View arg0) {
-						((Apps)mContext).itemContextMenu((AppData)arg0.getTag());
-						return false;
-					}
-				};
+				onLongClickListener = new OnAppLongClickListener((Apps)context);
 			}
 			comparator = new Comparator<AppData>() {
 				@Override

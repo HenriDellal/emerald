@@ -181,18 +181,12 @@ public class Dock {
 				button.setVisibility(View.VISIBLE);
 				IconPackManager.setIcon(context, buttons.get(i), apps.get(i));
 				button.setTag(apps.get(i));
-				button.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View arg0) {
-						if (arg0.getTag() instanceof AppData)
-							((Apps)context).launch((AppData)arg0.getTag());
-					}
-				});
+				button.setOnClickListener(new OnAppClickListener((Apps)context));
 			} else {
 				button.setVisibility(i > 0 ? View.GONE : View.INVISIBLE);
 				button.setImageResource(android.R.color.transparent);
 				button.setOnClickListener(null);
-				button.setOnLongClickListener(null);
+				//button.setOnLongClickListener(null);
 			}
 		}
 		if (apps.size() == 0) {
