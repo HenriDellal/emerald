@@ -57,6 +57,7 @@
 	<string name="show_dock_in_landscape">Show dock in landscape mode</string>
 	<string name="dock_background">Dock background</string>
 	
+	<string name="change_wallpaper">Change wallpaper</string>
 	<string name="accessHidden">Access hidden apps</string>
 	<string name="quit_hidden_apps">Quit hidden apps</string>
 	<string name="fullScan">Full scan</string>

@@ -259,8 +259,6 @@ public class Apps extends Activity //implements OnGestureListener
 		adapter = new CustomAdapter(this);
 
 		grid.setAdapter(adapter);
-	/*	grid.setOnItemClickListener(null);
-		grid.setOnItemLongClickListener(null);*/
 		if (Themer.theme == Options.LIGHT)
 			grid.setBackgroundColor(Color.WHITE);
 	}
@@ -774,6 +772,9 @@ public class Apps extends Activity //implements OnGestureListener
 				return true;
 			scanner = new GetApps(this);
 			scanner.execute(true);
+			return true;
+		case R.id.change_wallpaper:
+			startActivity(new Intent(Intent.ACTION_SET_WALLPAPER));
 			return true;
 		case R.id.options:
 			startActivity(new Intent(this, Options.class));
