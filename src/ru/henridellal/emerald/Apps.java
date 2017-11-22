@@ -65,16 +65,9 @@ import android.widget.Toast;
 public class Apps extends Activity //implements OnGestureListener 
 {
 	CategoryManager categories;
-	//GestureDetector detector;
-	//Animation slideInLeft, slideOutRight, fadeIn, fadeOut;
 	ArrayList<AppData> curCatData;
-	
-	//AsyncTask<Void, Void, Void> swipeTask;
-	
-	//ArrayAdapter<AppData> adapter;
 	GridView grid;
 	Dock dock;
-	
 	Map<String,AppData> map;
 	public SharedPreferences options;
 	final static String PREF_APPS = "apps";
@@ -89,7 +82,6 @@ public class Apps extends Activity //implements OnGestureListener
 	private boolean lock, homePressed, searchIsOpened;
 	int iconSize, textSize;
 	private int historySize, appShortcut;
-	private View.OnTouchListener swipeListener;
 	
 	public void loadList(boolean cleanCategory) {
 		ArrayList<AppData> data = new ArrayList<AppData>(); 
@@ -287,18 +279,7 @@ public class Apps extends Activity //implements OnGestureListener
 
 			final boolean[] oldChecked = checked.clone();
 
-			builder.setMultiChoiceItems(editableCategoryNames, checked, 
-					new DialogInterface.OnMultiChoiceClickListener() {							
-				@Override
-				public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-					//					Log.v(APP_TAG, "setting "+item.name+" to "+isChecked);
-					//						if (isChecked) 
-					//							categories.addToCategory(customCategoryNames[which], item);
-					//						else
-					//							categories.removeFromCategory(customCategoryNames[which], item);
-				}
-			}
-					);
+			builder.setMultiChoiceItems(editableCategoryNames, checked, null);
 			builder.setPositiveButton("OK", new OnClickListener(){
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
@@ -512,7 +493,6 @@ public class Apps extends Activity //implements OnGestureListener
 			//Log.v(APP_TAG, "BACK pressed");
 			if (searchIsOpened) {
 				closeSearch();
-			//	searchIsOpened = false;
 			}
 			if (categories.getCurCategory().equals(CategoryManager.HIDDEN)) {
 				findViewById(R.id.quit_hidden_apps).setVisibility(View.GONE);
@@ -621,12 +601,6 @@ public class Apps extends Activity //implements OnGestureListener
 		findViewById(R.id.topbar).setBackgroundColor(options.getInt(Options.PREF_BAR_BACKGROUND, 0x22000000));
 		findViewById(R.id.dock_bar).setBackgroundColor(options.getInt(Options.PREF_DOCK_BACKGROUND, 0x22000000));
 		grid = (GridView)findViewById(R.id.appsGrid);
-		//fadeIn = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
-		/*detector = new GestureDetector(this);
-		slideInLeft = AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left);
-		slideOutRight = AnimationUtils.loadAnimation(this, android.R.anim.slide_out_right);
-		fadeOut = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
-		fadeIn.setDuration(500);*/
 		//Log.v(APP_TAG, "onCreate get preferences");
 		ManagerContainer.setIconPackManager(this);
 		//Log.v(APP_TAG, "onCreate set preference listener");
@@ -677,89 +651,10 @@ public class Apps extends Activity //implements OnGestureListener
 	//	Log.v(APP_TAG, "onCreate set Spinner");
 		spin = (Spinner)findViewById(R.id.category);
 	//	Log.v(APP_TAG, "onCreate set swipe listener");
-		swipeListener = new View.OnTouchListener(){
-			float x, density;
-			public boolean onTouch(View v, MotionEvent e) {
-				density = getResources().getDisplayMetrics().density;
-				int action = e.getAction() & 255;
-				switch (action){
-				case MotionEvent.ACTION_DOWN:
-					x = e.getX();
-					return true;
-				case MotionEvent.ACTION_UP:
-					if (e.getX()-x > 30.0 * density) {
-						categories.setCurCategory(categories.getPrevCategory());
-						loadFilteredApps();
-						setSpinner();
-						return true;
-					} else if (x-e.getX() > 30.0 * density) {
-						categories.setCurCategory(categories.getNextCategory());
-						loadFilteredApps();
-						setSpinner();
-						//list.startAnimation(fadeIn);
-						return true;
-					} else v.performClick();
-				default:
-					return false;
-				}
-			}
-		};
-		spin.setOnTouchListener(swipeListener);
+		spin.setOnTouchListener(new SwipeListener(this));
 		dock = new Dock(this);
 		changePrefsOnRotate();
-		/*list.setOnTouchListener(new View.OnTouchListener() {
-			public boolean onTouch(View v, MotionEvent e) {
-				return detector.onTouchEvent(e);
-			}
-		});*/
 	}
-	/*
-	@Override
-	public boolean onTouchEvent(MotionEvent e){
-		return detector.onTouchEvent(e);
-	}
-	@Override
-	public boolean onDown(MotionEvent e){
-		return false;
-	}
-	@Override
-	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY){
-		float density = getResources().getDisplayMetrics().density;
-		
-		if (Math.abs(velocityX) > Math.abs(velocityY)) {
-			if (Math.abs(e2.getX()-e1.getX()) > 30. * density) {
-				if (velocityX > 0.0) {
-					categories.setCurCategory(categories.getPrevCategory());
-				}
-				else {
-					categories.setCurCategory(categories.getNextCategory());
-				}
-				loadFilteredApps();
-				list.startAnimation(fadeIn);
-				setSpinner();
-				//return true;
-			}
-			return true;
-		}
-		return false;
-	}
-	@Override
-	public void onLongPress(MotionEvent e){
-	
-	}
-	@Override
-	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY){
-		return false;
-	}
-	@Override
-	public void onShowPress(MotionEvent e){
-	
-	}
-	@Override
-	public boolean onSingleTapUp(MotionEvent e){
-		return false;
-	}
-	*/
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		//Log.v(APP_TAG, "Menu item is selected");
