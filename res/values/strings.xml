@@ -34,7 +34,7 @@
 	<string name="successfulRestore">Successfully restored.</string>
 	<string name="restorePrefs">Restore preferences</string>
 	<string name="restart">Restart launcher</string>
-	<string name="restartToImplement">Restart launcher to implement changes</string>
+	<string name="restart_needed">Launcher will be restarted</string>
 	
 	
 	<string name="launcherSettings">Launcher settings</string>

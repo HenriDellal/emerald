@@ -1,6 +1,7 @@
 package ru.henridellal.emerald;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -604,24 +605,13 @@ public class Apps extends Activity //implements OnGestureListener
 		//Log.v(APP_TAG, "onCreate get preferences");
 		ManagerContainer.setIconPackManager(this);
 		//Log.v(APP_TAG, "onCreate set preference listener");
-		prefListener = new OnSharedPreferenceChangeListener() {			
+		options.edit().putBoolean("message_shown", false).commit();
+		prefListener = new OnSharedPreferenceChangeListener() {
 			@Override
 			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 					String key) {
 			//	Log.v(APP_TAG, "pref change detected");
-				if (key.equals(Options.PREF_ORIENTATION) || key.equals("scrollbar") || key.equals("keepInMemory")) {
-					Toast.makeText(Apps.this, getResources().getString(R.string.restartToImplement), Toast.LENGTH_LONG).show();
-					//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-					//setRequestedOrientation(Integer.parseInt(sharedPreferences.getString(Options.PREF_ORIENTATION, "1")));
-				}
-				/*else if (key.equals("scrollbar")) {
-					setScrollbar();
-				}*/
-				else if (key.equals(Options.PREF_BAR_BACKGROUND)) {
-					findViewById(R.id.topbar).setBackgroundColor(options.getInt(Options.PREF_BAR_BACKGROUND, 0));
-				} else if (key.equals(Options.PREF_APPS_WINDOW_BACKGROUND)) {
-					findViewById(R.id.appsWindow).setBackgroundColor(options.getInt(Options.PREF_APPS_WINDOW_BACKGROUND, 0));
-				} else if (key.equals(Options.PREF_ICON_PACK) || key.equals(Options.PREF_TRANSFORM_DRAWABLE)) {
+				if (key.equals(Options.PREF_ICON_PACK) || key.equals(Options.PREF_TRANSFORM_DRAWABLE)) {
 					MyCache.deleteIcons(Apps.this);
 					ManagerContainer.getIconPackManager().setIconPack(sharedPreferences.getString(Options.PREF_ICON_PACK, "default"));
 					if (scanner != null && scanner.getStatus() == AsyncTask.Status.RUNNING)
@@ -630,12 +620,15 @@ public class Apps extends Activity //implements OnGestureListener
 					scanner.execute(true);
 					loadFilteredApps();
 					setSpinner();
-					return;
 				} else if (key.equals(Options.PREF_DIRTY) && sharedPreferences.getBoolean(Options.PREF_DIRTY, false)) {
 					if (scanner == null || scanner.getStatus() != AsyncTask.Status.RUNNING) {
 						scanner = new GetApps(Apps.this);
 						scanner.execute(false);
 					}
+				} else if (!sharedPreferences.getBoolean(Options.MESSAGE_SHOWN, false) && Arrays.asList(Options.noRestartKeys).indexOf(key) == -1) {
+					Toast.makeText(Apps.this, getResources().getString(R.string.restart_needed), Toast.LENGTH_LONG).show();
+					Toast.makeText(Apps.this, key, Toast.LENGTH_LONG).show();
+					sharedPreferences.edit().putBoolean(Options.MESSAGE_SHOWN, true).commit();
 				}
 			}
 		};

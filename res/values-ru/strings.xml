@@ -26,7 +26,7 @@
 	<string name="backupPrefs">Создать копию настроек</string>
 	<string name="restorePrefs">Восстановить настройки</string>
 	<string name="restart">Перезапустить лаунчер</string>
-	<string name="restartToImplement">Перезапустите лаунчер, чтобы осуществить изменения</string>
+	<string name="restart_needed">Лаунчер будет перезапущен</string>
 	
 	<string name="dock_is_full">Док заполнен</string>
 	<string name="dock_preferences">Настройки дока</string>

@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
-  <ru.henridellal.emerald.RestartPreference
-    	android:title="@string/restart"
-        android:key="restart"/>
     <PreferenceScreen android:title="@string/appearancePrefs">
 	    <ListPreference
 	        android:defaultValue="3"
@@ -142,4 +139,7 @@
 	    android:summary="Only for Android 3.0+"
 	    android:defaultValue="false"
 		android:key="keepInMemory"/>
+	<ru.henridellal.emerald.RestartPreference
+    	android:title="@string/restart"
+        android:key="restart"/>
 </PreferenceScreen>

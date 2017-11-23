@@ -34,7 +34,7 @@
 	<string name="successfulRestore">Pomyślnie przywrócono</string>
 	<string name="restorePrefs">Przywróć preferencje</string>
 	<string name="restart">Uruchom ponownie launcher</string>
-	<string name="restartToImplement">Uruchom ponownie launcher w celu wprowadzenia zmian</string>
+	<!--<string name="restart_needed">Uruchom ponownie launcher w celu wprowadzenia zmian</string>-->
 
 
 	<string name="launcherSettings">Ustawienia Launcher Emerald</string>

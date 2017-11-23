@@ -31,6 +31,7 @@ public class Options extends PreferenceActivity {
 	public static final int WALLPAPER_DARK = 4;
 	
 	public final static String SHOW_TUTORIAL = "show_tutorial";
+	public final static String MESSAGE_SHOWN = "message_shown";
 	
 	public final static String PREF_BAR_BACKGROUND = "bar_background";
 	public final static String PREF_DOCK_BACKGROUND = "dock_background";
@@ -65,12 +66,22 @@ public class Options extends PreferenceActivity {
 	public static final String PREF_HISTORY_SIZE = "history_size";
 	public static final String PREF_PASSWORD = "password";
 	
+	public static final String[] noRestartKeys = {PREF_CATEGORY, PREF_DIRTY, SHOW_TUTORIAL, MESSAGE_SHOWN};
+	
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		addPreferencesFromResource(R.xml.options);
 		setIconPacksList(ManagerContainer.getIconPackManager(this).getIconPacks());
+	}
+	@Override
+	public void onBackPressed() {
+		if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(MESSAGE_SHOWN, false)) {
+			System.exit(0);
+		} else {
+			super.onBackPressed();
+		}
 	}
 	@Override
 	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -84,7 +95,6 @@ public class Options extends PreferenceActivity {
 		v[0] = "default";
 		Set<Map.Entry<String, String>> entryset = iconPacks.entrySet();
 		short i=1;
-		//for (int i = 1; i <= values.size(); i++) {
 		for (Map.Entry<String, String> entry: entryset) {
 			e[i] = entry.getKey();
 			v[i] = entry.getValue();
