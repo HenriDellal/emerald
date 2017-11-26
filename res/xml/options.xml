@@ -124,10 +124,12 @@
     <ru.henridellal.emerald.AboutPreference
     	android:title="@string/aboutTitle"
         android:key="about"/>
-    <EditTextPreference
-        android:title="@string/searchProvider"
-        android:defaultValue="https://duckduckgo.com/?q="
-        android:key="search_provider"/>
+    <ru.henridellal.emerald.SearchPreference
+	    android:defaultValue="https://duckduckgo.com/?q="
+	    android:entries="@array/search_entries"
+	    android:entryValues="@array/search_values"
+	    android:title="@string/searchProvider"
+	    android:key="search_provider"/>
     <ru.henridellal.emerald.BackupPreference
     	android:title="@string/backupPrefs"
         android:key="backup"/>
@@ -136,7 +138,6 @@
         android:key="restore"/>
    <CheckBoxPreference
 		android:title="@string/keepInMemory"
-	    android:summary="Only for Android 3.0+"
 	    android:defaultValue="false"
 		android:key="keepInMemory"/>
 	<ru.henridellal.emerald.RestartPreference

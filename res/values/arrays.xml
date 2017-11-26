@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<string-array name="search_entries">
+        <item>User-preferred</item>
+        <item>DuckDuckGo</item>
+        <item>Google</item>
+    </string-array>
+    <string-array name="search_values" translatable="false">
+        <item></item>
+        <item>https://duckduckgo.com/?q=</item>
+        <item>https://google.com/search?q=</item>
+    </string-array>
 	<string-array name="appShortcutTypes">
         <item>Text</item>
         <item>Icon</item>

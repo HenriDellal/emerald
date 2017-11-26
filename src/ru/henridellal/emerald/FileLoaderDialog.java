@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.BaseAdapter;
 import android.widget.AdapterView;
 //required by permissions checker
-import android.app.Activity;
 import android.Manifest;
 import android.content.pm.PackageManager;
 

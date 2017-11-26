@@ -16,6 +16,8 @@ import android.widget.EditText;
 
 public class Themer {
 	public static int theme;
+	
+	@SuppressWarnings("deprecation")
 	private static void setBarTheme(Activity activity, int theme) {
 		Button menuButton = (Button)activity.findViewById(R.id.menuButton);
 		Button searchButton = (Button)activity.findViewById(R.id.searchButton);

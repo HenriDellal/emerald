@@ -2,6 +2,7 @@ package ru.henridellal.emerald;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceActivity;
@@ -66,7 +67,7 @@ public class Options extends PreferenceActivity {
 	public static final String PREF_HISTORY_SIZE = "history_size";
 	public static final String PREF_PASSWORD = "password";
 	
-	public static final String[] noRestartKeys = {PREF_CATEGORY, PREF_DIRTY, SHOW_TUTORIAL, MESSAGE_SHOWN};
+	public static final String[] noRestartKeys = {PREF_CATEGORY, PREF_DIRTY, SHOW_TUTORIAL, MESSAGE_SHOWN, PREF_SEARCH_PROVIDER};
 	
 	@SuppressWarnings("deprecation")
 	@Override
@@ -74,6 +75,9 @@ public class Options extends PreferenceActivity {
 		super.onCreate(icicle);
 		addPreferencesFromResource(R.xml.options);
 		setIconPacksList(ManagerContainer.getIconPackManager(this).getIconPacks());
+		if (Build.VERSION.SDK_INT < 11) {
+			findPreference("keepInMemory").setEnabled(false);
+		}
 	}
 	@Override
 	public void onBackPressed() {
