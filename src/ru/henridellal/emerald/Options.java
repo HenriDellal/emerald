@@ -58,6 +58,7 @@ public class Options extends PreferenceActivity {
 	public static final String PREF_DOCK_IN_LANDSCAPE = "show_dock_in_landscape";
 	
 	public static final String PREF_HOME = "home";
+	public static final String PREF_HOME_BUTTON = "home_button";
 	public static final String PREF_CATEGORY = "category";
 	public static final String PREF_DIRTY = "dirty";
 	public static final String PREF_ORIENTATION = "orientation";

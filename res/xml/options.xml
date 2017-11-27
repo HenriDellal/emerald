@@ -124,6 +124,12 @@
     <ru.henridellal.emerald.AboutPreference
     	android:title="@string/aboutTitle"
         android:key="about"/>
+    <ListPreference
+	    android:defaultValue="All"
+	    android:entries="@array/home_button_options"
+	    android:entryValues="@array/home_button_values"
+	    android:title="@string/home_button"
+	    android:key="home_button"/>
     <ru.henridellal.emerald.SearchPreference
 	    android:defaultValue="https://duckduckgo.com/?q="
 	    android:entries="@array/search_entries"

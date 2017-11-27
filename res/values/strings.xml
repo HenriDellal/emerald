@@ -5,6 +5,7 @@
 	<string name="portraitPrefs">Portrait mode preferences</string>
 	<string name="landscapePrefs">Landscape mode preferences</string>
 	
+	<string name="home_button">Home button behaviour</string>
 	<string name="categoryManager">Category manager</string>
 	<string name="appShortcut">App shortcut</string>
 	<string name="iconSize">Icon size</string>

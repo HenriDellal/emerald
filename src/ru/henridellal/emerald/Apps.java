@@ -72,14 +72,13 @@ public class Apps extends Activity //implements OnGestureListener
 	public SharedPreferences options;
 	final static String PREF_APPS = "apps";
 	final static String APP_TAG = "Emerald";
-	//private PackageManager packageManager;
 	private Spinner spin;
 	private CustomAdapter adapter = null;
 	public static final int GRID = 0;
 	public static final int LIST = 1;
 	GetApps scanner = null;
 	private OnSharedPreferenceChangeListener prefListener;
-	private boolean lock, homePressed, searchIsOpened;
+	private boolean lock, returnToHome, searchIsOpened;
 	int iconSize, textSize;
 	private int historySize, appShortcut;
 	
@@ -512,13 +511,19 @@ public class Apps extends Activity //implements OnGestureListener
 	public void onStart() {
 		//Log.v(APP_TAG, "onStart ");
 		super.onStart();
-		homePressed = false;
+	}
+	
+	@Override
+	public void onStop() {
+		returnToHome = true;
+		super.onStop();
 	}
 	
 	@Override
 	public void onPause() {
 		//Log.v(APP_TAG, "onPause");
 		super.onPause();
+		returnToHome = false;
 		if (searchIsOpened) {
 			closeSearch();
 		}
@@ -571,10 +576,21 @@ public class Apps extends Activity //implements OnGestureListener
 	@Override
 	public void onNewIntent(Intent i) {
 		//Log.v(APP_TAG, "onNewIntent");
-		homePressed = true;
+		if (returnToHome) {
+			categories.setCurCategory(categories.getHome());
+		} else {
+			if (categories.getCurCategory().equals(categories.getHome())) {
+				String newCategory = options.getString(Options.PREF_HOME_BUTTON, "");
+				if (newCategory.length() > 0)
+					categories.setCurCategory(newCategory);
+			} else {
+				categories.setCurCategory(categories.getHome());
+			}
+		}
+		loadFilteredApps();
+		setSpinner();
 		super.onNewIntent(i);
 	}
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		//Log.v(APP_TAG, "onCreate");
@@ -601,15 +617,12 @@ public class Apps extends Activity //implements OnGestureListener
 		findViewById(R.id.topbar).setBackgroundColor(options.getInt(Options.PREF_BAR_BACKGROUND, 0x22000000));
 		findViewById(R.id.dock_bar).setBackgroundColor(options.getInt(Options.PREF_DOCK_BACKGROUND, 0x22000000));
 		grid = (GridView)findViewById(R.id.appsGrid);
-		//Log.v(APP_TAG, "onCreate get preferences");
 		ManagerContainer.setIconPackManager(this);
-		//Log.v(APP_TAG, "onCreate set preference listener");
-		options.edit().putBoolean("message_shown", false).commit();
+		options.edit().putBoolean(Options.MESSAGE_SHOWN, false).commit();
 		prefListener = new OnSharedPreferenceChangeListener() {
 			@Override
 			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 					String key) {
-			//	Log.v(APP_TAG, "pref change detected");
 				if (key.equals(Options.PREF_ICON_PACK) || key.equals(Options.PREF_TRANSFORM_DRAWABLE)) {
 					MyCache.deleteIcons(Apps.this);
 					ManagerContainer.getIconPackManager().setIconPack(sharedPreferences.getString(Options.PREF_ICON_PACK, "default"));
@@ -626,7 +639,6 @@ public class Apps extends Activity //implements OnGestureListener
 					}
 				} else if (!sharedPreferences.getBoolean(Options.MESSAGE_SHOWN, false) && Arrays.asList(Options.noRestartKeys).indexOf(key) == -1) {
 					Toast.makeText(Apps.this, getResources().getString(R.string.restart_needed), Toast.LENGTH_LONG).show();
-					Toast.makeText(Apps.this, key, Toast.LENGTH_LONG).show();
 					sharedPreferences.edit().putBoolean(Options.MESSAGE_SHOWN, true).commit();
 				}
 			}
@@ -637,12 +649,8 @@ public class Apps extends Activity //implements OnGestureListener
 		if (Build.VERSION.SDK_INT >= 19) {
 			Themer.setWindowDecorations(this, options);
 		}
-	//	Log.v(APP_TAG, "onCreate setTheme");
-		
 		categories = null;
-	//	Log.v(APP_TAG, "onCreate set Spinner");
 		spin = (Spinner)findViewById(R.id.category);
-	//	Log.v(APP_TAG, "onCreate set swipe listener");
 		spin.setOnTouchListener(new SwipeListener(this));
 		dock = new Dock(this);
 		changePrefsOnRotate();
@@ -697,22 +705,6 @@ public class Apps extends Activity //implements OnGestureListener
 		loadList(false);
 		boolean needReload = false;
 		
-		if (homePressed) {
-			//Log.v(APP_TAG, "return to home category");
-			homePressed = false;
-		
-			if (categories != null) {
-				if (!categories.getCurCategory().equals(categories.getHome())) {
-					categories.setCurCategory(categories.getHome());
-				} else {
-					categories.setCurCategory(CategoryManager.ALL);
-					categories.clearHistory();
-				}
-				loadFilteredApps();
-				setSpinner();
-			}
-		}
-
 		if (map.size() == 0) {
 			needReload = true;
 		} else {
