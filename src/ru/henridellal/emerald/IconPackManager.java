@@ -189,7 +189,7 @@ public class IconPackManager {
 		if (iconPackName.equals("default")) {
 			return;
 		}
-		transformDrawable = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Options.PREF_TRANSFORM_DRAWABLE, true);
+		transformDrawable = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Keys.TRANSFORM_DRAWABLE, true);
 		String component = null;
 		String drawable = null;
 		PackageManager pm = context.getPackageManager();
@@ -197,8 +197,7 @@ public class IconPackManager {
 		try {
 			iconPackRes = pm.getResourcesForApplication(iconPackName);
 		} catch (PackageManager.NameNotFoundException nameNotFound) {
-		//	iconsData.put("error","name not found");
-		//	Log.e("ipm", nameNotFound.toString());
+		
 		}
 		try {
 			int id = iconPackRes.getIdentifier("appfilter", "xml", iconPackName);
@@ -242,8 +241,5 @@ public class IconPackManager {
 		} catch (Exception e) {
 			//iconsData.put("error", e.toString());
 		}
-		/*if (res != null) {
-			return;
-		}*/
 	}
 }

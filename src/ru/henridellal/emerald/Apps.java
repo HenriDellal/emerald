@@ -166,30 +166,30 @@ public class Apps extends Activity //implements OnGestureListener
 	public void changePrefsOnRotate() {
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 			//Log.v(APP_TAG, "loadFilteredApps : Portrait orientation");
-			iconSize = (int)(options.getInt(Options.PREF_ICON_SIZE, getResources().getInteger(R.integer.icon_size_default)) * getResources().getDisplayMetrics().density);
-	    	textSize = (int)(options.getInt(Options.PREF_TEXT_SIZE, getResources().getInteger(R.integer.text_size_default)) * getResources().getDisplayMetrics().density);
-	    	grid.setVerticalSpacing((int)(options.getInt(Options.PREF_VERTICAL_SPACING, getResources().getInteger(R.integer.vertical_spacing_default)) * getResources().getDisplayMetrics().density));
-	    	if (options.getBoolean(Options.PREF_TILE, true)) {
-	    		grid.setColumnWidth((int)(options.getInt(Options.PREF_COLUMN_WIDTH, getResources().getInteger(R.integer.column_width_default)) * getResources().getDisplayMetrics().density));
+			iconSize = (int)(options.getInt(Keys.ICON_SIZE, getResources().getInteger(R.integer.icon_size_default)) * getResources().getDisplayMetrics().density);
+	    	textSize = (int)(options.getInt(Keys.TEXT_SIZE, getResources().getInteger(R.integer.text_size_default)) * getResources().getDisplayMetrics().density);
+	    	grid.setVerticalSpacing((int)(options.getInt(Keys.VERTICAL_SPACING, getResources().getInteger(R.integer.vertical_spacing_default)) * getResources().getDisplayMetrics().density));
+	    	if (options.getBoolean(Keys.TILE, true)) {
+	    		grid.setColumnWidth((int)(options.getInt(Keys.COLUMN_WIDTH, getResources().getInteger(R.integer.column_width_default)) * getResources().getDisplayMetrics().density));
 			} else {
 	    		grid.setNumColumns(1);
 	    	}
-	    	if (!(options.getBoolean(Options.PREF_DOCK_IN_LANDSCAPE, true))) {
+	    	if (!(options.getBoolean(Keys.DOCK_IN_LANDSCAPE, true))) {
 	    		dock.setAlwaysHide(false);
 	    		dock.unhide();
 	    	}
 		} else {
 			//Log.v(APP_TAG, "loadFilteredApps : orientation");
-			textSize = (int)(options.getInt(Options.PREF_TEXT_SIZE_LANDSCAPE, getResources().getInteger(R.integer.text_size_land_default)) * getResources().getDisplayMetrics().density);
-	    	iconSize = (int)(options.getInt(Options.PREF_ICON_SIZE_LANDSCAPE, getResources().getInteger(R.integer.icon_size_land_default)) * getResources().getDisplayMetrics().density);
-			grid.setVerticalSpacing((int)(options.getInt(Options.PREF_VERTICAL_SPACING_LANDSCAPE, getResources().getInteger(R.integer.vertical_spacing_land_default)) * getResources().getDisplayMetrics().density));
-	    	if (options.getBoolean(Options.PREF_TILE, true)) {
-	    		grid.setColumnWidth((int)(options.getInt(Options.PREF_COLUMN_WIDTH_LANDSCAPE, getResources().getInteger(R.integer.column_width_land_default)) * getResources().getDisplayMetrics().density));
+			textSize = (int)(options.getInt(Keys.TEXT_SIZE_LANDSCAPE, getResources().getInteger(R.integer.text_size_land_default)) * getResources().getDisplayMetrics().density);
+	    	iconSize = (int)(options.getInt(Keys.ICON_SIZE_LANDSCAPE, getResources().getInteger(R.integer.icon_size_land_default)) * getResources().getDisplayMetrics().density);
+			grid.setVerticalSpacing((int)(options.getInt(Keys.VERTICAL_SPACING_LANDSCAPE, getResources().getInteger(R.integer.vertical_spacing_land_default)) * getResources().getDisplayMetrics().density));
+	    	if (options.getBoolean(Keys.TILE, true)) {
+	    		grid.setColumnWidth((int)(options.getInt(Keys.COLUMN_WIDTH_LANDSCAPE, getResources().getInteger(R.integer.column_width_land_default)) * getResources().getDisplayMetrics().density));
 	    	} else {
 	    		grid.setNumColumns(2);
 	    		grid.setColumnWidth(-1);
 	    	}
-	    	if (!(options.getBoolean(Options.PREF_DOCK_IN_LANDSCAPE, true))) {
+	    	if (!(options.getBoolean(Keys.DOCK_IN_LANDSCAPE, true))) {
 	    		dock.hide();
 	    		dock.setAlwaysHide(true);
 	    	}
@@ -244,13 +244,13 @@ public class Apps extends Activity //implements OnGestureListener
 		grid.setAdapter(null);
 
 		// -1 is a value of AUTO_FIT constant
-		if (options.getBoolean(Options.PREF_TILE, true)) {
+		if (options.getBoolean(Keys.TILE, true)) {
 			grid.setNumColumns(GridView.AUTO_FIT);
 		}
 		adapter = new CustomAdapter(this);
 
 		grid.setAdapter(adapter);
-		if (Themer.theme == Options.LIGHT)
+		if (Themer.theme == Themer.LIGHT)
 			grid.setBackgroundColor(Color.WHITE);
 	}
 	
@@ -386,7 +386,7 @@ public class Apps extends Activity //implements OnGestureListener
 				new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					if (inputBox.getText().toString().equals(options.getString(Options.PREF_PASSWORD, ""))) {
+					if (inputBox.getText().toString().equals(options.getString(Keys.PASSWORD, ""))) {
 						openOptionsMenu();
 					} else {
 						Toast.makeText(getApplicationContext(), getResources().getString(R.string.wrong_password), Toast.LENGTH_LONG).show();
@@ -403,7 +403,7 @@ public class Apps extends Activity //implements OnGestureListener
 		menu();
 	}
 	public void searchInWeb(String text) {
-		String site = options.getString(Options.PREF_SEARCH_PROVIDER, "https://duckduckgo.com/?q=");
+		String site = options.getString(Keys.SEARCH_PROVIDER, "https://duckduckgo.com/?q=");
 		String url = site + text;
 		Intent intent = new Intent(Intent.ACTION_VIEW);
 		intent.setData(Uri.parse(url));
@@ -580,7 +580,7 @@ public class Apps extends Activity //implements OnGestureListener
 			categories.setCurCategory(categories.getHome());
 		} else {
 			if (categories.getCurCategory().equals(categories.getHome())) {
-				String newCategory = options.getString(Options.PREF_HOME_BUTTON, "");
+				String newCategory = options.getString(Keys.HOME_BUTTON, "");
 				if (newCategory.length() > 0)
 					categories.setCurCategory(newCategory);
 			} else {
@@ -596,11 +596,11 @@ public class Apps extends Activity //implements OnGestureListener
 		//Log.v(APP_TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		options = PreferenceManager.getDefaultSharedPreferences(this);
-		Themer.theme = Integer.parseInt(options.getString(Options.PREF_THEME, getResources().getString(R.string.defaultThemeValue)));
-		if (options.getBoolean(Options.SHOW_TUTORIAL, true)) {
+		Themer.theme = Integer.parseInt(options.getString(Keys.THEME, getResources().getString(R.string.defaultThemeValue)));
+		if (options.getBoolean(Keys.SHOW_TUTORIAL, true)) {
 			startActivity(new Intent(this, TutorialActivity.class));
 		}
-		if (Build.VERSION.SDK_INT >= 11 && options.getBoolean("keepInMemory", false)) {
+		if (Build.VERSION.SDK_INT >= 11 && options.getBoolean(Keys.KEEP_IN_MEMORY, false)) {
 			Notification noti = new Notification.Builder(this)
 				.setContentTitle("Emerald")
 				.setContentText(" ")
@@ -611,35 +611,35 @@ public class Apps extends Activity //implements OnGestureListener
 			notiManager.notify(0, noti);
 		}
 		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		setRequestedOrientation(Integer.parseInt(options.getString(Options.PREF_ORIENTATION, "1")));
+		setRequestedOrientation(Integer.parseInt(options.getString(Keys.ORIENTATION, "1")));
 		setContentView(R.layout.apps);
-		findViewById(R.id.appsWindow).setBackgroundColor(options.getInt(Options.PREF_APPS_WINDOW_BACKGROUND, 0));
-		findViewById(R.id.topbar).setBackgroundColor(options.getInt(Options.PREF_BAR_BACKGROUND, 0x22000000));
-		findViewById(R.id.dock_bar).setBackgroundColor(options.getInt(Options.PREF_DOCK_BACKGROUND, 0x22000000));
+		findViewById(R.id.appsWindow).setBackgroundColor(options.getInt(Keys.APPS_WINDOW_BACKGROUND, 0));
+		findViewById(R.id.topbar).setBackgroundColor(options.getInt(Keys.BAR_BACKGROUND, 0x22000000));
+		findViewById(R.id.dock_bar).setBackgroundColor(options.getInt(Keys.DOCK_BACKGROUND, 0x22000000));
 		grid = (GridView)findViewById(R.id.appsGrid);
 		ManagerContainer.setIconPackManager(this);
-		options.edit().putBoolean(Options.MESSAGE_SHOWN, false).commit();
+		options.edit().putBoolean(Keys.MESSAGE_SHOWN, false).commit();
 		prefListener = new OnSharedPreferenceChangeListener() {
 			@Override
 			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 					String key) {
-				if (key.equals(Options.PREF_ICON_PACK) || key.equals(Options.PREF_TRANSFORM_DRAWABLE)) {
+				if (key.equals(Keys.ICON_PACK) || key.equals(Keys.TRANSFORM_DRAWABLE)) {
 					MyCache.deleteIcons(Apps.this);
-					ManagerContainer.getIconPackManager().setIconPack(sharedPreferences.getString(Options.PREF_ICON_PACK, "default"));
+					ManagerContainer.getIconPackManager().setIconPack(sharedPreferences.getString(Keys.ICON_PACK, "default"));
 					if (scanner != null && scanner.getStatus() == AsyncTask.Status.RUNNING)
 						return;
 					scanner = new GetApps(Apps.this);
 					scanner.execute(true);
 					loadFilteredApps();
 					setSpinner();
-				} else if (key.equals(Options.PREF_DIRTY) && sharedPreferences.getBoolean(Options.PREF_DIRTY, false)) {
+				} else if (key.equals(Keys.DIRTY) && sharedPreferences.getBoolean(Keys.DIRTY, false)) {
 					if (scanner == null || scanner.getStatus() != AsyncTask.Status.RUNNING) {
 						scanner = new GetApps(Apps.this);
 						scanner.execute(false);
 					}
-				} else if (!sharedPreferences.getBoolean(Options.MESSAGE_SHOWN, false) && Arrays.asList(Options.noRestartKeys).indexOf(key) == -1) {
+				} else if (!sharedPreferences.getBoolean(Keys.MESSAGE_SHOWN, false) && Arrays.asList(Keys.restart).contains(key)) {
 					Toast.makeText(Apps.this, getResources().getString(R.string.restart_needed), Toast.LENGTH_LONG).show();
-					sharedPreferences.edit().putBoolean(Options.MESSAGE_SHOWN, true).commit();
+					sharedPreferences.edit().putBoolean(Keys.MESSAGE_SHOWN, true).commit();
 				}
 			}
 		};
@@ -700,32 +700,32 @@ public class Apps extends Activity //implements OnGestureListener
 		super.onResume();
 		Themer.applyTheme(this, options);
 		//Log.v(APP_TAG, "onResume");
-		appShortcut = Integer.parseInt(options.getString(Options.PREF_APP_SHORTCUT, "3"));
-	    lock = options.getString(Options.PREF_PASSWORD, "").length() > 0;
+		appShortcut = Integer.parseInt(options.getString(Keys.APP_SHORTCUT, "3"));
+	    lock = options.getString(Keys.PASSWORD, "").length() > 0;
 		loadList(false);
 		boolean needReload = false;
 		
 		if (map.size() == 0) {
 			needReload = true;
 		} else {
-			if ((Integer.parseInt(options.getString(Options.PREF_PREV_APP_SHORTCUT, "3")) == Options.TEXT) != (appShortcut == Options.TEXT)) {
-				if (appShortcut >= Options.ICON) {
+			if ((Integer.parseInt(options.getString(Keys.PREV_APP_SHORTCUT, "3")) == CustomAdapter.TEXT) != (appShortcut == CustomAdapter.TEXT)) {
+				if (appShortcut >= CustomAdapter.ICON) {
 					needReload = true;
 				} else {
 					MyCache.deleteIcons(this);
-					options.edit().putString(Options.PREF_PREV_APP_SHORTCUT, ((Integer)appShortcut).toString()).commit();
+					options.edit().putString(Keys.PREV_APP_SHORTCUT, ((Integer)appShortcut).toString()).commit();
 				}
 			}
 		}
 
-		if (needReload || options.getBoolean(Options.PREF_DIRTY, false)) {
+		if (needReload || options.getBoolean(Keys.DIRTY, false)) {
 			//			Log.v(APP_TAG, "scan");
 			if (scanner == null || scanner.getStatus() != Status.RUNNING) {
 				scanner = new GetApps(this);
 				scanner.execute(false);
 			}
 		}
-		historySize = options.getInt(Options.PREF_HISTORY_SIZE, 10);
+		historySize = options.getInt(Keys.HISTORY_SIZE, 10);
 		boolean historySizeChanged = false;
 		while (categories.getCategoryData(CategoryManager.HISTORY).size() > historySize) {
 			historySizeChanged = true;
@@ -739,6 +739,9 @@ public class Apps extends Activity //implements OnGestureListener
 
 	public class CustomAdapter extends BaseAdapter// implements SectionIndexer
 	{
+		public static final int TEXT = 1;
+		public static final int ICON = 2;
+	
 		View.OnClickListener onClickListener;
 		View.OnLongClickListener onLongClickListener;
 		Context mContext;
@@ -789,7 +792,7 @@ public class Apps extends Activity //implements OnGestureListener
 
 			if (convertView == null) {
 				LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				if (options.getBoolean(Options.PREF_TILE, true))
+				if (options.getBoolean(Keys.TILE, true))
 					v = inflater.inflate(R.layout.iconbutton, parent, false);
 				else
 					v = inflater.inflate(R.layout.oneline, parent, false);
@@ -802,19 +805,19 @@ public class Apps extends Activity //implements OnGestureListener
 			tv = (TextView) v.findViewById(R.id.text);
 			// app shortcut
 			
-			if (appShortcut != Options.ICON) {
-				if (appShortcut == Options.TEXT) {
+			if (appShortcut != ICON) {
+				if (appShortcut == TEXT) {
 					img.setVisibility(View.GONE);
 				}
 				tv.setText(a.name);
 				tv.setTextSize(textSize);
 				tv.setTextColor(textColor);
 				tv.setTypeface(Typeface.DEFAULT,
-					Integer.parseInt(options.getString(Options.PREF_FONT_STYLE, "0")));
+					Integer.parseInt(options.getString(Keys.FONT_STYLE, "0")));
 			} else {
 				tv.setVisibility(View.GONE);
 			}
-			if (appShortcut >= Options.ICON) {
+			if (appShortcut >= ICON) {
 				IconPackManager.setIcon(Apps.this, img, a);
 				img.setVisibility(View.VISIBLE);
 				ViewGroup.LayoutParams p = img.getLayoutParams();
@@ -865,7 +868,7 @@ public class Apps extends Activity //implements OnGestureListener
 			//Log.v(APP_TAG, "custom adapter created");
 			this.mContext = context;
 			int theme = Themer.theme;
-			textColor = (theme == Options.LIGHT || theme == Options.WALLPAPER_DARK || theme == Options.DEFAULT_THEME) ? Color.BLACK : Color.WHITE;
+			textColor = (theme == Themer.LIGHT || theme == Themer.WALLPAPER_DARK || theme == Themer.DEFAULT_THEME) ? Color.BLACK : Color.WHITE;
 			curCatData = new ArrayList<AppData>();
 			toDisplay = new ArrayList<AppData>();
 			onClickListener = new OnAppClickListener((Apps)context);
@@ -884,7 +887,7 @@ public class Apps extends Activity //implements OnGestureListener
 							new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
-								if (inputBox.getText().toString().equals(options.getString(Options.PREF_PASSWORD, ""))) {
+								if (inputBox.getText().toString().equals(options.getString(Keys.PASSWORD, ""))) {
 									((Apps)mContext).itemContextMenu((AppData)v.getTag());
 								} else {
 									Toast.makeText(mContext, mContext.getResources().getString(R.string.wrong_password), Toast.LENGTH_LONG).show();

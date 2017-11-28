@@ -10,7 +10,7 @@ public class ManagerContainer {
 	private static CategoryManager cm;
 	public static void setIconPackManager(Context context) {
 		String iconPack = PreferenceManager.getDefaultSharedPreferences(context)
-			.getString(Options.PREF_ICON_PACK, "default");
+			.getString(Keys.ICON_PACK, "default");
 		ipm = new IconPackManager(context, iconPack);
 	}
 	public static IconPackManager getIconPackManager(Context context) {

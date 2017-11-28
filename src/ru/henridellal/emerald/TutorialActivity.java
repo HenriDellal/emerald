@@ -17,7 +17,7 @@ public class TutorialActivity extends Activity{
 			public void onClick(View v) {
 				PreferenceManager.getDefaultSharedPreferences(TutorialActivity.this)
 					.edit()
-					.putBoolean(Options.SHOW_TUTORIAL, false)
+					.putBoolean(Keys.SHOW_TUTORIAL, false)
 					.commit();
 				TutorialActivity.this.finish();
 			}

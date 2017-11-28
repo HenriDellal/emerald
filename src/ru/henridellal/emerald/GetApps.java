@@ -67,8 +67,8 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 		Intent launchIntent = new Intent(Intent.ACTION_MAIN);
 		launchIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-		int appShortcut = Integer.parseInt(context.options.getString(Options.PREF_APP_SHORTCUT, "3"));
-		boolean icons = appShortcut >= Options.ICON;
+		int appShortcut = Integer.parseInt(context.options.getString(Keys.APP_SHORTCUT, "3"));
+		boolean icons = appShortcut >= Apps.CustomAdapter.ICON;
 		Map<String,AppData> cache = new HashMap<String,AppData>();
 		// delete icons from cache if they aren't used
 		if (slow[0] || !icons) {
@@ -227,9 +227,9 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 	protected void onPostExecute(ArrayList<AppData> data) {
 		// send apps list to activity
 		context.loadList(data, true);
-		context.options.edit().putString(Options.PREF_PREV_APP_SHORTCUT, 
-				context.options.getString(Options.PREF_APP_SHORTCUT, "1")).commit();
-		context.options.edit().putBoolean(Options.PREF_DIRTY,false).commit();
+		context.options.edit().putString(Keys.PREV_APP_SHORTCUT, 
+				context.options.getString(Keys.APP_SHORTCUT, "1")).commit();
+		context.options.edit().putBoolean(Keys.DIRTY,false).commit();
 
 		try {
 			progress.dismiss();

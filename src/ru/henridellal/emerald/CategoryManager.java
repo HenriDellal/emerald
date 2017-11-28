@@ -49,8 +49,8 @@ public class CategoryManager {
 		categories = new HashMap<String,Category>();
 		loadCategories();		
 		sortNames();
-		setHome(options.getString(Options.PREF_HOME, ALL));
-		curCategory = options.getString(Options.PREF_CATEGORY, ALL);
+		setHome(options.getString(Keys.HOME, ALL));
+		curCategory = options.getString(Keys.CATEGORY, ALL);
 	}
 	public String getHome() {
 		return home;
@@ -58,7 +58,7 @@ public class CategoryManager {
 	public void setHome(String catName) {
 		if (haveCategory(catName)) {
 			home = catName;
-			options.edit().putString(Options.PREF_HOME, home).commit();
+			options.edit().putString(Keys.HOME, home).commit();
 		}
 	}
 	/*Checks if Categories instance has a category named s*/
@@ -158,7 +158,7 @@ public class CategoryManager {
 		if (push)
 			pushCategory(curCategory);
 		curCategory = category;
-		options.edit().putString(Options.PREF_CATEGORY, category).commit();
+		options.edit().putString(Keys.CATEGORY, category).commit();
 	}
 	//sets previously chosen category as current
 	public void prevCategory() {

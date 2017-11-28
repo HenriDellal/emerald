@@ -145,7 +145,7 @@
    <CheckBoxPreference
 		android:title="@string/keepInMemory"
 	    android:defaultValue="false"
-		android:key="keepInMemory"/>
+		android:key="keep_in_memory"/>
 	<ru.henridellal.emerald.RestartPreference
     	android:title="@string/restart"
         android:key="restart"/>

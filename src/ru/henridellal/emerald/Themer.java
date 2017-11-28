@@ -17,6 +17,12 @@ import android.widget.EditText;
 public class Themer {
 	public static int theme;
 	
+	public static final int DEFAULT_THEME = 0;
+	public static final int LIGHT = 1;
+	public static final int DARK = 2;
+	public static final int WALLPAPER_LIGHT = 3;
+	public static final int WALLPAPER_DARK = 4;
+	
 	@SuppressWarnings("deprecation")
 	private static void setBarTheme(Activity activity, int theme) {
 		Button menuButton = (Button)activity.findViewById(R.id.menuButton);
@@ -25,9 +31,9 @@ public class Themer {
 		EditText searchField = (EditText)activity.findViewById(R.id.textField);
 		Resources resources = activity.getResources();
 		switch (theme) {
-			case Options.DEFAULT_THEME:
-			case Options.LIGHT:
-			case Options.WALLPAPER_LIGHT:
+			case DEFAULT_THEME:
+			case LIGHT:
+			case WALLPAPER_LIGHT:
 				if (Build.VERSION.SDK_INT >= 16) {
 					menuButton.setBackground(resources.getDrawable(R.drawable.menu_bg));
 					searchButton.setBackground(resources.getDrawable(R.drawable.search_bg));
@@ -54,16 +60,16 @@ public class Themer {
 	}
 	public static void applyTheme(Activity activity, SharedPreferences options) {
 		switch (theme) {
-			case Options.LIGHT:
+			case LIGHT:
 				activity.setTheme(R.style.AppTheme_Light);
 				break;
-			case Options.DARK:
+			case DARK:
 				activity.setTheme(R.style.AppTheme_Dark);
 				break;
-			case Options.WALLPAPER_LIGHT:
+			case WALLPAPER_LIGHT:
 				activity.setTheme(R.style.AppTheme_Light_Wallpaper);
 				break;
-			case Options.WALLPAPER_DARK:
+			case WALLPAPER_DARK:
 				activity.setTheme(R.style.AppTheme_Dark_Wallpaper);
 				break;
 		}
@@ -71,10 +77,10 @@ public class Themer {
 	}
 	public static void setWindowDecorations(Activity activity, SharedPreferences options) {
 		if (Build.VERSION.SDK_INT >= 21) {
-			activity.getWindow().setStatusBarColor(options.getInt(Options.PREF_BAR_BACKGROUND, 0x22000000));
-			activity.getWindow().setNavigationBarColor(options.getInt(Options.PREF_BAR_BACKGROUND, 0x22000000));
+			activity.getWindow().setStatusBarColor(options.getInt(Keys.BAR_BACKGROUND, 0x22000000));
+			activity.getWindow().setNavigationBarColor(options.getInt(Keys.BAR_BACKGROUND, 0x22000000));
 		} else {
-			activity.findViewById(R.id.dummy_top_view).setBackgroundColor(options.getInt(Options.PREF_BAR_BACKGROUND, 0x22000000));
+			activity.findViewById(R.id.dummy_top_view).setBackgroundColor(options.getInt(Keys.BAR_BACKGROUND, 0x22000000));
 			Display display = ((WindowManager)activity.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 			Point size = new Point();
 			Point realSize = new Point();
@@ -87,7 +93,7 @@ public class Themer {
 			dummyBottomView.setLayoutParams(p);
 			if (navBarHeight > 0) {
 				dummyBottomView.setVisibility(View.VISIBLE);
-				dummyBottomView.setBackgroundColor(options.getInt(Options.PREF_DOCK_BACKGROUND, 0x22000000));
+				dummyBottomView.setBackgroundColor(options.getInt(Keys.DOCK_BACKGROUND, 0x22000000));
 			}
 		}
 	}
