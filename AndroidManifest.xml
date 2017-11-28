@@ -9,6 +9,9 @@
 	<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="26"/>
 	 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
      <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+     
+	 <uses-permission-sdk23 android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+     <uses-permission-sdk23 android:name="android.permission.READ_EXTERNAL_STORAGE"/>
           <supports-screens
                   android:normalScreens="true"
                   android:largeScreens="true"
