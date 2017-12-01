@@ -38,7 +38,7 @@ public final class Keys {
 	public static final String HISTORY_SIZE = "history_size";
 	public static final String PASSWORD = "password";
 	
-	public static final String[] restart = {MESSAGE_SHOWN, BAR_BACKGROUND, DOCK_BACKGROUND, APPS_WINDOW_BACKGROUND, TILE};
+	public static final String[] restart = {MESSAGE_SHOWN, BAR_BACKGROUND, DOCK_BACKGROUND, APPS_WINDOW_BACKGROUND, TILE, THEME, ORIENTATION, APP_SHORTCUT, KEEP_IN_MEMORY};
 	
 
 }
