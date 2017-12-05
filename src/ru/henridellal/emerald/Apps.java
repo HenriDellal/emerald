@@ -57,6 +57,7 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 //import android.widget.SectionIndexer;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -278,7 +279,12 @@ public class Apps extends Activity //implements OnGestureListener
 
 			final boolean[] oldChecked = checked.clone();
 
-			builder.setMultiChoiceItems(editableCategoryNames, checked, null);
+			builder.setMultiChoiceItems(editableCategoryNames, checked, 
+				new DialogInterface.OnMultiChoiceClickListener() {							
+				@Override
+				public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+				}
+			});
 			builder.setPositiveButton("OK", new OnClickListener(){
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
@@ -581,8 +587,11 @@ public class Apps extends Activity //implements OnGestureListener
 		} else {
 			if (categories.getCurCategory().equals(categories.getHome())) {
 				String newCategory = options.getString(Keys.HOME_BUTTON, "");
-				if (newCategory.length() > 0)
+				if (newCategory.length() > 0) {
 					categories.setCurCategory(newCategory);
+				} else {
+					categories.setCurCategory(categories.getHome());
+				}
 			} else {
 				categories.setCurCategory(categories.getHome());
 			}
@@ -591,10 +600,16 @@ public class Apps extends Activity //implements OnGestureListener
 		setSpinner();
 		super.onNewIntent(i);
 	}
+	/*public void layoutInit() {
+		RelativeLayout layout = (RelativeLayout)findViewById(R.id.appsWindow);
+		RelativeLayout.LayoutParams params = 
+	}*/
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		//Log.v(APP_TAG, "onCreate");
 		super.onCreate(savedInstanceState);
+		//layoutInit();
 		options = PreferenceManager.getDefaultSharedPreferences(this);
 		Themer.theme = Integer.parseInt(options.getString(Keys.THEME, getResources().getString(R.string.defaultThemeValue)));
 		if (options.getBoolean(Keys.SHOW_TUTORIAL, true)) {
