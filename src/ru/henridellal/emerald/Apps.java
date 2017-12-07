@@ -79,7 +79,7 @@ public class Apps extends Activity //implements OnGestureListener
 	public static final int LIST = 1;
 	GetApps scanner = null;
 	private OnSharedPreferenceChangeListener prefListener;
-	private boolean lock, returnToHome, searchIsOpened;
+	private boolean lock, returnToHome, searchIsOpened, homeButtonPressed;
 	int iconSize, textSize;
 	private int historySize, appShortcut;
 	
@@ -585,15 +585,19 @@ public class Apps extends Activity //implements OnGestureListener
 		if (returnToHome) {
 			categories.setCurCategory(categories.getHome());
 		} else {
-			if (categories.getCurCategory().equals(categories.getHome())) {
-				String newCategory = options.getString(Keys.HOME_BUTTON, "");
-				if (newCategory.length() > 0) {
-					categories.setCurCategory(newCategory);
+			if (categories != null) {
+				loadList(false);
+				homeButtonPressed = true;
+				if (categories.getCurCategory().equals(categories.getHome())) {
+					String newCategory = options.getString(Keys.HOME_BUTTON, "");
+					if (newCategory.length() > 0) {
+						categories.setCurCategory(newCategory);
+					} else {
+						categories.setCurCategory(categories.getHome());
+					}
 				} else {
 					categories.setCurCategory(categories.getHome());
 				}
-			} else {
-				categories.setCurCategory(categories.getHome());
 			}
 		}
 		loadFilteredApps();
@@ -664,7 +668,6 @@ public class Apps extends Activity //implements OnGestureListener
 		if (Build.VERSION.SDK_INT >= 19) {
 			Themer.setWindowDecorations(this, options);
 		}
-		categories = null;
 		spin = (Spinner)findViewById(R.id.category);
 		spin.setOnTouchListener(new SwipeListener(this));
 		dock = new Dock(this);
@@ -717,7 +720,11 @@ public class Apps extends Activity //implements OnGestureListener
 		//Log.v(APP_TAG, "onResume");
 		appShortcut = Integer.parseInt(options.getString(Keys.APP_SHORTCUT, "3"));
 	    lock = options.getString(Keys.PASSWORD, "").length() > 0;
-		loadList(false);
+	    if (!homeButtonPressed) {
+	    	loadList(false);
+	    } else {
+	    	homeButtonPressed = false;
+	    }
 		boolean needReload = false;
 		
 		if (map.size() == 0) {
