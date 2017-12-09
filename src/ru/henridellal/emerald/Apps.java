@@ -582,23 +582,25 @@ public class Apps extends Activity //implements OnGestureListener
 	@Override
 	public void onNewIntent(Intent i) {
 		//Log.v(APP_TAG, "onNewIntent");
+		homeButtonPressed = true;
+		if (categories == null) {
+			loadList(false);
+		}
 		if (returnToHome) {
 			categories.setCurCategory(categories.getHome());
-		} else {
-			if (categories != null) {
-				loadList(false);
-				homeButtonPressed = true;
-				if (categories.getCurCategory().equals(categories.getHome())) {
-					String newCategory = options.getString(Keys.HOME_BUTTON, "");
-					if (newCategory.length() > 0) {
-						categories.setCurCategory(newCategory);
-					} else {
-						categories.setCurCategory(categories.getHome());
-					}
-				} else {
-					categories.setCurCategory(categories.getHome());
-				}
+		} else if (categories.getCurCategory().equals(CategoryManager.HIDDEN)) {
+			findViewById(R.id.quit_hidden_apps).setVisibility(View.GONE);
+			findViewById(R.id.tabs).setVisibility(View.VISIBLE);
+			categories.setCurCategory(categories.getHome());
+		} else if (categories.getCurCategory().equals(categories.getHome())) {
+			String newCategory = options.getString(Keys.HOME_BUTTON, "");
+			if (newCategory.length() > 0) {
+				categories.setCurCategory(newCategory);
+			} else {
+				categories.setCurCategory(categories.getHome());
 			}
+		} else {
+			categories.setCurCategory(categories.getHome());
 		}
 		loadFilteredApps();
 		setSpinner();
