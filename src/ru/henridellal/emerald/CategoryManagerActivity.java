@@ -54,8 +54,6 @@ public class CategoryManagerActivity extends Activity{
 					int catNum, long id) {
 				String chosenCat = categories.get(catNum);
 				buildMenu(chosenCat);
-				//renameCategory(chosenCat);
-				//build and show new context menu
 			}
 
 		});
@@ -68,9 +66,6 @@ public class CategoryManagerActivity extends Activity{
 	}
 	
 	private void buildMenu(final String category) {
-	/*	if (category.equals(CategoryManager.ALL)) {
-			return;
-		}*/
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(category);
 		final boolean isHidden = cm.getCategory(category).isHidden();

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      android:versionCode="26"
-      android:versionName="0.5.2.4" package="ru.henridellal.emerald"
+      android:versionCode="28"
+      android:versionName="0.5.3" package="ru.henridellal.emerald"
       >
 
     <!--android:configChanges="keyboard|keyboardHidden|orientation|screenSize"-->
@@ -23,14 +23,11 @@
   android:label="@string/app_name"
   android:icon="@drawable/icon">
       
- 		<activity android:name=".AboutActivity" android:label="@string/aboutTitle">
- 		</activity>
- 		<activity android:name=".TutorialActivity" android:label="@string/how_to_use">
- 		</activity>
- 		<activity android:name=".CategoryManagerActivity" android:label="@string/categoryManager">
- 		</activity>
- 		<activity android:name=".Options" android:label="@string/launcherSettings">
-         </activity>
+ 		<activity android:name=".AboutActivity" android:label="@string/aboutTitle"/>
+ 		<activity android:name=".TutorialActivity" android:label="@string/how_to_use"/>
+ 		<activity android:name=".CategoryManagerActivity" android:label="@string/categoryManager"/>
+ 		<activity android:name=".Options" android:label="@string/launcherSettings"/>
+ 		<activity android:name=".ThemerActivity" android:label="@string/ui_colors"/>
             <!--
             -->
         <activity android:name=".Apps"

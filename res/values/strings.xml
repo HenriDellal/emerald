@@ -17,8 +17,11 @@
 	<string name="scrollbar">Show letter hint on scroll</string>
 	<string name="orientation">Screen orientation</string>
 	<string name="theme">Theme</string>
-	<string name="appsBackground">Apps window background color</string>
-	<string name="barBackground">Top bar background color</string>
+	<string name="ui_colors">UI colors</string>
+	<string name="appsBackground">Apps window</string>
+	<string name="statusBarBackground">Status bar</string>
+	<string name="barBackground">Top bar</string>
+	<string name="navBarBackground">Navigation bar</string>
 	<string name="iconPack">Icon pack</string>
 	<string name="transformIcons">Transform icons</string>
 	<string name="transformIconsSummary">Edit icons according to icon pack settings</string>
@@ -55,7 +58,7 @@
 	<string name="dock_height">Dock height</string>
 	<string name="dock_icon_size">Dock icon size</string>
 	<string name="show_dock_in_landscape">Show dock in landscape mode</string>
-	<string name="dock_background">Dock background</string>
+	<string name="dock_background">Dock</string>
 	
 	<string name="change_wallpaper">Change wallpaper</string>
 	<string name="accessHidden">Access hidden apps</string>

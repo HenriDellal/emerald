@@ -33,7 +33,7 @@
 	<string name="dock_height">Высота дока</string>
 	<string name="dock_icon_size">Размер иконок дока</string>
 	<string name="show_dock_in_landscape">Показывать в ландшафтном режиме</string>
-	<string name="dock_background">Цвет фона дока</string>
+	<string name="dock_background">Док</string>
 	
 	<string name="createCategory">Создать категорию</string>
 	<string name="launcherSettings">Настройки лаунчера</string>
@@ -48,8 +48,11 @@
 	<string name="setHome">Выбрать домашней категорией</string>
 	<string name="hide">Скрыть</string>
 	<string name="unhide">Убрать из скрытых</string>
-	<string name="appsBackground">Цвет фона приложения</string>
-	<string name="barBackground">Цвет фона верхнего бара</string>
+	<string name="ui_colors">Цвета интерфейса</string>
+	<string name="appsBackground">Меню</string>
+	<string name="statusBarBackground">Статус-бар</string>
+	<string name="barBackground">Главная панель</string>
+	<string name="navBarBackground">Навигационный бар</string>
 	<string name="searchProvider">Сайт для поиска в интернете</string>
 	<string name="keepInMemory">Держать в памяти</string>
 	<string name="save_here">Сохранить в этой папке</string>

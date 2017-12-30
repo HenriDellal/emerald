@@ -7,6 +7,8 @@ public final class Keys {
 	
 	public static final String BAR_BACKGROUND = "bar_background";
 	public static final String DOCK_BACKGROUND = "dock_background";
+	public static final String NAV_BAR_BACKGROUND = "nav_bar_background";
+	public static final String STATUS_BAR_BACKGROUND = "status_bar_background";
 	public static final String APPS_WINDOW_BACKGROUND = "apps_background";
 	
 	public static final String ICON_PACK = "icon_pack";
@@ -38,7 +40,8 @@ public final class Keys {
 	public static final String HISTORY_SIZE = "history_size";
 	public static final String PASSWORD = "password";
 	
-	public static final String[] restart = {MESSAGE_SHOWN, BAR_BACKGROUND, DOCK_BACKGROUND, APPS_WINDOW_BACKGROUND, TILE, THEME, ORIENTATION, APP_SHORTCUT, KEEP_IN_MEMORY};
-	
-
+	public static final String[] restart = {MESSAGE_SHOWN, BAR_BACKGROUND,
+		NAV_BAR_BACKGROUND, STATUS_BAR_BACKGROUND, DOCK_BACKGROUND,
+		APPS_WINDOW_BACKGROUND, TILE, THEME, ORIENTATION,
+		APP_SHORTCUT, KEEP_IN_MEMORY};
 }

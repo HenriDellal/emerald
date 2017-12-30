@@ -670,6 +670,7 @@ public class Apps extends Activity //implements OnGestureListener
 		if (Build.VERSION.SDK_INT >= 19) {
 			Themer.setWindowDecorations(this, options);
 		}
+		Themer.applyTheme(this, options);
 		spin = (Spinner)findViewById(R.id.category);
 		spin.setOnTouchListener(new SwipeListener(this));
 		dock = new Dock(this);
@@ -718,7 +719,6 @@ public class Apps extends Activity //implements OnGestureListener
 	@Override
 	public void onResume() {
 		super.onResume();
-		Themer.applyTheme(this, options);
 		//Log.v(APP_TAG, "onResume");
 		appShortcut = Integer.parseInt(options.getString(Keys.APP_SHORTCUT, "3"));
 	    lock = options.getString(Keys.PASSWORD, "").length() > 0;

@@ -57,11 +57,10 @@
 	    		android:title="@string/show_dock_in_landscape"
 	    		android:defaultValue="true"
 	    		android:key="show_dock_in_landscape"/>
-	    	<com.commonsware.cwac.colormixer.ColorPreference
-    			android:key="dock_background"
-    			android:defaultValue="0x22000000"
-    			android:title="@string/dock_background" />
 	    </PreferenceScreen>
+	    <ru.henridellal.emerald.LaunchActivityPreference
+	    	android:title="@string/ui_colors"
+	        android:key="themer"/>
 	    <CheckBoxPreference
 	    	android:title="@string/tileView"
 	    	android:defaultValue="true"
@@ -88,16 +87,6 @@
 	        android:entryValues="@array/themeValues"
 	        android:title="@string/theme"
 	        android:key="theme"/>
-	   <com.commonsware.cwac.colormixer.ColorPreference
-    		android:key="bar_background"
-    		android:defaultValue="0x22000000"
-    		android:title="@string/barBackground"
-    	/>
-    	<com.commonsware.cwac.colormixer.ColorPreference
-    		android:key="apps_background"
-    		android:defaultValue="0x00000000"
-    		android:title="@string/appsBackground"
-    	/>
 	   <ListPreference
 	        android:defaultValue="default"
 	        android:title="@string/iconPack"
@@ -108,9 +97,9 @@
 	    	android:defaultValue="true"
 	    	android:key="transform_drawable"/>
     </PreferenceScreen>
-    <ru.henridellal.emerald.CategoryManagerPreference
+    <ru.henridellal.emerald.LaunchActivityPreference
     	android:title="@string/categoryManager"
-        android:key="categoryManager"/>
+        android:key="category_manager"/>
    <ru.henridellal.emerald.EditIntPreference
         android:title="@string/historySize"
         android:defaultValue="@integer/history_size_default"
@@ -121,7 +110,7 @@
    	 android:summary="@string/passwordSummary"
         android:defaultValue=""
         android:key="password"/>
-    <ru.henridellal.emerald.AboutPreference
+    <ru.henridellal.emerald.LaunchActivityPreference
     	android:title="@string/aboutTitle"
         android:key="about"/>
     <ListPreference

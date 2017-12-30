@@ -77,8 +77,8 @@ public class Themer {
 	}
 	public static void setWindowDecorations(Activity activity, SharedPreferences options) {
 		if (Build.VERSION.SDK_INT >= 21) {
-			activity.getWindow().setStatusBarColor(options.getInt(Keys.BAR_BACKGROUND, 0x22000000));
-			activity.getWindow().setNavigationBarColor(options.getInt(Keys.BAR_BACKGROUND, 0x22000000));
+			activity.getWindow().setStatusBarColor(options.getInt(Keys.STATUS_BAR_BACKGROUND, 0x22000000));
+			activity.getWindow().setNavigationBarColor(options.getInt(Keys.NAV_BAR_BACKGROUND, 0x22000000));
 		} else {
 			activity.findViewById(R.id.dummy_top_view).setBackgroundColor(options.getInt(Keys.BAR_BACKGROUND, 0x22000000));
 			Display display = ((WindowManager)activity.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
@@ -93,7 +93,7 @@ public class Themer {
 			dummyBottomView.setLayoutParams(p);
 			if (navBarHeight > 0) {
 				dummyBottomView.setVisibility(View.VISIBLE);
-				dummyBottomView.setBackgroundColor(options.getInt(Keys.DOCK_BACKGROUND, 0x22000000));
+				dummyBottomView.setBackgroundColor(options.getInt(Keys.NAV_BAR_BACKGROUND, 0x22000000));
 			}
 		}
 	}

@@ -25,6 +25,7 @@ public class EditIntPreference extends DialogPreference {
 	protected void onBindDialogView(View v) {
 		super.onBindDialogView(v);
 		tv.setText(lastValue.toString());
+		tv.requestFocusFromTouch();
 	}
 	
 	@Override
