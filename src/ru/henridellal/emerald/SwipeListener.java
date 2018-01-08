@@ -3,11 +3,13 @@ package ru.henridellal.emerald;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.lang.ref.SoftReference;
+
 public class SwipeListener implements View.OnTouchListener {
 	float x, density;
-	private Apps apps;
+	private SoftReference<Apps> appsRef;
 	public SwipeListener(Apps apps) {
-		this.apps = apps;
+		appsRef = new SoftReference<Apps>(apps);
 		density = apps.getResources().getDisplayMetrics().density;
 	}
 	@Override
@@ -19,15 +21,14 @@ public class SwipeListener implements View.OnTouchListener {
 				return true;
 			case MotionEvent.ACTION_UP:
 				if (e.getX()-x > 30.0 * density) {
-					ManagerContainer.getCategoryManager().setCurCategory(ManagerContainer.getCategoryManager().getPrevCategory());
-					apps.loadFilteredApps();
-					apps.setSpinner();
+					LauncherApp.getInstance().getCategoryManager().setCurCategory(LauncherApp.getInstance().getCategoryManager().getPrevCategory());
+					appsRef.get().loadFilteredApps();
+					appsRef.get().setSpinner();
 					return true;
 				} else if (x-e.getX() > 30.0 * density) {
-					ManagerContainer.getCategoryManager().setCurCategory(ManagerContainer.getCategoryManager().getNextCategory());
-					apps.loadFilteredApps();
-					apps.setSpinner();
-					//list.startAnimation(fadeIn);
+					LauncherApp.getInstance().getCategoryManager().setCurCategory(LauncherApp.getInstance().getCategoryManager().getNextCategory());
+					appsRef.get().loadFilteredApps();
+					appsRef.get().setSpinner();
 					return true;
 				} else v.performClick();
 			default:

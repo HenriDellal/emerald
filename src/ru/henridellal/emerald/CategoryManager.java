@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.ref.SoftReference;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class CategoryManager {
-	Context context;
+	SoftReference<Context> contextRef;
 	public static final String ALL = "All";
 	public static final String UNCLASSIFIED = "Unclassified";
 	public static final String HIDDEN = "Hidden";
@@ -35,9 +36,8 @@ public class CategoryManager {
 	private ArrayList<String> history;
 	private static final int HISTORY_MAX = 10;
 	
-	public CategoryManager(Context context, Map<String,AppData> map) {
-		this.context = context;
-		this.map = map;
+	public CategoryManager(Context context) {
+		contextRef = new SoftReference<Context>(context);
 		this.options = PreferenceManager.getDefaultSharedPreferences(context);
 		history = new ArrayList<String>();
 		names = new ArrayList<String>();
@@ -47,10 +47,6 @@ public class CategoryManager {
 		names.add(HIDDEN);
 
 		categories = new HashMap<String,Category>();
-		loadCategories();		
-		sortNames();
-		setHome(options.getString(Keys.HOME, ALL));
-		curCategory = options.getString(Keys.CATEGORY, ALL);
 	}
 	public String getHome() {
 		return home;
@@ -114,7 +110,7 @@ public class CategoryManager {
 	and load them*/
 	@SuppressWarnings("deprecation")
 	public void loadCategories() {
-		for (File f : context.getFilesDir().listFiles()) {
+		for (File f : contextRef.get().getFilesDir().listFiles()) {
 			//get files names and look for .cat ones
 			String n = f.getName();
 			if (n.endsWith(".cat")) {
@@ -142,6 +138,13 @@ public class CategoryManager {
 	
 	public void setMap(Map<String,AppData> map) {
 		this.map = map;
+	}
+	public void setInitialMap(Map<String,AppData> map) {
+		setMap(map);
+		loadCategories();
+		sortNames();
+		setHome(options.getString(Keys.HOME, ALL));
+		curCategory = options.getString(Keys.CATEGORY, ALL);
 	}
 	
 	/*public static void setHome(String cat) {
@@ -192,7 +195,7 @@ public class CategoryManager {
 	//returns category file
 	@SuppressWarnings("deprecation")
 	private File catPath(String category) {
-		return new File(context.getFilesDir()+"/"+URLEncoder.encode(category)+".cat");
+		return new File(contextRef.get().getFilesDir()+"/"+URLEncoder.encode(category)+".cat");
 	}
 	//return category names
 	public ArrayList<String> getCategories() {
@@ -358,7 +361,7 @@ public class CategoryManager {
 	}
 	private void readCategoriesProps() {
 		BufferedReader reader = null;
-		File file = new File(context.getFilesDir() + "/categories.props");
+		File file = new File(contextRef.get().getFilesDir() + "/categories.props");
 		try {
 			reader = new BufferedReader(new FileReader(file));
 			
@@ -408,7 +411,7 @@ public class CategoryManager {
 	}
 	private void writeCategoriesProps() {
 		BufferedWriter writer = null;
-		File file = new File(context.getFilesDir() + "/categories.props");
+		File file = new File(contextRef.get().getFilesDir() + "/categories.props");
 		try {
 			writer = new BufferedWriter(new FileWriter(file));
 

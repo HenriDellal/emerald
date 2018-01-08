@@ -36,7 +36,7 @@ public class ThemerActivity extends Activity{
 	ColorMixer colorMixer;
 	String key;
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		wallpaperManager = WallpaperManager.getInstance(this);
 		preview = wallpaperManager.getDrawable();
@@ -90,11 +90,11 @@ public class ThemerActivity extends Activity{
 		((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRealSize(realSize);
 	}
 	@Override
-	public void onResume() {
+	protected void onResume() {
 		super.onResume();
 		setPreview();
 	}
-	public void setPreview() {
+	private void setPreview() {
 		ImageView uiPreview = (ImageView)findViewById(R.id.ui_preview);
 		int width = (int)(realSize.x*0.4f);
 		int height = (int)(realSize.y*0.4f);

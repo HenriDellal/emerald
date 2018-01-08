@@ -2,8 +2,6 @@ package ru.henridellal.emerald;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +23,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
 //import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
@@ -44,20 +41,16 @@ import android.text.TextWatcher;
 import android.view.inputmethod.InputMethodManager;
 import android.view.KeyEvent;
 //import android.view.KeyCharacterMap;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 //import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
+//import android.widget.RelativeLayout;
 //import android.widget.SectionIndexer;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -80,7 +73,6 @@ public class Apps extends Activity //implements OnGestureListener
 	GetApps scanner = null;
 	private OnSharedPreferenceChangeListener prefListener;
 	private boolean lock, returnToHome, searchIsOpened, homeButtonPressed;
-	int iconSize, textSize;
 	private int historySize, appShortcut;
 	
 	public void loadList(boolean cleanCategory) {
@@ -112,8 +104,8 @@ public class Apps extends Activity //implements OnGestureListener
 		this.map = map;
 
 		if (categories == null) {
-			ManagerContainer.newCategoryManager(this, map);
-			categories = ManagerContainer.getCategoryManager();	
+			LauncherApp.getInstance().getCategoryManager().setInitialMap(map);
+			categories = LauncherApp.getInstance().getCategoryManager();	
 		}
 		else {
 			categories.setMap(map);
@@ -167,8 +159,8 @@ public class Apps extends Activity //implements OnGestureListener
 	public void changePrefsOnRotate() {
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 			//Log.v(APP_TAG, "loadFilteredApps : Portrait orientation");
-			iconSize = (int)(options.getInt(Keys.ICON_SIZE, getResources().getInteger(R.integer.icon_size_default)) * getResources().getDisplayMetrics().density);
-	    	textSize = (int)(options.getInt(Keys.TEXT_SIZE, getResources().getInteger(R.integer.text_size_default)) * getResources().getDisplayMetrics().density);
+			adapter.setIconSize((int)(options.getInt(Keys.ICON_SIZE, getResources().getInteger(R.integer.icon_size_default)) * getResources().getDisplayMetrics().density));
+	    	adapter.setTextSize((int)(options.getInt(Keys.TEXT_SIZE, getResources().getInteger(R.integer.text_size_default)) * getResources().getDisplayMetrics().density));
 	    	grid.setVerticalSpacing((int)(options.getInt(Keys.VERTICAL_SPACING, getResources().getInteger(R.integer.vertical_spacing_default)) * getResources().getDisplayMetrics().density));
 	    	if (options.getBoolean(Keys.TILE, true)) {
 	    		grid.setColumnWidth((int)(options.getInt(Keys.COLUMN_WIDTH, getResources().getInteger(R.integer.column_width_default)) * getResources().getDisplayMetrics().density));
@@ -181,8 +173,8 @@ public class Apps extends Activity //implements OnGestureListener
 	    	}
 		} else {
 			//Log.v(APP_TAG, "loadFilteredApps : orientation");
-			textSize = (int)(options.getInt(Keys.TEXT_SIZE_LANDSCAPE, getResources().getInteger(R.integer.text_size_land_default)) * getResources().getDisplayMetrics().density);
-	    	iconSize = (int)(options.getInt(Keys.ICON_SIZE_LANDSCAPE, getResources().getInteger(R.integer.icon_size_land_default)) * getResources().getDisplayMetrics().density);
+	    	adapter.setIconSize((int)(options.getInt(Keys.ICON_SIZE_LANDSCAPE, getResources().getInteger(R.integer.icon_size_land_default)) * getResources().getDisplayMetrics().density));
+			adapter.setTextSize((int)(options.getInt(Keys.TEXT_SIZE_LANDSCAPE, getResources().getInteger(R.integer.text_size_land_default)) * getResources().getDisplayMetrics().density));
 			grid.setVerticalSpacing((int)(options.getInt(Keys.VERTICAL_SPACING_LANDSCAPE, getResources().getInteger(R.integer.vertical_spacing_land_default)) * getResources().getDisplayMetrics().density));
 	    	if (options.getBoolean(Keys.TILE, true)) {
 	    		grid.setColumnWidth((int)(options.getInt(Keys.COLUMN_WIDTH_LANDSCAPE, getResources().getInteger(R.integer.column_width_land_default)) * getResources().getDisplayMetrics().density));
@@ -298,7 +290,8 @@ public class Apps extends Activity //implements OnGestureListener
 					grid.setSelection(position);
 				}});
 		}
-		builder.create().show();
+		if (!isFinishing())
+			builder.create().show();
 	}
 	public void itemContextMenu(final AppData item) {
 		//Log.v(APP_TAG, "Open app edit window");
@@ -355,7 +348,8 @@ public class Apps extends Activity //implements OnGestureListener
 				}
 			}
 		});
-		builder.create().show();
+		if (!isFinishing())
+			builder.create().show();
 	}
 //	@Override
 //	public boolean dispatchKeyEvent(KeyEvent event) {
@@ -399,13 +393,15 @@ public class Apps extends Activity //implements OnGestureListener
 					}
 			} });
 			builder.setCancelable(true);
-			builder.show();
+			if (!isFinishing()) {
+				builder.show();
+			}
 		} else {
 			openOptionsMenu();
 		}
 	}
 	
-	public void onMenuButton(View v) {
+	protected void onMenuButton(View v) {
 		menu();
 	}
 	public void searchInWeb(String text) {
@@ -494,7 +490,6 @@ public class Apps extends Activity //implements OnGestureListener
 			menu();
 			return true;
 		} else if (keyCode == KeyEvent.KEYCODE_BACK) {
-			//onBackPressed
 			//Log.v(APP_TAG, "BACK pressed");
 			if (searchIsOpened) {
 				closeSearch();
@@ -514,19 +509,22 @@ public class Apps extends Activity //implements OnGestureListener
 	}
 	
 	@Override
-	public void onStart() {
+	public void onBackPressed() {}
+	
+	@Override
+	protected void onStart() {
 		//Log.v(APP_TAG, "onStart ");
 		super.onStart();
 	}
 	
 	@Override
-	public void onStop() {
+	protected void onStop() {
 		returnToHome = true;
 		super.onStop();
 	}
 	
 	@Override
-	public void onPause() {
+	protected void onPause() {
 		//Log.v(APP_TAG, "onPause");
 		super.onPause();
 		returnToHome = false;
@@ -535,7 +533,7 @@ public class Apps extends Activity //implements OnGestureListener
 		}
 	}
 	@Override
-	public void onDestroy() {
+	protected void onDestroy() {
 		//Log.v(APP_TAG, "onDestroy");
 		options.unregisterOnSharedPreferenceChangeListener(prefListener);
 		grid.setOnScrollListener(null);
@@ -555,7 +553,10 @@ public class Apps extends Activity //implements OnGestureListener
 				public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 					if (adapter != null) {
 						if (adapter.getCount() > 0) {
-							firstChar = adapter.getAppName(firstVisibleItem).substring(0,1);
+							firstChar = adapter.getAppName(firstVisibleItem);
+							if (firstChar.length() > 1) {
+								firstChar = firstChar.substring(0,1);
+							}
 						} else {
 							firstChar = " ";
 						}
@@ -580,7 +581,7 @@ public class Apps extends Activity //implements OnGestureListener
 		}
 	}
 	@Override
-	public void onNewIntent(Intent i) {
+	protected void onNewIntent(Intent i) {
 		//Log.v(APP_TAG, "onNewIntent");
 		homeButtonPressed = true;
 		if (categories == null) {
@@ -612,7 +613,7 @@ public class Apps extends Activity //implements OnGestureListener
 	}*/
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		//Log.v(APP_TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		//layoutInit();
@@ -638,7 +639,6 @@ public class Apps extends Activity //implements OnGestureListener
 		findViewById(R.id.topbar).setBackgroundColor(options.getInt(Keys.BAR_BACKGROUND, 0x22000000));
 		findViewById(R.id.dock_bar).setBackgroundColor(options.getInt(Keys.DOCK_BACKGROUND, 0x22000000));
 		grid = (GridView)findViewById(R.id.appsGrid);
-		ManagerContainer.setIconPackManager(this);
 		options.edit().putBoolean(Keys.MESSAGE_SHOWN, false).commit();
 		prefListener = new OnSharedPreferenceChangeListener() {
 			@Override
@@ -646,7 +646,7 @@ public class Apps extends Activity //implements OnGestureListener
 					String key) {
 				if (key.equals(Keys.ICON_PACK) || key.equals(Keys.TRANSFORM_DRAWABLE)) {
 					MyCache.deleteIcons(Apps.this);
-					ManagerContainer.getIconPackManager().setIconPack(sharedPreferences.getString(Keys.ICON_PACK, "default"));
+					LauncherApp.getInstance().getIconPackManager().setIconPack(sharedPreferences.getString(Keys.ICON_PACK, "default"));
 					if (scanner != null && scanner.getStatus() == AsyncTask.Status.RUNNING)
 						return;
 					scanner = new GetApps(Apps.this);
@@ -717,7 +717,7 @@ public class Apps extends Activity //implements OnGestureListener
 	}
 
 	@Override
-	public void onResume() {
+	protected void onResume() {
 		super.onResume();
 		//Log.v(APP_TAG, "onResume");
 		appShortcut = Integer.parseInt(options.getString(Keys.APP_SHORTCUT, "3"));
@@ -759,187 +759,5 @@ public class Apps extends Activity //implements OnGestureListener
 			loadFilteredApps();
 		}
 		dock.initApps(map);
-	}
-
-	public class CustomAdapter extends BaseAdapter// implements SectionIndexer
-	{
-		public static final int TEXT = 1;
-		public static final int ICON = 2;
-	
-		View.OnClickListener onClickListener;
-		View.OnLongClickListener onLongClickListener;
-		Context mContext;
-		ArrayList<AppData> catData, toDisplay;
-		//ArrayList<String> sectionData;
-		//HashMap<Integer, Integer> indexData;
-		//String[] sections;
-		int curMode, textColor;
-		ImageView img;
-		TextView tv;
-		String searchInput;
-		Comparator<AppData> comparator;
-		public void filter(CharSequence searchInput) {
-			/*String ch;
-			sectionData = new ArrayList<String>();
-			indexData = new HashMap<Integer, Integer>();
-			int sectionIndex = 0;
-			int appIndex = 0;*/
-			this.searchInput = searchInput.toString();
-			toDisplay = new ArrayList<AppData>();
-			for (AppData a: catData) {
-				if (a.name.toLowerCase().contains(searchInput.toString().toLowerCase())) {
-					toDisplay.add(a);
-					/*ch = a.name.toUpperCase().substring(0,1);
-					if (!sectionData.contains(ch)) {
-						sectionData.add(ch);
-						indexData.put(sectionIndex, appIndex);
-						sectionIndex++;
-					}*/
-				}
-				//appIndex++;
-			}
-			//String[] sections = new String[sectionData.size()];
-			//sectionData.toArray(sections);
-			Collections.sort(toDisplay, comparator);
-			notifyDataSetChanged();
-		}
-		
-		@Override
-		public boolean isEnabled(int position) {
-			return true;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			View v;
-			AppData a;
-
-			if (convertView == null) {
-				LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				if (options.getBoolean(Keys.TILE, true))
-					v = inflater.inflate(R.layout.iconbutton, parent, false);
-				else
-					v = inflater.inflate(R.layout.oneline, parent, false);
-			} else {
-				v = convertView;
-			}
-			a = toDisplay.get(position);
-			img = (ImageView) v.findViewById(R.id.icon);
-			v.setTag(a);
-			tv = (TextView) v.findViewById(R.id.text);
-			// app shortcut
-			
-			if (appShortcut != ICON) {
-				if (appShortcut == TEXT) {
-					img.setVisibility(View.GONE);
-				}
-				tv.setText(a.name);
-				tv.setTextSize(textSize);
-				tv.setTextColor(textColor);
-				tv.setTypeface(Typeface.DEFAULT,
-					Integer.parseInt(options.getString(Keys.FONT_STYLE, "0")));
-			} else {
-				tv.setVisibility(View.GONE);
-			}
-			if (appShortcut >= ICON) {
-				IconPackManager.setIcon(Apps.this, img, a);
-				img.setVisibility(View.VISIBLE);
-				ViewGroup.LayoutParams p = img.getLayoutParams();
-				p.width = iconSize;
-				p.height = iconSize;
-				img.setLayoutParams(p);
-			}
-			v.setOnClickListener(onClickListener);
-			v.setOnLongClickListener(onLongClickListener);
-			return v;
-		}
-		public String getAppName(int position) {
-			return toDisplay.get(position).name;
-		}
-		
-		/*public int getPositionForSection(int sectionIndex) {
-			
-			return indexData.get(sectionIndex);
-		}
-		public int getSectionForPosition(int position) {
-			return 0;
-		}
-		public Object[] getSections() {
-			return sections;
-		}*/
-		
-		@Override
-		public int getCount() {
-			return toDisplay.size();
-		}
-
-		@Override
-		public Object getItem(int position) {
-			return null;
-		}
-	
-		@Override
-		public long getItemId(int position) {
-			return 0;
-		}			
-		public void update(ArrayList<AppData> curCatData) {
-			this.catData = curCatData;
-			toDisplay = catData;
-			notifyDataSetChanged();
-		}
-		public CustomAdapter(Context context) {
-			super();
-			//Log.v(APP_TAG, "custom adapter created");
-			this.mContext = context;
-			int theme = Themer.theme;
-			textColor = (theme == Themer.LIGHT || theme == Themer.WALLPAPER_DARK || theme == Themer.DEFAULT_THEME) ? Color.BLACK : Color.WHITE;
-			curCatData = new ArrayList<AppData>();
-			toDisplay = new ArrayList<AppData>();
-			onClickListener = new OnAppClickListener((Apps)context);
-			if (lock) {
-				onLongClickListener = new View.OnLongClickListener() {
-					@Override
-					public boolean onLongClick(View arg0) {
-						final View v = arg0;
-						AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-						//builder.setTitle("");
-						builder.setMessage(mContext.getResources().getString(R.string.type_password));
-						final EditText inputBox = new EditText(mContext);
-						inputBox.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD);
-						builder.setView(inputBox);
-						builder.setPositiveButton(android.R.string.yes, 
-							new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								if (inputBox.getText().toString().equals(options.getString(Keys.PASSWORD, ""))) {
-									((Apps)mContext).itemContextMenu((AppData)v.getTag());
-								} else {
-									Toast.makeText(mContext, mContext.getResources().getString(R.string.wrong_password), Toast.LENGTH_LONG).show();
-								}
-							}
-						});
-						builder.setCancelable(true);
-						builder.show();
-						return false;
-					}
-				};
-			} else {
-				onLongClickListener = new OnAppLongClickListener((Apps)context);
-			}
-			comparator = new Comparator<AppData>() {
-				@Override
-				public int compare(AppData first, AppData second) {
-					boolean firstStarts = first.name.toLowerCase().startsWith(searchInput);
-					boolean secondStarts = second.name.toLowerCase().startsWith(searchInput);
-					if (firstStarts && !secondStarts) {
-						return -1;
-					} else if (!firstStarts && secondStarts) {
-						return 1;
-					} else {
-						return AppData.NameComparator.compare(first, second);
-					}
-				}
-			};
-		}
 	}
 }

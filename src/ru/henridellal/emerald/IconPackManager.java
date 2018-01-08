@@ -23,7 +23,6 @@ import android.widget.ImageView;
 */
 import android.os.Build;
 import android.graphics.drawable.AdaptiveIconDrawable;
-import android.graphics.drawable.LayerDrawable;
 
 
 import java.io.File;
@@ -68,24 +67,18 @@ public class IconPackManager {
 	}
 	/* Returns Bitmap for default icon pack.
 	 * Includes code for retrieving Oreo+ adaptive icons.
-	 * Credits to Vishnu Prasad: 
-	 *   https://stackoverflow.com/questions/46130594/android-get-apps-adaptive-icons-from-package-manager
 	 */
 	public Bitmap getDefaultBitmap(Drawable d) {
 		if (d instanceof BitmapDrawable) {
 			return ((BitmapDrawable) d).getBitmap();
 		} else if (Build.VERSION.SDK_INT >= 26) {
 			if (d instanceof AdaptiveIconDrawable) {
-				Drawable bgDrawable = ((AdaptiveIconDrawable)d).getBackground();
-				Drawable fgDrawable = ((AdaptiveIconDrawable)d).getForeground();
-				Drawable[] layers = new Drawable[]{bgDrawable, fgDrawable};
-				LayerDrawable layerDrawable = new LayerDrawable(layers);
-				int w = layerDrawable.getIntrinsicWidth();
-				int h = layerDrawable.getIntrinsicHeight();
+				int w = d.getIntrinsicWidth();
+				int h = d.getIntrinsicHeight();
 				Bitmap result = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
 				Canvas canvas = new Canvas(result);
-				layerDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-				layerDrawable.draw(canvas);
+				d.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+				d.draw(canvas);
 				return result;
 			}
 		}
@@ -121,7 +114,7 @@ public class IconPackManager {
 		Canvas canvas = new Canvas(result);
 		if (iconBacks != null) {
 			if (iconBacks.size() > 0) {
-				canvas.drawBitmap(iconBacks.get((int)(Math.random()*iconBacks.size())), 0, 0, null);
+				canvas.drawBitmap(iconBacks.get((int)(Math.random()*iconBacks.size()-1)), 0, 0, null);
 			}
 		}
 		paint = new Paint(Paint.ANTI_ALIAS_FLAG);

@@ -1,7 +1,6 @@
 package ru.henridellal.emerald;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Environment;
 import android.view.View;
 import android.widget.ListView;
@@ -14,9 +13,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.BaseAdapter;
 import android.widget.AdapterView;
-//required by permissions checker
-import android.Manifest;
-import android.content.pm.PackageManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,13 +68,6 @@ public class FileLoaderDialog extends ListView
     public FileLoaderDialog(DialogPreference preference, Context context, int mode)
 	{
 		super(context);
-		// request runtime permissions (Marshmallow+)
-        if (Build.VERSION.SDK_INT >= 23) {
-        	if ((context.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)
-        		|| (context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)) {
-        		((Options)context).requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
-        	}
-        }
 		curDirectory = Environment.getExternalStorageDirectory();
 		setFileList(curDirectory);
 		this.mode = mode;

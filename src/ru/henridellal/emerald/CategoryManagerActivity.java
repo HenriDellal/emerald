@@ -34,15 +34,15 @@ public class CategoryManagerActivity extends Activity{
 	}
 	
 	@Override
-	public void onDestroy() {
+	protected void onDestroy() {
 		cm = null;
 		super.onDestroy();
 	}
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.categorymanager);
-		cm = ManagerContainer.getCategoryManager();
+		cm = LauncherApp.getInstance().getCategoryManager();
 		categories = cm.getCategories();
 		adapter = new ArrayAdapter<String>(this, 
 			android.R.layout.simple_list_item_1, categories);

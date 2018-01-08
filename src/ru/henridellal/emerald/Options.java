@@ -25,7 +25,7 @@ public class Options extends PreferenceActivity {
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		addPreferencesFromResource(R.xml.options);
-		setIconPacksList(ManagerContainer.getIconPackManager(this).getIconPacks());
+		setIconPacksList(LauncherApp.getInstance().getIconPackManager().getIconPacks());
 		if (Build.VERSION.SDK_INT < 11) {
 			findPreference("keepInMemory").setEnabled(false);
 		}

@@ -8,7 +8,7 @@ import android.widget.Button;
 
 public class TutorialActivity extends Activity{
 
-	public void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tutorial);
 		((Button)findViewById(R.id.close_tutorial)).setOnClickListener(

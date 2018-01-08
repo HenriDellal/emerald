@@ -43,7 +43,7 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 	private void writeIconTo(File iconFile, Drawable d) {
 		try {
 			Bitmap bmp;
-			IconPackManager ipm = ManagerContainer.getIconPackManager();
+			IconPackManager ipm = LauncherApp.getInstance().getIconPackManager();
 			// get icon from icon pack
 			if (((bmp = ipm.getBitmap(component)) == null) && (d instanceof BitmapDrawable)) {
 				// edit drawable to match icon pack
@@ -68,7 +68,7 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 		launchIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 
 		int appShortcut = Integer.parseInt(context.options.getString(Keys.APP_SHORTCUT, "3"));
-		boolean icons = appShortcut >= Apps.CustomAdapter.ICON;
+		boolean icons = appShortcut >= CustomAdapter.ICON;
 		Map<String,AppData> cache = new HashMap<String,AppData>();
 		// delete icons from cache if they aren't used
 		if (slow[0] || !icons) {

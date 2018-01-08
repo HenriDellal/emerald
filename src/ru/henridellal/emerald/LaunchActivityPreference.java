@@ -23,6 +23,7 @@ public class LaunchActivityPreference extends Preference {
 		activityMap.put("about", AboutActivity.class);
 		activityMap.put("category_manager", CategoryManagerActivity.class);
 		activityMap.put("themer", ThemerActivity.class);
+		activityMap.put("open_file", FileActivity.class);
 		if (activityMap.containsKey(getKey())) {
 			Intent intent = new Intent(getContext(), activityMap.get(getKey()));
 			getContext().startActivity(intent);

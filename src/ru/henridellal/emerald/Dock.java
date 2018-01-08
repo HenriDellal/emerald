@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.lang.ref.SoftReference;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -26,13 +27,13 @@ import android.widget.Toast;
 public class Dock {
 	private ArrayList<AppData> apps;
 	private ArrayList<ImageView> buttons;
-	private Context context;
+	private SoftReference<Context> contextRef;
 	private LinearLayout dockBar;
 	private int defaultHeight;
 	private boolean alwaysHide = false;
 	
 	public Dock(Context context) {
-		this.context = context;
+		contextRef = new SoftReference<Context>(context);
 		dockBar = (LinearLayout) ((Apps)context).findViewById(R.id.dock_bar);
 		defaultHeight = dockBar.getLayoutParams().height;
 		apps = new ArrayList<AppData>();
@@ -93,7 +94,7 @@ public class Dock {
 	public void initApps(Map<String, AppData> map) {
 		apps = new ArrayList<AppData>();
 		BufferedReader reader = null;
-		File f = new File(context.getFilesDir(), "dock");
+		File f = new File(contextRef.get().getFilesDir(), "dock");
 		try {
 			if (!f.exists()) {
 				f.createNewFile();
@@ -113,11 +114,11 @@ public class Dock {
 				}
 			}
 		} catch (FileNotFoundException e) {
-			Toast.makeText(context, " "+e, Toast.LENGTH_LONG).show();
+			Toast.makeText(contextRef.get(), " "+e, Toast.LENGTH_LONG).show();
 		} catch (IOException e) {
-			Toast.makeText(context, " "+e, Toast.LENGTH_LONG).show();
+			Toast.makeText(contextRef.get(), " "+e, Toast.LENGTH_LONG).show();
 		} catch (Exception e) {
-			Toast.makeText(context, " "+e, Toast.LENGTH_LONG).show();
+			Toast.makeText(contextRef.get(), " "+e, Toast.LENGTH_LONG).show();
 		}
 		
 		if (reader != null)
@@ -131,7 +132,7 @@ public class Dock {
 	private void saveApps() {
 		BufferedWriter writer = null;
 		try {
-			File file = new File(context.getFilesDir(), "dock");
+			File file = new File(contextRef.get().getFilesDir(), "dock");
 			if (!file.exists()) {
 				file.createNewFile();
 			}
@@ -141,7 +142,7 @@ public class Dock {
 				writer.write(a.getComponent() + "\n");
 			}
 		} catch (IOException e) {
-			Toast.makeText(context, " "+e, Toast.LENGTH_LONG).show();
+			Toast.makeText(contextRef.get(), " "+e, Toast.LENGTH_LONG).show();
 		}
 
 		if (writer != null) {
@@ -177,11 +178,11 @@ public class Dock {
 	public void update() {
 		for (int i=0; i<buttons.size(); i++) {
 			ImageView button = buttons.get(i);
-			if (i<apps.size() && ((Apps)context).hasApp(apps.get(i))) {
+			if (i<apps.size() && ((Apps)contextRef.get()).hasApp(apps.get(i))) {
 				button.setVisibility(View.VISIBLE);
-				IconPackManager.setIcon(context, buttons.get(i), apps.get(i));
+				IconPackManager.setIcon(contextRef.get(), buttons.get(i), apps.get(i));
 				button.setTag(apps.get(i));
-				button.setOnClickListener(new OnAppClickListener((Apps)context));
+				button.setOnClickListener(new OnAppClickListener((Apps)contextRef.get()));
 			} else {
 				button.setVisibility(i > 0 ? View.GONE : View.INVISIBLE);
 				button.setImageResource(android.R.color.transparent);
