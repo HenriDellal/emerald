@@ -15,7 +15,9 @@
 package com.commonsware.cwac.colormixer;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -25,9 +27,11 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.Toast;
 import android.widget.TextView;
 
 import ru.henridellal.emerald.R;
@@ -41,8 +45,7 @@ public class ColorMixer extends RelativeLayout {
   private SeekBar blue=null;
   private SeekBar green=null;
   private TextView alphaValue, redValue, greenValue, blueValue;
-  private EditText hexColorText;
-  private OnColorChangedListener listener=null;
+  private Button hexButton;
 
   public ColorMixer(Context context) {
     super(context);
@@ -61,30 +64,57 @@ public class ColorMixer extends RelativeLayout {
 
     initMixer(attrs);
   }
-
-  public OnColorChangedListener getOnColorChangedListener() {
-    return(listener);
-  }
-
-  public void setOnColorChangedListener(OnColorChangedListener listener) {
-    this.listener=listener;
-  }
-
   public int getColor() {
     return(Color.argb(alpha.getProgress(), red.getProgress(), green.getProgress(),
                       blue.getProgress()));
   }
-
   public void setColor(int color) {
-    alpha.setProgress(Color.alpha(color));
-    alphaValue.setText(((Integer)Color.alpha(color)).toString());
-    red.setProgress(Color.red(color));
-    redValue.setText(((Integer)Color.red(color)).toString());
-    green.setProgress(Color.green(color));
-    greenValue.setText(((Integer)Color.green(color)).toString());
-    blue.setProgress(Color.blue(color));
-    blueValue.setText(((Integer)Color.blue(color)).toString());
+    int alphaInt = (int)(color >> 6*4);
+    int colorInt = (int)(color - (alphaInt << 6*4));
+    setColor(alphaInt, colorInt);
   }
+  public void setColor(int alphaInt, int colorInt) {
+    if (alphaInt < 0) {
+      alphaInt = 256+alphaInt;
+    }
+    alpha.setProgress(alphaInt);
+    alphaValue.setText(((Integer)alphaInt).toString());
+    red.setProgress(Color.red(colorInt));
+    redValue.setText(((Integer)Color.red(colorInt)).toString());
+    green.setProgress(Color.green(colorInt));
+    greenValue.setText(((Integer)Color.green(colorInt)).toString());
+    blue.setProgress(Color.blue(colorInt));
+    blueValue.setText(((Integer)Color.blue(colorInt)).toString());
+  }
+  private void buildHexDialog() {
+    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+      builder.setMessage("HEX code");
+          final EditText inputBox = new EditText(getContext());
+          inputBox.setText(Integer.toHexString(getColor()));
+          builder.setView(inputBox);
+          builder.setPositiveButton(android.R.string.yes,
+            new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              String hexCode = inputBox.getText().toString();
+              try {
+                String alphaHexCode = hexCode.substring(0,2);
+                String rgbHexCode = hexCode.substring(2);
+                setColor(Integer.parseInt(alphaHexCode, 16), Integer.parseInt(rgbHexCode, 16));
+              } catch (Exception e) {
+                Toast.makeText(getContext(), "Not a hex code"+e, Toast.LENGTH_LONG).show();
+              }
+            }
+          });
+          builder.setNegativeButton(android.R.string.cancel,
+            new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {}
+          });
+          builder.setCancelable(true);
+          builder.create().show();
+  }
+
 
   private void initMixer(AttributeSet attrs) {
     if (isInEditMode()) {
@@ -124,22 +154,16 @@ public class ColorMixer extends RelativeLayout {
     blue.setMax(0xFF);
     blue.setOnSeekBarChangeListener(onMix);
 
-    hexColorText=(EditText)findViewById(R.id.hexColorText);
-    hexColorText.setText(Integer.toHexString(getColor()));
-	hexColorText.addTextChangedListener(new TextWatcher() {
-      @Override
-      public void afterTextChanged(Editable s) {}
-      @Override
-      public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-      @Override
-      public void onTextChanged(CharSequence s, int start, int count, int after) {
-        try {
-          setColor(Integer.parseInt(s.toString(), 16));
-        } catch (Exception e) {
-        
+    
+    hexButton=(Button)findViewById(R.id.hexButton);
+    hexButton.setOnClickListener(
+      new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          buildHexDialog();
         }
       }
-    });
+    );
     if (attrs != null) {
       int[] styleable=R.styleable.ColorMixer;
       TypedArray a=
@@ -174,27 +198,25 @@ public class ColorMixer extends RelativeLayout {
         public void onProgressChanged(SeekBar seekBar, int progress,
                                       boolean fromUser) {
           int color=getColor();
-          hexColorText.setText(Integer.toHexString(color));
+          int alphaInt = color >>> 6*4;
+          int colorInt = color - (alphaInt << 6*4);
           switch (seekBar.getId()) {
             case R.id.alpha:
-              alphaValue.setText(((Integer)Color.alpha(color)).toString());
+              alphaValue.setText(((Integer)alphaInt).toString());
               break;
             case R.id.red:
-              redValue.setText(((Integer)Color.red(color)).toString());
+              redValue.setText(((Integer)Color.red(colorInt)).toString());
               break;
             case R.id.green:
-              greenValue.setText(((Integer)Color.green(color)).toString());
+              greenValue.setText(((Integer)Color.green(colorInt)).toString());
               break;
             case R.id.blue:
-              blueValue.setText(((Integer)Color.blue(color)).toString());
+              blueValue.setText(((Integer)Color.blue(colorInt)).toString());
               break;
           }
 
-          swatch.setBackgroundColor(color);
+          swatch.setBackgroundColor((int)color);
 
-          if (listener != null) {
-            listener.onColorChange(color);
-          }
         }
 
         public void onStartTrackingTouch(SeekBar seekBar) {
@@ -206,7 +228,4 @@ public class ColorMixer extends RelativeLayout {
         }
       };
 
-  public interface OnColorChangedListener {
-    public void onColorChange(int argb);
-  }
 }
