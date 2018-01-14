@@ -12,6 +12,7 @@
 	android:layout_height="match_parent"
 	android:padding="10dp"
 	android:text="@string/about"
+	android:textSize="14sp"
 	android:textColor="#fff"/>
 	</LinearLayout>
 </ScrollView>
