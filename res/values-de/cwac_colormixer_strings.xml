@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="cwac_colormixer_alpha">Transparenz</string>
+  <string name="cwac_colormixer_red">Rot</string>
+  <string name="cwac_colormixer_green">Grün</string>
+  <string name="cwac_colormixer_blue">Blau</string>
+  <string name="cwac_colormixer_set">Benutzen</string>
+  <string name="cwac_colormixer_cancel">Abbrechen</string>
+</resources>
