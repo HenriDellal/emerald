@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      android:versionCode="29"
+      android:versionCode="30"
       android:versionName="0.5.3.3-h" package="ru.henridellal.emerald"
       >
 
