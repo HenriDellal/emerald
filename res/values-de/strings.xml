@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Emerald Launcher</string>
+	<string name="appearancePrefs">Aussehen</string>
+	<string name="portraitPrefs">Hochformat Einstellungen</string>
+	<string name="landscapePrefs">Querformat Einstellungen</string>
+	
+	<string name="home_button">Verhalten der Starttaste</string>
+	<string name="categoryManager">Kategorien verwalten</string>
+	<string name="appShortcut">Anzeige der Apps</string>
+	<string name="iconSize">Symbolgröße</string>
+	<string name="textSize">Textgröße</string>
+	<string name="fontStyle">Schriftstil</string>
+	<string name="columnWidth">Spaltenbreite</string>
+	<string name="verticalSpacing">Vertikaler Abstand</string>
+	<string name="tileView">Gitter</string>
+	<string name="scrollbar">Zeige Anfangsbuchstaben während des Bildlaufs</string>
+	<string name="orientation">Ausrichtung des Bildschirms</string>
+	<string name="theme">Thema</string>
+	<string name="ui_colors">Farbe der Benutzeroberfläche</string>
+	<string name="appsBackground">Hintergrund</string>
+	<string name="statusBarBackground">Statusleiste</string>
+	<string name="barBackground">Oberer Rand</string>
+	<string name="navBarBackground">Navigationsleiste</string>
+	<string name="iconPack">Symbolpaket</string>
+	<string name="transformIcons">Anpassung der Symbolart</string>
+	<string name="transformIconsSummary">Ändere Symbole entsprechend der Einstellungen im Symbolpaket</string>
+	<string name="defaultIconPack">Voreingestellt</string>
+	<string name="fullscreen">Vollbildmodus</string>
+	<string name="historySize">Anzahl der letzten Apps</string>
+	<string name="password">Kennwort</string>
+	<string name="passwordSummary">Sperreinstellungen und verborgene Apps</string>
+	<string name="passwordHint">Leer lassen, um Sperre zu deaktivieren</string>
+	<string name="searchProvider">Suchdienstanbieter</string>
+	<string name="keepInMemory">Im Speicher behalten</string>
+	<string name="backupPrefs">Einstellungen zur Sicherungskopie</string>
+	<string name="successfulBackup">Sicherungskopie erstellt. Die Datei befindet sich in </string>
+	<string name="successfulRestore">Sicherungskopie wiederhergestellt.</string>
+	<string name="restorePrefs">Einstellungen zur Wiederherstellung</string>
+	<string name="restart">Neustart des Launchers</string>
+	<string name="restart_needed">Launcher wird neu gestartet</string>
+	
+	<string name="launcherSettings">Launcher Einstellungen</string>
+	
+	<string name="createCategory">Kategorie erstellen</string>
+	<string name="rename">Umbenennen</string>
+	<string name="editAppList">Liste der Apps bearbeiten</string>
+	<string name="findInMarket">Finde im App-Store</string>
+	<string name="editAppCategories">Ändere Kategorien</string>
+	<string name="delete">Löschen</string>
+	<string name="setHome">Als Standard setzen</string>
+	<string name="hide">Verbergen</string>
+	<string name="unhide">Nicht mehr verbergen</string>
+	<string name="save_here">In diesem Verzeichnis speichern</string>
+	<string name="dock_is_full">Dock ist voll</string>
+	<string name="dock_preferences">Dock Voreinstellungen</string>
+	<string name="dock_height">Höhe des Docks</string>
+	<string name="dock_icon_size">Symbolgröße im Dock</string>
+	<string name="show_dock_in_landscape">Zeige Dock im Querformat</string>
+	<string name="dock_background">Dock</string>
+	<string name="change_wallpaper">Hintergrundbild ändern</string>
+	<string name="accessHidden">Verborgene Apps</string>
+	<string name="quit_hidden_apps">Verborgene Apps schliessen</string>
+	<string name="fullScan">Alle Apps neu einlesen</string>
+	<string name="clear">Löschen</string>
+	<string name="wrong_password">Falsches Kennwort.</string>
+	<string name="type_password">Kennwort eingeben</string>
+	<string name="add_to_dock">Zum Dock hinzufügen</string>
+	<string name="remove_from_dock">Vom Dock entfernen</string>
+	<string name="uninstall">Deinstallieren</string>
+	
+	<string name="aboutTitle">Über</string>
+	<string name="how_to_use">Hinweise zur Benutzung</string>
+	<string name="close_tutorial">Tutorial beenden</string>
+<string name="tutorial">Wischen Sie auf dem Namen der Kategorie, um zur nächsten/vorherigen Kategorie zu wechseln. Auf den Kategoriennamen klicken, um alle Kategorien zu sehen.
+\n
+\nÖffnen Sie Launcher Einstellungen -> Kategorien verwalten, um Kategorien zu ändern.
+\n
+\nKlicken Sie den Suchen-Button um alle Apps zu durchsuchen (ausgenommen verborgene). Um im Web zu suchen, öffnen Sie die Suche, tippen Sie ... und klicken Sie auf den Pfeil ganz rechts.
+\n
+\nSymbol lange gedrückt halten, um das Popup-Menü zu öffnen.
+\n
+\nDrücken Sie die Starttaste, um die Anfangskategorie zu öffnen. Noch einmal drücken, um wieder alle Apps zu sehen.
+\n
+\nDie Rücktaste drücken, um zur vorher geöffneten Kategorie zu wechseln.
+</string>
+</resources>

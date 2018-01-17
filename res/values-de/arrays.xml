@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="home_button_options">
+        <item>Wechseln zwischen Startansicht und Alle Apps</item>
+        <item>Wechseln zwischen Startansicht und Letzte Apps</item>
+        <item>Nicht wechseln</item>
+    </string-array>
+	<string-array name="search_entries">
+        <item>Benutzerdefiniert</item>
+        <item>DuckDuckGo</item>
+        <item>Google</item>
+    </string-array>
+	<string-array name="appShortcutTypes">
+        <item>Text</item>
+        <item>Symbol</item>
+        <item>Symbol und Text</item>
+    </string-array>
+	<string-array name="themeTypes">
+        <item>Hell</item>
+        <item>Dunkel</item>
+    </string-array>
+    <string-array name="orientationTypes">
+        <item>Hochformat</item>
+        <item>Querformat</item>
+        <item>System</item>
+        <item>Automatisch</item>
+    </string-array>
+    <string-array name="fontStyleTypes">
+        <item>Standard</item>
+        <item>Fett</item>
+        <item>Kursiv</item>
+        <item>Fett Kursiv</item>
+    </string-array>
+</resources>

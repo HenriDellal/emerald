@@ -90,15 +90,17 @@
 	
 <string name="about" translatable="false">Emerald Launcher
 \n
-\nCopyright 2017 Anri Dellal
+\nCopyright 2018 Anri Dellal
 \n
 \nLicensed under GPL-v3
 \nWant to help? Report bugs and submit suggestions via GitHub (https://www.github.com/HenriDellal/emerald) or Google Play listing(http://play.google.com/details?id=ru.henridellal.emerald).
 \n
 \nThanks to:
-\nTheAlaskaLinuxUser (http://thealaskalinuxuser.wordpress.com) for help with Nougat tests, searching and handling bugs.
-\nMax Kerekesha for Ukrainian translation.
+\nTheAlaskaLinuxUser (http://thealaskalinuxuser.wordpress.com) for tests and bug fixes.
+\nMaxim Kerekesha for Ukrainian translation.
 \nDaria Szatan (https://github.com/bla-ke) for Polish translation.
+\nThomas Blankenburg for German translation and tests.
+\nDavid Smit for tests.
 \nAll contributors.
 \n
 \nTinyLaunch
