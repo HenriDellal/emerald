@@ -20,7 +20,7 @@ mkdir -p build/apk build/gen build/obj
 "${BUILD_TOOLS}/aapt" package -f -m -J build/gen/ -S res -M AndroidManifest.xml -I "${PLATFORM}/android.jar"
 
 # javac
-javac -source 1.8 -target 1.8 -bootclasspath "${JAVA_HOME}/jre/lib/rt.jar" -classpath "${PLATFORM}/android.jar" -d build/obj build/gen/${SOURCE}/R.java src/com/commonsware/cwac/colormixer/ColorMixer.java src/ru/henridellal/emerald/*.java
+javac -source 1.8 -target 1.8 -bootclasspath "${JAVA_HOME}/jre/lib/rt.jar" -classpath "${PLATFORM}/android.jar" -Xlint:deprecation -d build/obj build/gen/${SOURCE}/R.java src/com/commonsware/cwac/colormixer/ColorMixer.java src/ru/henridellal/emerald/*.java
 
 # dex
 "${BUILD_TOOLS}/dx" --dex --output=build/apk/classes.dex build/obj/
