@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string-array name="appShortcutTypes">
-	<item>Текст</item>
-	<item>Піктограма</item>
-	<item>Піктограма і текст</item>
+	<item>Text</item>
+	<item>Icon</item>
+	<item>Icon and Text</item>
 	</string-array>
 <string-array name="themeTypes">
-	<!--<item>Стандартна</item>-->
-	<item>Світла</item>
-	<item>Темна</item>
-	<!--<item>Шпалери з чорним текстом</item>
-	<item>Шпалери з білим текстом</item>-->
+	<item>Light</item>
+	<item>Dark</item>
 </string-array>
 <string-array name="orientationTypes">
-	<item>Портретна</item>
-	<item>Ландшафтна</item>
-	<item>Системна</item>
-	<item>Завжди авто-поворот</item>
+	<item>Portrait</item>
+	<item>Landscape</item>
+	<item>System</item>
+	<item>Always auto-rotate</item>
 </string-array>
 </resources>
