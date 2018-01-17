@@ -4,7 +4,7 @@
 # Build file for emerald-launcher on jenkins server
 #
 # Inspired by http://www.hanshq.net/command-line-android.html
-#
+# and https://m.habrahabr.ru/post/335074/
 #
 
 SOURCE=ru/henridellal/emerald
