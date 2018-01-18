@@ -1,29 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="portraitPrefs">Налаштування портретного режиму</string>
-	<string name="landscapePrefs">Налаштування ландшафтного режиму</string>
+	<string name="app_name">Emerald Launcher</string>
+	<string name="appearancePrefs">Appearance preferences</string>
+	<string name="portraitPrefs">Portrait mode preferences</string>
+	<string name="landscapePrefs">Landscape mode preferences</string>
+	
+	<string name="home_button">Home button behaviour</string>
+	<string name="categoryManager">Category manager</string>
+	<string name="appShortcut">App shortcut</string>
+	<string name="iconSize">Icon size</string>
+	<string name="textSize">Text size</string>
+	<string name="fontStyle">Font style</string>
+	<string name="columnWidth">Column width</string>
+	<string name="verticalSpacing">Vertical spacing</string>
+	<string name="tileView">Grid</string>
+	<string name="scrollbar">Show letter hint on scroll</string>
+	<string name="orientation">Screen orientation</string>
+	<string name="theme">Theme</string>
+	<string name="ui_colors">UI colors</string>
+	<string name="appsBackground">Apps window</string>
+	<string name="statusBarBackground">Status bar</string>
+	<string name="barBackground">Top bar</string>
+	<string name="navBarBackground">Navigation bar</string>
+	<string name="iconPack">Icon pack</string>
+	<string name="transformIcons">Transform icons</string>
+	<string name="transformIconsSummary">Edit icons according to icon pack settings</string>
+	<string name="defaultIconPack">Default</string>
+	<string name="fullscreen">Fullscreen mode</string>
+	<string name="historySize">History size</string>
+	<string name="password">Password</string>
+	<string name="passwordSummary">Lock settings and hidden apps</string>
+	<string name="passwordHint">Leave it empty to disable lock</string>
+	<string name="searchProvider">Search provider</string>
+	<string name="keepInMemory">Keep in memory</string>
+	<string name="backupPrefs">Backup preferences</string>
+	<string name="successfulBackup">Backup finished. Backup file can be found at </string>
+	<string name="successfulRestore">Successfully restored.</string>
+	<string name="restorePrefs">Restore preferences</string>
+	<string name="restart">Restart launcher</string>
+	<string name="restart_needed">Launcher will be restarted</string>
+	
+	<string name="launcherSettings">Launcher settings</string>
+	
+	<string name="createCategory">Create category</string>
+	<string name="rename">Rename</string>
+	<string name="editAppList">Edit application list</string>
+	<string name="findInMarket">Find in app market</string>
+	<string name="editAppCategories">Edit application categories</string>
+	<string name="delete">Delete</string>
+	<string name="setHome">Set as home</string>
+	<string name="hide">Hide</string>
+	<string name="unhide">Unhide</string>
+	
+	<string name="save_here">Save in this folder</string>
+	<string name="dock_is_full">Dock is full</string>
+	<string name="dock_preferences">Dock preferences</string>
+	<string name="dock_height">Dock height</string>
+	<string name="dock_icon_size">Dock icon size</string>
+	<string name="show_dock_in_landscape">Show dock in landscape mode</string>
+	<string name="dock_background">Dock</string>
+	
+	<string name="change_wallpaper">Change wallpaper</string>
+	<string name="accessHidden">Access hidden apps</string>
+	<string name="quit_hidden_apps">Quit hidden apps</string>
+	<string name="fullScan">Full scan</string>
+	<string name="clear">Clear</string>
+	<string name="wrong_password">Wrong password.</string>
+	<string name="type_password">Type password</string>
+	
+	<string name="add_to_dock">Add to dock</string>
+	<string name="remove_from_dock">Remove from dock</string>
+	<string name="uninstall">Uninstall</string>
+	
+	<string name="aboutTitle">About</string>
+	<string name="how_to_use">How to use</string>
+	<string name="close_tutorial">Close tutorial</string>
+<string name="tutorial">Swipe on the category name to switch to the next/previous category. Click on it to see the full list of categories.
+\n
+\nOpen Launcher settings/Category manager to edit categories.
+\n
+\nClick on the search button to search through all apps (except hidden). To search in the web, open search, type ... and click an arrow at the right of the text field.
+\n
+\nLong-press an app icon to open the popup menu.
+\n
+\nPress Home button to open home category. Press once again to open all apps list.
+\n
+\nPress Back button to switch to the previously opened category.
+</string>
+	
+<string name="about" translatable="false">Emerald Launcher
+\n
+\nCopyright 2018 Anri Dellal
+\n
+\nLicensed under GPL-v3
+\nWant to help? Report bugs and submit suggestions via GitHub (https://www.github.com/HenriDellal/emerald) or Google Play listing(http://play.google.com/details?id=ru.henridellal.emerald).
+\n
+\nThanks to:
+\nTheAlaskaLinuxUser (http://thealaskalinuxuser.wordpress.com) for tests and bug fixes.
+\nMaxim Kerekesha for Ukrainian translation.
+\nDaria Szatan (https://github.com/bla-ke) for Polish translation.
+\nThomas Blankenburg for German translation and tests.
+\nDavid Smit for tests.
+\nAll contributors.
+\n
+\nTinyLaunch
+\nCopyright (c) 2011-12, Alexander R. Pruss
+\nLicensed under BSD-3-Clause
+\nhttps://github.com/arpruss/tinylaunch
+\n
+\nCWAC ColorMixer
+\n
+\nLicensed under the Apache License 2.0.
+\nhttps://github.com/commonsguy/cwac-colormixer
+\n
+\nFont-Awesome
+\nThe font licensed under the SIL OFL 1.1.
+\nhttp://fontawesome.io/</string>
 
-	<string name="appShortcut">Ярлики додатків</string>
-	<string name="iconSize">Розмір піктограм</string>
-	<string name="columnWidth">Ширина колонки</string>
-	<string name="verticalSpacing">Вертикальний інтервал</string>
-	<string name="tileView">Вид плитки</string>
-	<string name="orientation">Орієнтація екрана</string>
-	<string name="theme">Тема</string>
-	<string name="iconPack">Пакет іконок</string>
-	<string name="defaultIconPack">За умовчанням</string>
-	<string name="historySize">Розмір історії</string>
-	<string name="password">Пароль</string>
-	<string name="passwordSummary">Заблокувати налаштування та приховані програми</string>
-	<string name="passwordHint">Залиште його порожнім, щоб вимкнути блокування</string>
-
-	<string name="createCategory">Нова категорія</string>
-	<string name="launcherSettings">Налаштування лаунчера</string>
-	<string name="rename">Перейменувати</string>
-	<string name="delete">Видалити</string>
-	<string name="accessHidden">Доступ до прихованих додатків</string>
-	<string name="fullScan">Повне сканування</string>
-	<string name="clear">Очистити </string>
-	<string name="uninstall">Видалити</string>
-
+	<!-- DEFAULT VALUES FOR SETTINGS -->
+	
+	<string name="defaultThemeValue" translatable="false">1</string>
+	
 </resources>
