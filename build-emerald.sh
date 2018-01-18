@@ -26,7 +26,7 @@ javac -source 1.8 -target 1.8 -bootclasspath "${JAVA_HOME}/jre/lib/rt.jar" -clas
 "${BUILD_TOOLS}/dx" --dex --output=build/apk/classes.dex build/obj/
 
 # aapt, create first apk
-"${BUILD_TOOLS}/aapt" package -f -M AndroidManifest.xml -S res/  -I "${PLATFORM}/android.jar" -F build/emerald.unsigned.unaligned.apk build/apk/
+"${BUILD_TOOLS}/aapt" package -f -M AndroidManifest.xml -S res/  -I "${PLATFORM}/android.jar" -F build/emerald.unaligned.apk build/apk/
 
 # zipalign the apk
-"${BUILD_TOOLS}/zipalign" -f 4 build/emerald.unsigned.unaligned.apk build/emerald.unsigned.aligned.apk
+"${BUILD_TOOLS}/zipalign" -f 4 build/emerald.unaligned.apk build/emerald.aligned.apk
