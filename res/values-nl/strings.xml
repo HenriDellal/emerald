@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Emerald Launcher</string>
+	<string name="appearancePrefs">Weergave</string>
+	<string name="portraitPrefs">Instellingen Staand</string>
+	<string name="landscapePrefs">Instellingen Liggend</string>
+	
+	<string name="home_button">Home-knop instelling</string>
+	<string name="categoryManager">Categoriën instellen</string>
+	<string name="appShortcut">App snelkoppeling</string>
+	<string name="iconSize">Icoongrootte</string>
+	<string name="textSize">Textgrootte</string>
+	<string name="fontStyle">Lettertype</string>
+	<string name="columnWidth">Kolombreedte</string>
+	<string name="verticalSpacing">Verticale afstand</string>
+	<string name="tileView">Tegelweergave</string>
+	<string name="scrollbar">Toon beginletter tijdens scrollen</string>
+	<string name="orientation">Schermoriëntering/string>
+	<string name="theme">Thema</string>
+	<string name="ui_colors">Voorgrondkleur</string>
+	<string name="appsBackground">Achtergrond</string>
+	<string name="statusBarBackground">Statusbalk</string>
+	<string name="barBackground">Bovenrand</string>
+	<string name="navBarBackground">Navigatiebalk</string>
+	<string name="iconPack">Icoonpakket</string>
+	<string name="transformIcons">Pas iconen aan</string>
+	<string name="transformIconsSummary">Standaardiconen aanpassen aan icoonpakket</string>
+	<string name="defaultIconPack">Standaardiconen</string>
+	<string name="fullscreen">Volledig scherm</string>
+	<string name="historySize">Geschiedenisgrootte</string>
+	<string name="password">Wachtwoord</string>
+	<string name="passwordSummary">Beveiligingsinstellingen en verborgen apps</string>
+	<string name="passwordHint">Leeg laten om beveiliging uit te schakelen</string>
+	<string name="searchProvider">Zoekmachine</string>
+	<string name="keepInMemory">In geheugen houden</string>
+	<string name="backupPrefs">Instellingen opslaan</string>
+	<string name="successfulBackup">Instellingen opgeslagen in </string>
+	<string name="successfulRestore">Instellingen geladen.</string>
+	<string name="restorePrefs">Instellingen laden</string>
+	<string name="restart">Herstart launcher</string>
+	<string name="restart_needed">Launcher wordt herstart</string>
+	
+	<string name="launcherSettings">Launcherinstellingen</string>
+	
+	<string name="createCategory">Nieuwe categorie</string>
+	<string name="rename">Hernoemen</string>
+	<string name="editAppList">App-lijst bewerken</string>
+	<string name="findInMarket">Zoek in App-Store</string>
+	<string name="editAppCategories">Categoriën wijzigen</string>
+	<string name="delete">Verwijderen</string>
+	<string name="setHome">Instellen als Start</string>
+	<string name="hide">Verbergen</string>
+	<string name="unhide">Niet meer verbergen</string>
+	<string name="save_here">Hier opslaan</string>
+	<string name="dock_is_full">Dock is vol</string>
+	<string name="dock_preferences">Dock-instellingen</string>
+	<string name="dock_height">Dock-hoogte</string>
+	<string name="dock_icon_size">Icoongrootte in Dock</string>
+	<string name="show_dock_in_landscape">Toon Dock in liggende weergave</string>
+	<string name="dock_background">Dock</string>
+	<string name="change_wallpaper">Achtergrond instellen</string>
+	<string name="accessHidden">Verborgen apps</string>
+	<string name="quit_hidden_apps">Verborgen apps sluiten</string>
+	<string name="fullScan">Volledige scan</string>
+	<string name="clear">Verwijderen</string>
+	<string name="wrong_password">Onjuist wachtwoord.</string>
+	<string name="type_password">Wachtwoord invoeren</string>
+	<string name="add_to_dock">Toevoegen aan Dock</string>
+	<string name="remove_from_dock">Verwijderen uit Dock</string>
+	<string name="uninstall">App verwijderen</string>
+	
+	<string name="aboutTitle">Over</string>
+	<string name="how_to_use">Gebruikshandleiding</string>
+	<string name="close_tutorial">Tutorial sluiten</string>
+<string name="tutorial">Veeg over de naam van de categorie om naar de volgende/vorige categorie te gaan. Druk op de naam van de categorie om alle categoriën te zien.
+\n
+\nGa naar Launcherinstelingen -> Categoriën wijzigen om categoriën aan te passen.
+\n
+\nDruk op de zoek-button om te zoeken in alle apps (behalve verborgen). Om op het Web te zoeken, open Zoeken, druk op ... en daarna op de pijl rechts.
+\n
+\nHoud een icoon ingedrukt om het Popup-menu te openen.
+\n
+\nDruk op de Home-knop om de Startcategorie te openen. Druk nogmaals op Home om terug te keren naar Alle apps.
+\n
+\nDruk op de Terug-knop om terug te gaan naar de vorige categorie.
+</string>
+</resources>
