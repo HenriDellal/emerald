@@ -84,38 +84,6 @@
 \n
 \nDruk op de Terug-knop om terug te gaan naar de vorige categorie.
 </string>
-		
-		<string name="about" translatable="false">Emerald Launcher
-\n
-\nCopyright 2018 Anri Dellal
-\n
-\nLicensed under GPL-v3
-\n 
-\nWil je helpen? Rapporteer bugs en doe verbetervoorstellen via GitHub (https://www.github.com/HenriDellal/emerald) of Google Play (http://play.google.com/details?id=ru.henridellal.emerald).
-\n
-\nMet dank aan:
-\nTheAlaskaLinuxUser (http://thealaskalinuxuser.wordpress.com) voor tests en bug fixes.
-\nMaxim Kerekesha voor vertaling naar Ukraiens.
-\nDaria Szatan (https://github.com/bla-ke) voor vertaling naar Pools.
-\nThomas Blankenburg voor vertaling naar Duits en voor tests.
-\nDavid Smit voor vertaling naar Nederlands en voor tests.
-\nAlle bijdragers.
-\n
-\nTinyLaunch
-\nCopyright (c) 2011-12, Alexander R. Pruss
-\nLicensed under BSD-3-Clause
-\nhttps://github.com/arpruss/tinylaunch
-\n
-\nCWAC ColorMixer
-\nLicensed under the Apache License 2.0.
-\nhttps://github.com/commonsguy/cwac-colormixer
-\n
-\nFont-Awesome
-\nThe font licensed under the SIL OFL 1.1.
-\nhttp://fontawesome.io/</string>
 
-	<!-- DEFAULT VALUES FOR SETTINGS -->
-	
-	<string name="defaultThemeValue" translatable="false">1</string>
 	
 </resources>
