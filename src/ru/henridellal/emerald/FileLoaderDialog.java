@@ -76,7 +76,7 @@ public class FileLoaderDialog extends ListView
 			button.setText(context.getResources().getString(R.string.save_here));
 			button.setOnClickListener(new View.OnClickListener(){
 				public void onClick(View v) {
-					File chosenFile = new File(curDirectory, "preferences.txt");
+					File chosenFile = new File(curDirectory, "emerald-launcher-preferences.txt");
 					((Options)getContext()).backupPrefs(chosenFile);
 				}
 			});
