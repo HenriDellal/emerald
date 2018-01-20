@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="home_button_options">
+        <item>Bladeren tussen Start en Alle Apps</item>
+        <item>Bladeren tussen Start en Geschiedenis</item>
+        <item>Niet bladeren</item>
+    </string-array>
+	<string-array name="search_entries">
+        <item>Aangepast</item>
+        <item>DuckDuckGo</item>
+        <item>Google</item>
+    </string-array>
+	<string-array name="appShortcutTypes">
+        <item>Tekst</item>
+        <item>Icoon</item>
+        <item>Icoon en Tekst</item>
+    </string-array>
+	<string-array name="themeTypes">
+        <item>Licht</item>
+        <item>Donker</item>
+    </string-array>
+    <string-array name="orientationTypes">
+        <item>Staand</item>
+        <item>Liggend</item>
+        <item>Systeem</item>
+        <item>Autorotatie</item>
+    </string-array>
+    <string-array name="fontStyleTypes">
+        <item>Normaal</item>
+        <item>Vet</item>
+        <item>Cursief</item>
+        <item>Vet cursief</item>
+    </string-array>
+</resources>
