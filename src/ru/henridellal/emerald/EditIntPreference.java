@@ -3,6 +3,7 @@ package ru.henridellal.emerald;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.preference.DialogPreference;
+import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.EditText;
@@ -24,6 +25,7 @@ public class EditIntPreference extends DialogPreference {
 	@Override
 	protected void onBindDialogView(View v) {
 		super.onBindDialogView(v);
+		tv.setInputType(InputType.TYPE_CLASS_NUMBER);
 		tv.setText(lastValue.toString());
 		tv.requestFocusFromTouch();
 	}

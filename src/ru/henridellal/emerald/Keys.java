@@ -40,6 +40,8 @@ public final class Keys {
 	public static final String HISTORY_SIZE = "history_size";
 	public static final String PASSWORD = "password";
 	
+	public static final String[] noBackup = {MESSAGE_SHOWN, DIRTY, CATEGORY, PASSWORD};
+	
 	public static final String[] restart = {MESSAGE_SHOWN, BAR_BACKGROUND,
 		NAV_BAR_BACKGROUND, STATUS_BAR_BACKGROUND, DOCK_BACKGROUND,
 		APPS_WINDOW_BACKGROUND, TILE, THEME, ORIENTATION,
