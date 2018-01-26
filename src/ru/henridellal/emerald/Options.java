@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.io.BufferedReader;
@@ -66,6 +67,7 @@ public class Options extends PreferenceActivity {
 	}
 	
 	public void backupPrefs(File file) {
+		List<String> backupKeys = Arrays.asList(Keys.BACKUP);
 		FileOutputStream output = null;
 		try {
 			if (!file.exists()) {
@@ -76,7 +78,7 @@ public class Options extends PreferenceActivity {
 			Set<? extends Map.Entry<? extends String, ? extends Object>> prefEntrySet = PreferenceManager.getDefaultSharedPreferences(this).getAll().entrySet();
 			for (Map.Entry<? extends String, ? extends Object> entry: prefEntrySet) {
 				String key = entry.getKey();
-				if (Arrays.asList(Keys.noBackup).contains(key)) {
+				if (!backupKeys.contains(key)) {
 					continue;
 				}
 				Object value = entry.getValue();
@@ -116,6 +118,7 @@ public class Options extends PreferenceActivity {
 	}
 	
 	public void restorePrefs(File file) {
+		List<String> backupKeys = Arrays.asList(Keys.BACKUP);
 		BufferedReader input = null;
 		SharedPreferences.Editor prefsEditor = PreferenceManager.getDefaultSharedPreferences(this).edit();
 		ArrayList<String> argTypes = new ArrayList<String>();
@@ -133,7 +136,7 @@ public class Options extends PreferenceActivity {
 				}
 				int index = line.indexOf('=');
 				key = line.substring(0, index).trim();
-				if (!PreferenceManager.getDefaultSharedPreferences(this).contains(key)) {
+				if (!backupKeys.contains(key)) {
 					continue;
 				}
 				value = line.substring(index+1, line.length()).trim();
