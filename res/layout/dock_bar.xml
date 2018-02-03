@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/dock_bar"
+	android:layout_width="fill_parent"
+	android:layout_height="@dimen/dock_height"
+	android:background="#2000">
+	<ImageView
+		android:id="@+id/button1"
+		android:layout_width="0dp"
+		android:layout_height="@dimen/dock_icon_size"
+		android:layout_gravity="center_vertical"
+		android:layout_weight="1"
+		android:visibility="invisible"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentTop="true" />
+	<ImageView
+		android:id="@+id/button2"
+		android:layout_width="0dp"
+		android:layout_height="@dimen/dock_icon_size"
+		android:layout_gravity="center_vertical"
+		android:layout_weight="1"
+		android:visibility="gone"
+		android:layout_toRightOf="@id/button1" />
+	<ImageView
+		android:id="@+id/button3"
+		android:layout_width="0dp"
+		android:layout_height="@dimen/dock_icon_size"
+		android:layout_gravity="center_vertical"
+		android:layout_weight="1"
+		android:visibility="gone"
+		android:layout_toRightOf="@id/button2" />
+	<ImageView
+		android:id="@+id/button4"
+		android:layout_width="0dp"
+		android:layout_height="@dimen/dock_icon_size"
+		android:layout_gravity="center_vertical"
+		android:layout_weight="1"
+		android:visibility="gone"
+		android:layout_toRightOf="@id/button3" />
+	<ImageView
+		android:id="@+id/button5"
+		android:layout_width="0dp"
+		android:layout_height="@dimen/dock_icon_size"
+		android:layout_gravity="center_vertical"
+		android:layout_weight="1"
+		android:visibility="gone"
+		android:layout_toRightOf="@id/button4" />
+</LinearLayout>

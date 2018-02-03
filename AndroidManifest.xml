@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      android:versionCode="30"
-      android:versionName="0.5.3.3-beta" package="ru.henridellal.emerald"
+      android:versionCode="31"
+      android:versionName="0.5.4" package="ru.henridellal.emerald"
       >
 
     <!--android:configChanges="keyboard|keyboardHidden|orientation|screenSize"-->
@@ -57,5 +57,6 @@
         	<data android:scheme="package"/>
         	</intent-filter> 
         </receiver>
+        <!--<service android:name=".PackageService"/>-->
     </application>
 </manifest>

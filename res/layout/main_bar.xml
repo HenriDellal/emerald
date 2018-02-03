@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/main_bar"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:paddingTop="2dp"
+	android:paddingLeft="8dp"
+	android:paddingRight="8dp"
+	android:paddingBottom="2dp"
+	android:background="#2000" >
+	<RelativeLayout 
+		android:id="@+id/tabs"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" >
+		<Button 
+			android:id="@+id/menuButton"
+			android:layout_width="32dp"
+			android:layout_height="32dp"
+			android:layout_centerVertical="true"
+			android:onClick="onMyClick"
+			android:background="@drawable/menu_bg"
+			android:layout_alignParentLeft="true" />
+		<Spinner
+			android:id="@+id/category"
+			android:layout_width="0dp"
+			android:layout_height="40dp"
+			android:layout_toLeftOf="@+id/searchButton"
+			android:layout_toRightOf="@id/menuButton"
+			android:layout_marginLeft="5dp"
+			android:layout_marginRight="5dp"
+			android:layout_centerVertical="true" />
+		<Button 
+			android:id="@+id/searchButton"
+			android:layout_width="32dp"
+			android:layout_height="32dp"
+			android:layout_centerVertical="true"
+			android:onClick="onMyClick"
+			android:layout_alignParentRight="true"
+			android:background="@drawable/search_bg" />
+	</RelativeLayout>
+	<RelativeLayout 
+		android:id="@+id/searchBar"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:visibility="gone" >
+		<Button 
+			android:id="@+id/webSearchButton"
+			android:layout_width="32dp"
+			android:layout_height="32dp"
+			android:layout_centerVertical="true"
+			android:visibility="gone"
+			android:layout_alignParentRight="true"
+			android:background="@drawable/web_search_bg" />
+		<EditText
+			android:id="@+id/textField"
+			android:singleLine="true"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:visibility="gone"
+			android:textSize="14sp"
+			android:layout_alignParentLeft="true"
+			android:layout_toStartOf="@id/searchBar"
+			android:layout_toLeftOf="@id/webSearchButton" />
+	</RelativeLayout>
+	<Button 
+		android:id="@+id/quit_hidden_apps"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_gravity="center_vertical"
+		android:visibility="gone"
+		android:onClick="onMyClick"
+		android:text="@string/quit_hidden_apps" />
+</FrameLayout>

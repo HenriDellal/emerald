@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SectionIndexer;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,8 +22,10 @@ import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Set;
 
-public class CustomAdapter extends BaseAdapter// implements SectionIndexer
+public class CustomAdapter extends BaseAdapter implements SectionIndexer
 {
 	public static final int TEXT = 1;
 	public static final int ICON = 2;
@@ -32,43 +35,52 @@ public class CustomAdapter extends BaseAdapter// implements SectionIndexer
 	SoftReference<Context> contextRef;
 	SharedPreferences options;
 	ArrayList<AppData> categoryData, toDisplay;
-	//ArrayList<String> sectionData;
-	//HashMap<Integer, Integer> indexData;
-	//String[] sections;
+	ArrayList<String> sectionsList;
+	HashMap<String, Integer> indexData;
+	String[] sections;
 	int curMode, iconSize, textSize, textColor, appShortcut;
 	public void setIconSize(int size) {iconSize = size;}
 	public void setTextSize(int size) {textSize = size;}
-	boolean lock;
+	boolean lock, fastScrollEnabled;
 	ImageView img;
 	TextView tv;
 	String searchInput;
+	Set<String> sectionsSet;
 	Comparator<AppData> comparator;
 	public void filter(CharSequence searchInput) {
-		/*String ch;
-		sectionData = new ArrayList<String>();
-		indexData = new HashMap<Integer, Integer>();
-		int sectionIndex = 0;
-		int appIndex = 0;*/
+		indexData.clear();
 		this.searchInput = searchInput.toString();
 		toDisplay = new ArrayList<AppData>();
 		for (AppData a: categoryData) {
-			if (a.name.toLowerCase().contains(searchInput.toString().toLowerCase())) {
+			if (a.name.toLowerCase().contains(this.searchInput.toLowerCase())) {
 				toDisplay.add(a);
-				/*ch = a.name.toUpperCase().substring(0,1);
-				if (!sectionData.contains(ch)) {
-					sectionData.add(ch);
-					indexData.put(sectionIndex, appIndex);
-					sectionIndex++;
-				}*/
 			}
-			//appIndex++;
 		}
-		//String[] sections = new String[sectionData.size()];
-		//sectionData.toArray(sections);
+		setSections();
 		Collections.sort(toDisplay, comparator);
 		notifyDataSetChanged();
 	}
-		
+	public void setSections() {
+		indexData.clear();
+		if (fastScrollEnabled) {
+			if (this.searchInput.equals("")) {
+				String ch;
+				int appIndex = 0;
+				for (AppData a: categoryData) {
+					ch = a.name.substring(0,1).toUpperCase();
+					indexData.put(ch, appIndex);
+					appIndex++;
+				}
+			}
+			
+			sectionsSet = indexData.keySet();
+			sectionsList = new ArrayList<String>(sectionsSet);
+			Collections.sort(sectionsList);
+			sections = new String[sectionsList.size()];
+			sectionsList.toArray(sections);
+		}
+	}
+	
 	@Override
 	public boolean isEnabled(int position) {
 		return true;
@@ -76,62 +88,66 @@ public class CustomAdapter extends BaseAdapter// implements SectionIndexer
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View v;
+		View view;
 		AppData a;
 
-		if (convertView == null) {
+		a = toDisplay.get(position);
+		boolean isEmptyView = (convertView == null);
+		if (isEmptyView) {
 			LayoutInflater inflater = (LayoutInflater)contextRef.get().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			if (options.getBoolean(Keys.TILE, true))
-				v = inflater.inflate(R.layout.iconbutton, parent, false);
+				view = inflater.inflate(R.layout.iconbutton, parent, false);
 			else
-				v = inflater.inflate(R.layout.oneline, parent, false);
+				view = inflater.inflate(R.layout.oneline, parent, false);
 		} else {
-			v = convertView;
+			view = convertView;
 		}
-		a = toDisplay.get(position);
-		img = (ImageView) v.findViewById(R.id.icon);
-		v.setTag(a);
-		tv = (TextView) v.findViewById(R.id.text);
 		// app shortcut
+		view.setTag(a);
+		img = (ImageView) view.findViewById(R.id.icon);
+		tv = (TextView) view.findViewById(R.id.text);
 		
 		if (appShortcut != ICON) {
-			if (appShortcut == TEXT) {
-				img.setVisibility(View.GONE);
-			}
 			tv.setText(a.name);
-			tv.setTextSize(textSize);
-			tv.setTextColor(textColor);
-			tv.setTypeface(Typeface.DEFAULT,
-				Integer.parseInt(options.getString(Keys.FONT_STYLE, "0")));
+			if (isEmptyView) {
+				if (appShortcut == TEXT) {
+					img.setVisibility(View.GONE);
+				}
+				tv.setTextSize(textSize);
+				tv.setTextColor(textColor);
+				tv.setTypeface(Typeface.DEFAULT,
+					Integer.parseInt(options.getString(Keys.FONT_STYLE, "0")));
+			}
 		} else {
 			tv.setVisibility(View.GONE);
 		}
 		if (appShortcut >= ICON) {
 			IconPackManager.setIcon(contextRef.get(), img, a);
-			img.setVisibility(View.VISIBLE);
-			ViewGroup.LayoutParams p = img.getLayoutParams();
-			p.width = iconSize;
-			p.height = iconSize;
-			img.setLayoutParams(p);
+			if (isEmptyView) {
+				img.setVisibility(View.VISIBLE);
+				ViewGroup.LayoutParams p = img.getLayoutParams();
+				p.width = iconSize;
+				p.height = iconSize;
+				img.setLayoutParams(p);
+			}
 		}
-		v.setOnClickListener(onClickListener);
-		v.setOnLongClickListener(onLongClickListener);
-		return v;
+		view.setOnClickListener(onClickListener);
+		view.setOnLongClickListener(onLongClickListener);
+		return view;
 	}
 	public String getAppName(int position) {
 		return toDisplay.get(position).name;
 	}
 		
-	/*public int getPositionForSection(int sectionIndex) {
-			
-		return indexData.get(sectionIndex);
+	public int getPositionForSection(int sectionIndex) {
+		return indexData.get(sections[sectionIndex]);
 	}
 	public int getSectionForPosition(int position) {
 		return 0;
 	}
 	public Object[] getSections() {
 		return sections;
-	}*/
+	}
 		
 	@Override
 	public int getCount() {
@@ -150,13 +166,17 @@ public class CustomAdapter extends BaseAdapter// implements SectionIndexer
 	public void update(ArrayList<AppData> curCatData) {
 		categoryData = curCatData;
 		toDisplay = new ArrayList<AppData>(categoryData);
+		setSections();
 		notifyDataSetChanged();
 	}
 	public CustomAdapter(Context context) {
 		super();
+		indexData = new HashMap<String, Integer>();
 		//Log.v(APP_TAG, "custom adapter created");
 		contextRef = new SoftReference<Context>(context);
 		options = PreferenceManager.getDefaultSharedPreferences(contextRef.get());
+		fastScrollEnabled = options.getBoolean(Keys.SCROLLBAR, false);
+		searchInput = "";
 		appShortcut = Integer.parseInt(options.getString(Keys.APP_SHORTCUT, "3"));
 		lock = options.getString(Keys.PASSWORD, "").length() > 0;
 		int theme = Themer.theme;

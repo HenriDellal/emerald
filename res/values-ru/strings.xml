@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<string name="set_as_default">Установить лаунчером по умолчанию</string>
 	<string name="appearancePrefs">Настройки вида</string>
 	<string name="portraitPrefs">Настройки портретного режима</string>
 	<string name="landscapePrefs">Настройки ландшафтного режима</string>
@@ -12,6 +13,8 @@
 	<string name="columnWidth">Ширина столбца</string>
 	<string name="verticalSpacing">Вертикальный отступ</string>
 	<string name="tileView">Сетка</string>
+	<string name="bottom_main_bar">Расположить главную панель внизу</string>
+	<string name="stack_from_bottom">Прикрепить содержимое категорий к низу</string>
 	<string name="orientation">Ориентация экрана</string>
 	<string name="scrollbar">Показывать подсказку при прокручивании списка</string>
 	<string name="theme">Тема оформления</string>

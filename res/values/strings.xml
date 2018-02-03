@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">Emerald Launcher</string>
+	<string name="set_as_default">Set as default launcher</string>
 	<string name="appearancePrefs">Appearance preferences</string>
 	<string name="portraitPrefs">Portrait mode preferences</string>
 	<string name="landscapePrefs">Landscape mode preferences</string>
@@ -14,6 +15,8 @@
 	<string name="columnWidth">Column width</string>
 	<string name="verticalSpacing">Vertical spacing</string>
 	<string name="tileView">Grid</string>
+	<string name="bottom_main_bar">Main bar at the bottom</string>
+	<string name="stack_from_bottom">Stick category content to the bottom</string>
 	<string name="scrollbar">Show letter hint on scroll</string>
 	<string name="orientation">Screen orientation</string>
 	<string name="theme">Theme</string>
@@ -100,7 +103,7 @@
 \nMaxim Kerekesha for Ukrainian translation.
 \nDaria Szatan (https://github.com/bla-ke) for Polish translation.
 \nThomas Blankenburg for German translation and tests.
-\nDavid Smit for tests.
+\nDavid Smit for Dutch translation and continuous help.
 \nAll contributors.
 \n
 \nTinyLaunch

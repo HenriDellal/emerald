@@ -28,7 +28,6 @@ import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Build;
 import android.os.Bundle;
-//import android.os.Process;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.InputType;
@@ -39,6 +38,7 @@ import android.text.TextWatcher;
 //import android.view.GestureDetector;
 //import android.view.GestureDetector.OnGestureListener;
 import android.view.inputmethod.InputMethodManager;
+import android.view.LayoutInflater;
 import android.view.KeyEvent;
 //import android.view.KeyCharacterMap;
 import android.view.Menu;
@@ -49,9 +49,10 @@ import android.widget.AdapterView;
 //import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.GridView;
-//import android.widget.RelativeLayout;
-//import android.widget.SectionIndexer;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,6 +61,7 @@ public class Apps extends Activity //implements OnGestureListener
 {
 	CategoryManager categories;
 	ArrayList<AppData> curCatData;
+	private RelativeLayout mainLayout;
 	GridView grid;
 	Dock dock;
 	Map<String,AppData> map;
@@ -232,21 +234,6 @@ public class Apps extends Activity //implements OnGestureListener
 		}
 	}
 
-	private void initGrid() {
-		//Log.v(APP_TAG, "Make a grid");
-		grid.setAdapter(null);
-
-		// -1 is a value of AUTO_FIT constant
-		if (options.getBoolean(Keys.TILE, true)) {
-			grid.setNumColumns(GridView.AUTO_FIT);
-		}
-		adapter = new CustomAdapter(this);
-
-		grid.setAdapter(adapter);
-		if (Themer.theme == Themer.LIGHT)
-			grid.setBackgroundColor(Color.WHITE);
-	}
-	
 	//launches popup window for editing apps
 	private void itemEdit(final AppData item) {
 		//Log.v(APP_TAG, "Open app edit window");
@@ -471,7 +458,6 @@ public class Apps extends Activity //implements OnGestureListener
 				openSearch();
 				break;
 			case R.id.menuButton:
-				//startActivity(new Intent(this, Options.class));
 				menu();
 				break;
 			case R.id.quit_hidden_apps:
@@ -512,12 +498,6 @@ public class Apps extends Activity //implements OnGestureListener
 	public void onBackPressed() {}
 	
 	@Override
-	protected void onStart() {
-		//Log.v(APP_TAG, "onStart ");
-		super.onStart();
-	}
-	
-	@Override
 	protected void onStop() {
 		returnToHome = true;
 		super.onStop();
@@ -541,45 +521,6 @@ public class Apps extends Activity //implements OnGestureListener
 		super.onDestroy();
 	}
 	
-	public void setScrollbar() {
-		if (options.getBoolean("scrollbar", false)) {
-			//grid.setFastScrollEnabled(true);
-			//grid.setFastScrollAlwaysVisible(true);
-			//grid.setScrollBarStyle(AbsListView.SCROLLBARS_OUTSIDE_INSET);
-			//grid.setSmoothScrollbarEnabled(true);
-			AbsListView.OnScrollListener onScrollListener = new AbsListView.OnScrollListener() {
-				String firstChar;
-				@Override
-				public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-					if (adapter != null) {
-						if (adapter.getCount() > 0) {
-							firstChar = adapter.getAppName(firstVisibleItem);
-							if (firstChar.length() > 1) {
-								firstChar = firstChar.substring(0,1);
-							}
-						} else {
-							firstChar = " ";
-						}
-					} else {
-						firstChar = " ";
-					}
-					((TextView)findViewById(R.id.hintText)).setText(firstChar);
-				}
-				@Override
-				public void onScrollStateChanged(AbsListView view, int scrollState) {
-					if (scrollState == SCROLL_STATE_TOUCH_SCROLL || scrollState == SCROLL_STATE_FLING) {
-						findViewById(R.id.hint).setVisibility(View.VISIBLE);
-					} else {
-						findViewById(R.id.hint).setVisibility(View.GONE);
-					}
-				}
-			};
-			grid.setOnScrollListener(onScrollListener);
-		} else {
-			grid.setOnScrollListener(null);
-			findViewById(R.id.hint).setVisibility(View.GONE);
-		}
-	}
 	@Override
 	protected void onNewIntent(Intent i) {
 		//Log.v(APP_TAG, "onNewIntent");
@@ -607,18 +548,70 @@ public class Apps extends Activity //implements OnGestureListener
 		setSpinner();
 		super.onNewIntent(i);
 	}
-	/*public void layoutInit() {
-		RelativeLayout layout = (RelativeLayout)findViewById(R.id.appsWindow);
-		RelativeLayout.LayoutParams params = 
-	}*/
+	
+	public void layoutInit() {
+		mainLayout = new RelativeLayout(this);
+		LayoutInflater layoutInflater = (LayoutInflater) 
+			this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		
+		LinearLayout dockBar = (LinearLayout) layoutInflater.inflate(R.layout.dock_bar, mainLayout, false);
+		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(dockBar.getLayoutParams());
+		layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		dockBar.setLayoutParams(layoutParams);
+		dockBar.setBackgroundColor(options.getInt(Keys.DOCK_BACKGROUND, 0x22000000));
+		mainLayout.addView(dockBar);
+		
+		FrameLayout mainBar = (FrameLayout) layoutInflater.inflate(R.layout.main_bar, mainLayout, false);
+		grid = (GridView) layoutInflater.inflate(R.layout.apps_grid, mainLayout, false);
+		if (options.getBoolean(Keys.BOTTOM_MAIN_BAR, false)) {
+			layoutParams = new RelativeLayout.LayoutParams(mainBar.getLayoutParams());
+			layoutParams.addRule(RelativeLayout.ABOVE, R.id.dock_bar);
+			mainBar.setLayoutParams(layoutParams);
+			mainLayout.addView(mainBar);
+			
+			layoutParams = new RelativeLayout.LayoutParams(grid.getLayoutParams());
+			layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+			layoutParams.addRule(RelativeLayout.ABOVE, R.id.main_bar);
+			grid.setLayoutParams(layoutParams);
+			mainLayout.addView(grid);
+		} else {
+			layoutParams = new RelativeLayout.LayoutParams(mainBar.getLayoutParams());
+			layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+			mainBar.setLayoutParams(layoutParams);
+			mainLayout.addView(mainBar);
+			
+			layoutParams = new RelativeLayout.LayoutParams(grid.getLayoutParams());
+			layoutParams.addRule(RelativeLayout.ABOVE, R.id.dock_bar);
+			layoutParams.addRule(RelativeLayout.BELOW, R.id.main_bar);
+			grid.setLayoutParams(layoutParams);
+			mainLayout.addView(grid);
+		}
+		mainBar.setBackgroundColor(options.getInt(Keys.BAR_BACKGROUND, 0x22000000));
+		grid.setBackgroundColor(options.getInt(Keys.APPS_WINDOW_BACKGROUND, 0));
+		if (options.getBoolean(Keys.STACK_FROM_BOTTOM, false)) {
+			grid.setStackFromBottom(true);
+		}
+		if (options.getBoolean(Keys.TILE, true)) {
+			grid.setNumColumns(GridView.AUTO_FIT);
+		}
+		adapter = new CustomAdapter(this);
+		grid.setAdapter(adapter);
+		
+		if (options.getBoolean(Keys.SCROLLBAR, false)) {
+			grid.setFastScrollEnabled(true);
+			grid.setFastScrollAlwaysVisible(true);
+			grid.setScrollBarStyle(AbsListView.SCROLLBARS_INSIDE_INSET);
+			grid.setSmoothScrollbarEnabled(true);
+		}
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//Log.v(APP_TAG, "onCreate");
 		super.onCreate(savedInstanceState);
-		//layoutInit();
 		options = PreferenceManager.getDefaultSharedPreferences(this);
 		Themer.theme = Integer.parseInt(options.getString(Keys.THEME, getResources().getString(R.string.defaultThemeValue)));
+		layoutInit();
 		if (options.getBoolean(Keys.SHOW_TUTORIAL, true)) {
 			startActivity(new Intent(this, TutorialActivity.class));
 		}
@@ -634,11 +627,7 @@ public class Apps extends Activity //implements OnGestureListener
 		}
 		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setRequestedOrientation(Integer.parseInt(options.getString(Keys.ORIENTATION, "1")));
-		setContentView(R.layout.apps);
-		findViewById(R.id.appsWindow).setBackgroundColor(options.getInt(Keys.APPS_WINDOW_BACKGROUND, 0));
-		findViewById(R.id.topbar).setBackgroundColor(options.getInt(Keys.BAR_BACKGROUND, 0x22000000));
-		findViewById(R.id.dock_bar).setBackgroundColor(options.getInt(Keys.DOCK_BACKGROUND, 0x22000000));
-		grid = (GridView)findViewById(R.id.appsGrid);
+		setContentView(mainLayout);
 		options.edit().putBoolean(Keys.MESSAGE_SHOWN, false).commit();
 		prefListener = new OnSharedPreferenceChangeListener() {
 			@Override
@@ -665,16 +654,15 @@ public class Apps extends Activity //implements OnGestureListener
 			}
 		};
 		options.registerOnSharedPreferenceChangeListener(prefListener);
-		initGrid();
-		setScrollbar();
 		if (Build.VERSION.SDK_INT >= 19) {
 			Themer.setWindowDecorations(this, options);
 		}
 		Themer.applyTheme(this, options);
-		spin = (Spinner)findViewById(R.id.category);
-		spin.setOnTouchListener(new SwipeListener(this));
 		dock = new Dock(this);
 		changePrefsOnRotate();
+		
+		spin = (Spinner)findViewById(R.id.category);
+		spin.setOnTouchListener(new SwipeListener(this));
 	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

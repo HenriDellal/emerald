@@ -9,16 +9,12 @@
 	<style name="AppTheme.Dark" parent="@android:style/Theme.Holo.NoActionBar">
 	</style>
 	<style name="AppTheme.Dark.Wallpaper" parent="AppTheme.Dark">
-		<item name="android:windowTranslucentNavigation">true</item>
-		<item name="android:windowTranslucentStatus">true</item>
 		<item name="android:windowBackground">@android:color/transparent</item>
 		<item name="android:windowShowWallpaper">true</item>
 		<item name="android:spinnerDropDownItemStyle">@style/spinnerDropDownItem</item>
 		<item name="android:spinnerItemStyle">@style/spinnerItem.Dark</item>
 	</style>
 	<style name="AppTheme.Light.Wallpaper" parent="AppTheme.Light">
-		<item name="android:windowTranslucentNavigation">true</item>
-		<item name="android:windowTranslucentStatus">true</item>
 		<item name="android:windowBackground">@android:color/transparent</item>
 		<item name="android:windowShowWallpaper">true</item>
 		<item name="android:spinnerItemStyle">@style/spinnerItem</item>

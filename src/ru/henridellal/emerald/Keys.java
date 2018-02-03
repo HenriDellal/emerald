@@ -16,6 +16,9 @@ public final class Keys {
 	public static final String APP_SHORTCUT = "app_shortcut";
 	public static final String PREV_APP_SHORTCUT = "prevApp_shortcut";
 	public static final String TILE = "tile";
+	public static final String BOTTOM_MAIN_BAR = "bottom_main_bar";
+	public static final String STACK_FROM_BOTTOM = "stack_from_bottom";
+	public static final String SCROLLBAR = "scrollbar";
 	
 	public static final String ICON_SIZE = "icon_size";
 	public static final String TEXT_SIZE = "text_size";
@@ -44,7 +47,8 @@ public final class Keys {
 		KEEP_IN_MEMORY, BAR_BACKGROUND, DOCK_BACKGROUND,
 		NAV_BAR_BACKGROUND, STATUS_BAR_BACKGROUND,
 		APPS_WINDOW_BACKGROUND, ICON_PACK, TRANSFORM_DRAWABLE,
-		APP_SHORTCUT, PREV_APP_SHORTCUT, TILE,
+		APP_SHORTCUT, PREV_APP_SHORTCUT, TILE, BOTTOM_MAIN_BAR,
+		STACK_FROM_BOTTOM, SCROLLBAR,
 		ICON_SIZE, TEXT_SIZE, FONT_STYLE, COLUMN_WIDTH,
 		VERTICAL_SPACING, ICON_SIZE_LANDSCAPE, 
 		TEXT_SIZE_LANDSCAPE, COLUMN_WIDTH_LANDSCAPE,
@@ -55,6 +59,7 @@ public final class Keys {
 	
 	public static final String[] restart = {MESSAGE_SHOWN, BAR_BACKGROUND,
 		NAV_BAR_BACKGROUND, STATUS_BAR_BACKGROUND, DOCK_BACKGROUND,
-		APPS_WINDOW_BACKGROUND, TILE, THEME, ORIENTATION,
+		APPS_WINDOW_BACKGROUND, TILE, BOTTOM_MAIN_BAR,
+		STACK_FROM_BOTTOM, SCROLLBAR, THEME, ORIENTATION,
 		APP_SHORTCUT, KEEP_IN_MEMORY, PASSWORD};
 }

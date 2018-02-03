@@ -66,6 +66,14 @@
 	    	android:defaultValue="true"
 	    	android:key="tile"/>
 	    <CheckBoxPreference
+	    	android:title="@string/bottom_main_bar"
+	    	android:defaultValue="false"
+	    	android:key="bottom_main_bar"/>
+	    <CheckBoxPreference
+	    	android:title="@string/stack_from_bottom"
+	    	android:defaultValue="false"
+	    	android:key="stack_from_bottom"/>
+	    <CheckBoxPreference
 	    	android:title="@string/scrollbar"
 	    	android:defaultValue="false"
 	    	android:key="scrollbar"/>

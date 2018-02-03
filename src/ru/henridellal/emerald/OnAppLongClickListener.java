@@ -11,7 +11,9 @@ public class OnAppLongClickListener implements View.OnLongClickListener {
 	
 	@Override
 	public boolean onLongClick(View arg0) {
-		appsRef.get().itemContextMenu((AppData)arg0.getTag());
+		if (arg0.getTag() instanceof AppData) {
+			appsRef.get().itemContextMenu((AppData)arg0.getTag());
+		}
 		return false;
 	}
 }
