@@ -73,11 +73,17 @@
 	
 	<string name="add_to_dock">Add to dock</string>
 	<string name="remove_from_dock">Remove from dock</string>
+	<string name="reset_icon">Reset icon</string>
+	<string name="change_icon">Change icon</string>
+	<string name="change_icon_question">Do you want to change the icon?</string>
+	<string name="search_icon_hint">Search icon by package name</string>
 	<string name="uninstall">Uninstall</string>
 	
 	<string name="aboutTitle">About</string>
 	<string name="how_to_use">How to use</string>
 	<string name="close_tutorial">Close tutorial</string>
+	
+	
 <string name="tutorial">Swipe on the category name to switch to the next/previous category. Click on it to see the full list of categories.
 \n
 \nOpen Launcher settings/Category manager to edit categories.

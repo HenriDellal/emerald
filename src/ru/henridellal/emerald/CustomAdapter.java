@@ -67,7 +67,7 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 				String ch;
 				int appIndex = 0;
 				for (AppData a: categoryData) {
-					ch = a.name.substring(0,1).toUpperCase();
+					ch = (a.name.length() > 1) ? a.name.substring(0,1).toUpperCase() : a.name;
 					indexData.put(ch, appIndex);
 					appIndex++;
 				}

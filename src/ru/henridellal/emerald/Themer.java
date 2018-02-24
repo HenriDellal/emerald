@@ -1,16 +1,16 @@
 package ru.henridellal.emerald;
 
 import android.app.Activity;
-import android.content.Context;
+//import android.content.Context;
 import android.content.res.Resources;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Point;
+//import android.graphics.Point;
 import android.os.Build;
-import android.view.Display;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
+//import android.view.Display;
+//import android.view.View;
+//import android.view.ViewGroup;
+//import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 

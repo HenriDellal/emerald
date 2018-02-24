@@ -59,20 +59,20 @@ import android.widget.Toast;
 
 public class Apps extends Activity //implements OnGestureListener 
 {
-	CategoryManager categories;
-	ArrayList<AppData> curCatData;
+	private CategoryManager categories;
+	private ArrayList<AppData> curCatData;
 	private RelativeLayout mainLayout;
-	GridView grid;
-	Dock dock;
-	Map<String,AppData> map;
+	private GridView grid;
+	private Dock dock;
+	private Map<String,AppData> map;
 	public SharedPreferences options;
-	final static String PREF_APPS = "apps";
-	final static String APP_TAG = "Emerald";
+	public static final String PREF_APPS = "apps";
+	public static final String APP_TAG = "Emerald";
 	private Spinner spin;
 	private CustomAdapter adapter = null;
 	public static final int GRID = 0;
 	public static final int LIST = 1;
-	GetApps scanner = null;
+	private GetApps scanner = null;
 	private OnSharedPreferenceChangeListener prefListener;
 	private boolean lock, returnToHome, searchIsOpened, homeButtonPressed;
 	private int historySize, appShortcut;
@@ -295,7 +295,8 @@ public class Apps extends Activity //implements OnGestureListener
 			getResources().getString(R.string.uninstall),
 			(dock.hasApp(item)) ? 
 				getResources().getString(R.string.remove_from_dock): 
-				getResources().getString(R.string.add_to_dock)
+				getResources().getString(R.string.add_to_dock),
+			getResources().getString(R.string.change_icon)
 		};
 		builder.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, commands),
 		new DialogInterface.OnClickListener(){
@@ -331,6 +332,11 @@ public class Apps extends Activity //implements OnGestureListener
 							}
 						}
 						dock.update();
+						break;
+					case 5:
+						Intent intent = new Intent(Apps.this, ChangeIconActivity.class);
+						intent.putExtra(ChangeIconActivity.COMPONENT_NAME, item.getComponent());
+						startActivity(intent);
 						break;
 				}
 			}
@@ -549,8 +555,11 @@ public class Apps extends Activity //implements OnGestureListener
 		super.onNewIntent(i);
 	}
 	
-	public void layoutInit() {
+	private void layoutInit() {
 		mainLayout = new RelativeLayout(this);
+		if (Build.VERSION.SDK_INT >= 21) {
+			mainLayout.setFitsSystemWindows(true);
+		}
 		LayoutInflater layoutInflater = (LayoutInflater) 
 			this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		

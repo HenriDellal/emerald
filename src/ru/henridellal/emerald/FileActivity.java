@@ -24,12 +24,12 @@ import java.io.File;
 import java.io.FileFilter;
 
 public class FileActivity extends Activity {
-	File curDirectory;
-	int teamType;
+	private File curDirectory;
+	private int teamType;
 	
-	File[] fileArray = null;
-	ArrayList<File> files = new ArrayList<File>();
-	FileListAdapter adapter=null;
+	private File[] fileArray = null;
+	private ArrayList<File> files = new ArrayList<File>();
+	private FileListAdapter adapter=null;
 	protected void setCurDirectory(File f) {
 		curDirectory = f;
 	}

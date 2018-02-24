@@ -33,13 +33,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class IconPackManager {
-	Context context;
-	String iconPackName;
+	private Context context;
+	private String iconPackName;
 	private float factor = 1.0f;
-	ArrayList<Bitmap> iconBacks;
-	Bitmap iconMask, iconUpon;
-	boolean transformDrawable = true;
-	Map<String, String> iconsData;
+	private ArrayList<Bitmap> iconBacks;
+	private Bitmap iconMask, iconUpon;
+	private boolean transformDrawable = true;
+	private Map<String, String> iconsData;
 	private Resources iconPackRes;
 	public Resources getResources() {
 		return iconPackRes;
@@ -159,14 +159,19 @@ public class IconPackManager {
 	}
 	//sets icon from cache in ImageView
 	public static void setIcon(Context c, ImageView img, AppData a) {
-		File iconFile = MyCache.getIconFile(c, a.getComponent());
-		if (iconFile.exists()) {
+		File iconFile;
+		iconFile = MyCache.getCustomIconFile(c, a.getComponent());
+		if (!iconFile.exists()) {
+			iconFile = MyCache.getIconFile(c, a.getComponent());
+		}
+		if (iconFile.exists()){
 			try {
 				img.setImageDrawable(Drawable.createFromStream(
 					new FileInputStream(iconFile), null));
 			} catch (Exception e) {
-				//				Log.e(APP_TAG, ""+e);
 				img.setImageResource(android.R.drawable.sym_def_app_icon);
+			} finally {
+				return;
 			}
 		} else {
 			img.setImageResource(android.R.drawable.sym_def_app_icon);
@@ -180,7 +185,7 @@ public class IconPackManager {
 		iconUpon = null;
 		factor = 1.0f;
 		iconPackRes = null;
-		if (iconPackName.equals("default")) {
+		if ("default".equals(iconPackName)) {
 			return;
 		}
 		transformDrawable = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Keys.TRANSFORM_DRAWABLE, true);
@@ -200,40 +205,35 @@ public class IconPackManager {
 			
 			while (parserEvent != XmlPullParser.END_DOCUMENT) {
 				if (parserEvent == XmlPullParser.START_TAG){
-					if (parser.getName().equals("item")) {
+					final String parserName = parser.getName();
+					if ("item".equals(parserName)) {
 						for (int i = 0; i < parser.getAttributeCount(); i++) {
-							if (parser.getAttributeName(i).equals("component")) {
+							if ("component".equals(parser.getAttributeName(i))) {
 								component = parser.getAttributeValue(i);
 								int c = component.indexOf("{");
 								component = component.substring(c+1, component.length()-1);
-							} else if (parser.getAttributeName(i).equals("drawable")) {
+							} else if ("drawable".equals(parser.getAttributeName(i))) {
 								drawable = parser.getAttributeValue(i);
 							}
 						}
 						iconsData.put(component, drawable);
-					} else if (parser.getName().equals("iconback")) {
+					} else if ("iconback".equals(parserName)) {
 						for (int i = 0; i < parser.getAttributeCount(); i++) {
 							iconBacks.add(loadBitmap(parser.getAttributeValue(i)));
 						}
-					} else if (parser.getName().equals("iconmask")) {
-						if (parser.getAttributeCount() > 0 && parser.getAttributeName(0).equals("iconmask")) {
-							iconMask = loadBitmap(parser.getAttributeValue(0));
-						}
-					} else if (parser.getName().equals("iconupon")) {
-						if (parser.getAttributeCount() > 0 && parser.getAttributeName(0).equals("iconupon")) {
-							iconUpon = loadBitmap(parser.getAttributeValue(0));
-						}
-					} else if (parser.getName().equals("scale")) {
-						if (parser.getAttributeCount() > 0 && parser.getAttributeName(0).equals("factor")) {
-							factor = Float.valueOf(parser.getAttributeValue(0));
-						}
+					} else if ("iconmask".equals(parserName) && parser.getAttributeCount() > 0 && "iconmask".equals(parser.getAttributeName(0))) {
+						iconMask = loadBitmap(parser.getAttributeValue(0));
+					} else if ("iconupon".equals(parserName) && parser.getAttributeCount() > 0 && "iconupon".equals(parser.getAttributeName(0))) {
+						iconUpon = loadBitmap(parser.getAttributeValue(0));
+					} else if ("scale".equals(parserName) && "factor".equals(parser.getAttributeName(0))) {
+						factor = Float.valueOf(parser.getAttributeValue(0));
 					}
 				}
 				parserEvent = parser.next();
 			}
 			
 		} catch (Exception e) {
-			//iconsData.put("error", e.toString());
+			
 		}
 	}
 }

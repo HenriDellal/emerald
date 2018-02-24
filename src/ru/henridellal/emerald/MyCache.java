@@ -57,7 +57,11 @@ public class MyCache {
 	static public String genFilename(Context c, String name) {
 		File dir = c.getCacheDir();
 		return dir.getPath() + "/" + name + ".MyCache"; 
-	}	
+	}
+	public static File getCustomIconFile(Context c, String componentName) {
+		return new File(c.getCacheDir(), 
+				Uri.encode(componentName)+".custom.png");
+	}
 	public static File getIconFile(Context c, String componentName) {
 		return new File(c.getCacheDir(), 
 				Uri.encode(componentName)+".icon.png");

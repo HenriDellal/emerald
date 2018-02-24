@@ -6,7 +6,7 @@ import android.view.View;
 import java.lang.ref.SoftReference;
 
 public class SwipeListener implements View.OnTouchListener {
-	float x, density;
+	private float x, density;
 	private SoftReference<Apps> appsRef;
 	public SwipeListener(Apps apps) {
 		appsRef = new SoftReference<Apps>(apps);
