@@ -31,7 +31,7 @@
   <string name="fullscreen">Mode layar Penuh</string>
   <string name="historySize">Ukuran riwayat</string>
   <string name="password">Kata sandi</string>
-  <string name="passwordSummary">Kunci pengaturan & aplikasi tersembunyi</string>
+  <string name="passwordSummary">Kunci pengaturan dan aplikasi tersembunyi</string>
   <string name="passwordHint">Kosongkan untuk mematikan</string>
   <string name="searchProvider">penyedia pencarian</string>
   <string name="keepInMemory">Keep in memory</string>
