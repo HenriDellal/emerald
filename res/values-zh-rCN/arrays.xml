@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="home_button_options">
+        <item>在主页和所有应用之间切换</item>
+        <item>在主页和历史记录之间切换</item>
+        <item>不切换</item>
+    </string-array>
+	<string-array name="search_entries">
+        <item>遵照用户偏好</item>
+        <item>DuckDuckGo</item>
+        <item>Google</item>
+    </string-array>
+	<string-array name="appShortcutTypes">
+        <item>文字</item>
+        <item>图标</item>
+        <item>图标和文字</item>
+    </string-array>
+	<string-array name="themeTypes">
+        <item>浅色</item>
+        <item>深色</item>
+    </string-array>
+    <string-array name="orientationTypes">
+        <item>纵向</item>
+        <item>横向</item>
+        <item>系统</item>
+        <item>总是自动旋转</item>
+    </string-array>
+    <string-array name="fontStyleTypes">
+        <item>正常</item>
+        <item>粗体</item>
+        <item>斜体</item>
+        <item>粗斜体</item>
+    </string-array>
+</resources>
