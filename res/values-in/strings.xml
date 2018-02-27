@@ -24,7 +24,7 @@
   <string name="statusBarBackground">Status bar</string>
   <string name="barBackground">Bar atas</string>
   <string name="navBarBackground">Bar navogasi</string>
-  <string name="iconPack">paket ikon</string>
+  <string name="iconPack">Paket ikon</string>
   <string name="transformIcons">Mengubah ikon</string>
   <string name="transformIconsSummary">Edit ikon berdasarkan pengaturan paket ikon</string>
   <string name="defaultIconPack">Baku</string>
@@ -33,7 +33,7 @@
   <string name="password">Kata sandi</string>
   <string name="passwordSummary">Kunci pengaturan dan aplikasi tersembunyi</string>
   <string name="passwordHint">Kosongkan untuk mematikan</string>
-  <string name="searchProvider">penyedia pencarian</string>
+  <string name="searchProvider">Penyedia pencarian</string>
   <string name="keepInMemory">Keep in memory</string>
   <string name="backupPrefs">Cadangkan preferensi</string>
   <string name="successfulBackup">Mencadangkan selesai, file dapat ditemukan di</string>
@@ -47,8 +47,8 @@
   <string name="editAppList">Edit daftar aplikasi</string>
   <string name="findInMarket">Temukan di play store</string>
   <string name="editAppCategories">Edit kategori aplikasi</string>
-  <string name="delete">hapus</string>
-  <string name="setHome">set sebagai baku</string>
+  <string name="delete">Hapus</string>
+  <string name="setHome">Set sebagai baku</string>
   <string name="hide">Sembunyikan</string>
   <string name="unhide">Tampilkan</string>
   <string name="save_here">Simpan di folder ini</string>
@@ -70,7 +70,7 @@
   <string name="reset_icon">Reset ikon</string>
   <string name="change_icon">Ubah ikon</string>
   <string name="change_icon_question">Apakah Anda ingin mengubah ikon?</string>
-  <string name="search_icon_hint">cari ikon berdasrkan nama paket</string>
+  <string name="search_icon_hint">Cari ikon berdasrkan nama paket</string>
   <string name="uninstall">Uninstall</string>
   <string name="aboutTitle">Tentang</string>
   <string name="how_to_use">Cara menggunakan</string>
@@ -79,13 +79,13 @@
 \n
 \nBuka peluncur pengaturan / pengelolah kategori untuk mengedit kategori.
 \n
-\nklik pada tombol cari untuk menelusuri melalui semua aplikasi (kecuali aplikasi tersembunyi). untuk mencari di web, buka cari, ketik ... dan klik panah di kanan kolom teks.
+\nKlik pada tombol cari untuk menelusuri melalui semua aplikasi (kecuali aplikasi tersembunyi). untuk mencari di web, buka cari, ketik ... dan klik panah di kanan kolom teks.
 \n
-\ntekan lama ikon aplikasi untuk membuka menu popup.
+\nTekan lama ikon aplikasi untuk membuka menu popup.
 \n
-\ntekan tombol rumah untuk membuka kategori baku. tekan sekali lagi untuk membuka daftar semua aplikasi.
+\nTekan tombol rumah untuk membuka kategori baku. tekan sekali lagi untuk membuka daftar semua aplikasi.
 \n
-\ntekan tombol kembali untuk beralih ke kategori yang sebelumnya dibuka.</string>
+\nTekan tombol kembali untuk beralih ke kategori yang sebelumnya dibuka.</string>
 	
 <string name="about" translatable="false">Emerald Launcher
 \n
