@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string-array name="home_button_options">        <item>Berpindah antara kategori baku dan semua aplikasi</item>
+    <string-array name="home_button_options">
+        <item>Berpindah antara kategori baku dan semua aplikasi</item>
         <item>Berpindah antara kategori baku dan riwayat</item>
         <item>Tidak berpindah</item>
     </string-array>
