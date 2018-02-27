@@ -75,17 +75,18 @@
   <string name="aboutTitle">Tentang</string>
   <string name="how_to_use">Cara menggunakan</string>
   <string name="close_tutorial">Tutup tutorial</string>
-  <string name="tutorial">Usap pada nama kategori untuk beralih ke depan / sebelumnya kategori. klik di atasnya untuk melihat daftar lengkap kategori.
+  <string name="tutorial">Usap pada nama kategori untuk beralih ke kategori sebelum/selanjutnya. Klik di atasnya untuk melihat daftar lengkap kategori.
 \n
 \nBuka peluncur pengaturan / pengelolah kategori untuk mengedit kategori.
 \n
-\nKlik pada tombol cari untuk menelusuri melalui semua aplikasi (kecuali aplikasi tersembunyi). untuk mencari di web, buka cari, ketik ... dan klik panah di kanan kolom teks.
+\nKlik pada tombol cari untuk menelusuri melalui semua aplikasi (kecuali aplikasi tersembunyi). Untuk mencari di web, buka cari, ketik ... dan klik panah di kanan kolom teks.
 \n
 \nTekan lama ikon aplikasi untuk membuka menu popup.
 \n
-\nTekan tombol rumah untuk membuka kategori baku. tekan sekali lagi untuk membuka daftar semua aplikasi.
+\nTekan tombol rumah untuk membuka kategori baku. Tekan sekali lagi untuk membuka daftar semua aplikasi.
 \n
-\nTekan tombol kembali untuk beralih ke kategori yang sebelumnya dibuka.</string>
+\nTekan tombol kembali untuk beralih ke kategori yang sebelumnya dibuka.
+	</string>
 	
 <string name="about" translatable="false">Emerald Launcher
 \n
