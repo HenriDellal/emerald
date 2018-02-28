@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="home_button_options">
+        <item>Berpindah antara kategori baku dan semua aplikasi</item>
+        <item>Berpindah antara kategori baku dan riwayat</item>
+        <item>Tidak berpindah</item>
+    </string-array>
+	<string-array name="search_entries">
+        <item>Pilihan pengguna</item>
+        <item>DuckDuckGo</item>
+        <item>Google</item>
+    </string-array>
+	<string-array name="appShortcutTypes">
+        <item>Teks</item>
+        <item>Ikon</item>
+        <item>Ikon dan Teks</item>
+    </string-array>
+	<string-array name="themeTypes">
+        <item>Terang</item>
+        <item>Gelap</item>
+    </string-array>
+    <string-array name="orientationTypes">
+        <item>Portrait</item>
+        <item>Landscape</item>
+        <item>Sistem</item>
+        <item>Perputaran otomatis</item>
+    </string-array>
+    <string-array name="fontStyleTypes">
+        <item>Normal</item>
+        <item>Tebal</item>
+        <item>Miring</item>
+        <item>Tebal dan Miring</item>
+    </string-array>
+</resources>
