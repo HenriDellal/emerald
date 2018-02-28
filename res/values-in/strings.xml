@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	  <string name="app_name">Emerald Launcher</string>
   <string name="set_as_default">Jadikan sebagai peluncur baku</string>
   <string name="appearancePrefs">Preferensi penampilan</string>
   <string name="portraitPrefs">Preferensi modus potret</string>
@@ -53,7 +52,7 @@
   <string name="unhide">Tampilkan</string>
   <string name="save_here">Simpan di folder ini</string>
   <string name="dock_is_full">Dock penuh</string>
-  <string name="dock_preferences">Prefernsi dock</string>
+  <string name="dock_preferences">Preferensi dock</string>
   <string name="dock_height">Tinggi dock</string>
   <string name="dock_icon_size">Ukuran ikon dock</string>
   <string name="show_dock_in_landscape">Tampilkan dock dalam landskap mode</string>
@@ -86,39 +85,6 @@
 \nTekan tombol rumah untuk membuka kategori baku. Tekan sekali lagi untuk membuka daftar semua aplikasi.
 \n
 \nTekan tombol kembali untuk beralih ke kategori yang sebelumnya dibuka.
-	</string>
-	
-<string name="about" translatable="false">Emerald Launcher
-\n
-\nCopyright 2018 Anri Dellal
-\n
-\nLicensed under GPL-v3
-\nWant to help? Report bugs and submit suggestions via GitHub (https://www.github.com/HenriDellal/emerald) or Google Play listing(http://play.google.com/details?id=ru.henridellal.emerald).
-\n
-\nThanks to:
-\nTheAlaskaLinuxUser (http://thealaskalinuxuser.wordpress.com) for tests and bug fixes.
-\nMaxim Kerekesha for Ukrainian translation.
-\nDaria Szatan (https://github.com/bla-ke) for Polish translation.
-\nThomas Blankenburg for German translation and tests.
-\nDavid Smit for Dutch translation and continuous help.
-\nAll contributors.
-\n
-\nTinyLaunch
-\nCopyright (c) 2011-12, Alexander R. Pruss
-\nLicensed under BSD-3-Clause
-\nhttps://github.com/arpruss/tinylaunch
-\n
-\nCWAC ColorMixer
-\n
-\nLicensed under the Apache License 2.0.
-\nhttps://github.com/commonsguy/cwac-colormixer
-\n
-\nFont-Awesome
-\nThe font licensed under the SIL OFL 1.1.
-\nhttp://fontawesome.io/</string>
+</string>
 
-	<!-- DEFAULT VALUES FOR SETTINGS -->
-	
-	<string name="defaultThemeValue" translatable="false">1</string>
-	
 </resources>
