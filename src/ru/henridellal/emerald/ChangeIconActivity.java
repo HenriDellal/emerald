@@ -31,7 +31,6 @@ import java.util.ArrayList;
 public class ChangeIconActivity extends Activity{
 	public final static String COMPONENT_NAME = "ru.henridellal.emerald.component_name";
 	private GridView iconGrid;
-	private EditText iconSearchBar;
 	private IconGridAdapter iconGridAdapter;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +38,7 @@ public class ChangeIconActivity extends Activity{
 		setContentView(R.layout.change_icon_activity);
 		Intent intent = getIntent();
 		final String component = intent.getStringExtra(COMPONENT_NAME);
-		iconSearchBar = (EditText)findViewById(R.id.icon_search_bar);
+		EditText iconSearchBar = (EditText)findViewById(R.id.icon_search_bar);
 		final File customIconFile = MyCache.getCustomIconFile(this, component);
 		if (customIconFile.exists()) {
 			((Button)findViewById(R.id.reset_icon)).setEnabled(true);

@@ -145,7 +145,7 @@ public class Options extends PreferenceActivity {
 				} else if (prefType.indexOf("INTEGER") == 0) {
 						prefsEditor.putInt(key, Integer.parseInt(value));
 				} else if (prefType.indexOf("BOOLEAN") == 0) {
-						prefsEditor.putBoolean(key, value.equals("true"));
+						prefsEditor.putBoolean(key, "true".equals(value));
 				} else if (prefType.indexOf("FLOAT") == 0) {
 						prefsEditor.putFloat(key, Float.parseFloat(value));
 				}

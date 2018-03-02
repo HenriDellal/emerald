@@ -28,13 +28,13 @@ import android.widget.Toast;
 import com.commonsware.cwac.colormixer.ColorMixer;
 
 public class ThemerActivity extends Activity{
-	WallpaperManager wallpaperManager;
-	Drawable preview;
-	ListView list;
-	Point realSize;
-	SharedPreferences sharedPrefs;
-	ColorMixer colorMixer;
-	String key;
+	private WallpaperManager wallpaperManager;
+	private Drawable preview;
+	private ListView list;
+	private Point realSize;
+	private SharedPreferences sharedPrefs;
+	private ColorMixer colorMixer;
+	private String key;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

@@ -75,7 +75,7 @@ public class Apps extends Activity //implements OnGestureListener
 	private GetApps scanner = null;
 	private OnSharedPreferenceChangeListener prefListener;
 	private boolean lock, returnToHome, searchIsOpened, homeButtonPressed;
-	private int historySize, appShortcut;
+	private int historySize;
 	
 	public void loadList(boolean cleanCategory) {
 		ArrayList<AppData> data = new ArrayList<AppData>(); 
@@ -717,7 +717,7 @@ public class Apps extends Activity //implements OnGestureListener
 	protected void onResume() {
 		super.onResume();
 		//Log.v(APP_TAG, "onResume");
-		appShortcut = Integer.parseInt(options.getString(Keys.APP_SHORTCUT, "3"));
+		int appShortcut = Integer.parseInt(options.getString(Keys.APP_SHORTCUT, "3"));
 	    lock = options.getString(Keys.PASSWORD, "").length() > 0;
 	    if (!homeButtonPressed) {
 	    	loadList(false);
@@ -739,12 +739,10 @@ public class Apps extends Activity //implements OnGestureListener
 			}
 		}
 
-		if (needReload || options.getBoolean(Keys.DIRTY, false)) {
-			//			Log.v(APP_TAG, "scan");
-			if (scanner == null || scanner.getStatus() != Status.RUNNING) {
-				scanner = new GetApps(this);
-				scanner.execute(false);
-			}
+		if ((needReload || options.getBoolean(Keys.DIRTY, false))
+			&& (scanner == null || scanner.getStatus() != Status.RUNNING)) {
+			scanner = new GetApps(this);
+			scanner.execute(false);
 		}
 		historySize = options.getInt(Keys.HISTORY_SIZE, 10);
 		boolean historySizeChanged = false;

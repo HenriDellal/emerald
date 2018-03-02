@@ -30,23 +30,25 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 	public static final int TEXT = 1;
 	public static final int ICON = 2;
 	
-	View.OnClickListener onClickListener;
-	View.OnLongClickListener onLongClickListener;
-	SoftReference<Context> contextRef;
-	SharedPreferences options;
-	ArrayList<AppData> categoryData, toDisplay;
-	ArrayList<String> sectionsList;
-	HashMap<String, Integer> indexData;
-	String[] sections;
-	int curMode, iconSize, textSize, textColor, appShortcut;
+	private View.OnClickListener onClickListener;
+	private View.OnLongClickListener onLongClickListener;
+	private SoftReference<Context> contextRef;
+	private SharedPreferences options;
+	private ArrayList<AppData> categoryData, toDisplay;
+	private ArrayList<String> sectionsList;
+	private HashMap<String, Integer> indexData;
+	private String[] sections;
+	private int curMode, iconSize, textSize, textColor, appShortcut;
+	boolean lock, fastScrollEnabled;
+	private ImageView img;
+	private TextView tv;
+	private String searchInput;
+	private Set<String> sectionsSet;
+	private Comparator<AppData> comparator;
+	
 	public void setIconSize(int size) {iconSize = size;}
 	public void setTextSize(int size) {textSize = size;}
-	boolean lock, fastScrollEnabled;
-	ImageView img;
-	TextView tv;
-	String searchInput;
-	Set<String> sectionsSet;
-	Comparator<AppData> comparator;
+	
 	public void filter(CharSequence searchInput) {
 		indexData.clear();
 		this.searchInput = searchInput.toString();

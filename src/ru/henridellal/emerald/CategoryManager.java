@@ -22,11 +22,11 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class CategoryManager {
-	SoftReference<Context> contextRef;
 	public static final String ALL = "All";
 	public static final String UNCLASSIFIED = "Unclassified";
 	public static final String HIDDEN = "Hidden";
 	public static final String HISTORY = "History";
+	private SoftReference<Context> contextRef;
 	private String home;
 	private String curCategory;
 	private ArrayList<String> names;
@@ -75,8 +75,7 @@ public class CategoryManager {
 					finished = true;
 				}
 			}
-		}
-		else {
+		} else {
 			result = 0;
 		}
 		return names.get(result);
@@ -93,8 +92,7 @@ public class CategoryManager {
 					finished = true;
 				}
 			}
-		}
-		else {
+		} else {
 			result = 0;
 		}
 		return names.get(result);
@@ -380,7 +378,7 @@ public class CategoryManager {
 					key = d.substring(0, index).trim();
 					value = d.substring(index+1, d.length()).trim();
 					if (key.equals("hidden")) {
-						if (value.equals("true")) {
+						if ("true".equals(value)) {
 							c.hide();
 						} else {
 							c.unhide();
@@ -437,7 +435,7 @@ public class CategoryManager {
 		
 		if (!isEditable(curCategory)) {
 			data.addAll(map.values());
-			if (curCategory == UNCLASSIFIED) {
+			if (UNCLASSIFIED.equals(curCategory)) {
 				for (Category c : categories.values()) {
 					if (!c.getName().equals(HISTORY)) {
 						data.removeAll(c.getData());
