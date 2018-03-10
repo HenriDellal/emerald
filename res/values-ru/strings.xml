@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="set_as_default">Установить лаунчером по умолчанию</string>
 	<string name="appearancePrefs">Настройки вида</string>
 	<string name="portraitPrefs">Настройки портретного режима</string>
 	<string name="landscapePrefs">Настройки ландшафтного режима</string>
 
 	<string name="categoryManager">Управление категориями</string>
+	
+	<string name="category_all">Все приложения</string>
+	<string name="category_unclassified">Несортированное</string>
+	<string name="category_history">История</string>
+	<string name="category_hidden">Скрытые</string>
+	
 	<string name="appShortcut">Вид ярлыка</string>
 	<string name="iconSize">Размер иконок</string>
 	<string name="textSize">Размер текста</string>

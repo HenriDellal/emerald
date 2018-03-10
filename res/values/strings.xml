@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">Emerald Launcher</string>
-	<string name="set_as_default">Set as default launcher</string>
 	<string name="appearancePrefs">Appearance preferences</string>
 	<string name="portraitPrefs">Portrait mode preferences</string>
 	<string name="landscapePrefs">Landscape mode preferences</string>
 	
 	<string name="home_button">Home button behaviour</string>
 	<string name="categoryManager">Category manager</string>
+	<string name="category_all">All apps</string>
+	<string name="category_unclassified">Unclassified</string>
+	<string name="category_history">History</string>
+	<string name="category_hidden">Hidden</string>
 	<string name="appShortcut">App shortcut</string>
 	<string name="iconSize">Icon size</string>
 	<string name="textSize">Text size</string>
@@ -123,6 +126,11 @@
 \n
 \nLicensed under the Apache License 2.0.
 \nhttps://github.com/commonsguy/cwac-colormixer
+\n
+\nHayai Launcher
+\nCopyright 2015 Hayai Software
+\nLicensed under the Apache License 2.0.
+\nhttps://github.com/seizonsenryaku/HayaiLauncher
 \n
 \nFont-Awesome
 \nThe font licensed under the SIL OFL 1.1.

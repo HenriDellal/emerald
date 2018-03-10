@@ -28,6 +28,7 @@ public class Themer {
 		Button menuButton = (Button)activity.findViewById(R.id.menuButton);
 		Button searchButton = (Button)activity.findViewById(R.id.searchButton);
 		Button webSearchButton = (Button)activity.findViewById(R.id.webSearchButton);
+		Button categoryButton = (Button)activity.findViewById(R.id.category_button);
 		EditText searchField = (EditText)activity.findViewById(R.id.textField);
 		Resources resources = activity.getResources();
 		switch (theme) {
@@ -43,6 +44,7 @@ public class Themer {
 					searchButton.setBackgroundDrawable(resources.getDrawable(R.drawable.search_bg));
 					webSearchButton.setBackgroundDrawable(resources.getDrawable(R.drawable.web_search_bg));
 				}
+				categoryButton.setTextColor(Color.WHITE);
 				searchField.setTextColor(Color.WHITE);
 				break;
 			default:
@@ -55,6 +57,7 @@ public class Themer {
 					searchButton.setBackgroundDrawable(resources.getDrawable(R.drawable.search_dark_bg));
 					webSearchButton.setBackgroundDrawable(resources.getDrawable(R.drawable.web_search_dark_bg));
 				}
+				categoryButton.setTextColor(Color.BLACK);
 				searchField.setTextColor(Color.BLACK);
 		}
 	}

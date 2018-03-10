@@ -48,6 +48,9 @@ public class Dock {
 	/*
 		dockContentHolder.removeView(findViewWithTag(app));
 	*/
+	public AppData getApp(int index) {
+		return (apps.size() > index) ? apps.get(index) : null;
+	}
 	public boolean hasApp(AppData app) {
 		return apps.contains(app);
 	}

@@ -25,7 +25,6 @@ import java.io.FileFilter;
 
 public class FileActivity extends Activity {
 	private File curDirectory;
-	private int teamType;
 	
 	private File[] fileArray = null;
 	private ArrayList<File> files = new ArrayList<File>();

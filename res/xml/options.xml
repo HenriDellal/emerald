@@ -78,7 +78,7 @@
 	    	android:defaultValue="false"
 	    	android:key="scrollbar"/>
 	    <ListPreference
-	        android:defaultValue="1"
+	        android:defaultValue="2"
 	        android:entries="@array/orientationTypes"
 	        android:entryValues="@array/orientationValues"
 	        android:title="@string/orientation"
