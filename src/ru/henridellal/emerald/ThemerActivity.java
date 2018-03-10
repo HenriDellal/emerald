@@ -99,6 +99,12 @@ public class ThemerActivity extends Activity{
 		int width = (int)(realSize.x*0.4f);
 		int height = (int)(realSize.y*0.4f);
 		float density = getResources().getDisplayMetrics().density;
+		
+		int statusBarHeight = (int) (24.f * density * 0.4f);
+		int mainBarHeight = (int) (32.f * density * 0.4f);
+		int navBarHeight = (int) (48.f * density * 0.4f);
+		int dockHeight = (int) (56.f * density * 0.4f);
+		
 		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(bitmap);
 		Bitmap scaledBitmap = Bitmap.createScaledBitmap(((BitmapDrawable)preview).getBitmap(), width, height, false);
@@ -111,25 +117,25 @@ public class ThemerActivity extends Activity{
 		
 		// STATUS BAR
 		int statusBarColor = (Build.VERSION.SDK_INT >= 21) ? sharedPrefs.getInt(Keys.STATUS_BAR_BACKGROUND, 0x22000000) : Color.BLACK;
-		int statusBarHeight = (int) (24.f * density * 0.4f);
 		paint.setColor(statusBarColor);
 		canvas.drawRect(0, 0, width, statusBarHeight, paint);
 		
 		// MAIN BAR
 		int mainBarColor = sharedPrefs.getInt(Keys.BAR_BACKGROUND, 0x22000000);
-		int mainBarHeight = (int) (32.f * density * 0.4f);
 		paint.setColor(mainBarColor);
-		canvas.drawRect(0, statusBarHeight, width, statusBarHeight+mainBarHeight, paint);
+		if (sharedPrefs.getBoolean(Keys.BOTTOM_MAIN_BAR, false)) {
+			canvas.drawRect(0, height-navBarHeight-dockHeight-mainBarHeight, width, height-navBarHeight-dockHeight, paint);
+		} else {
+			canvas.drawRect(0, statusBarHeight, width, statusBarHeight+mainBarHeight, paint);
+		}
 		
 		// NAVIGATION BAR
 		int navBarColor = (Build.VERSION.SDK_INT >= 19) ? sharedPrefs.getInt(Keys.NAV_BAR_BACKGROUND, 0x22000000) : Color.BLACK;
-		int navBarHeight = (int) (48.f * density * 0.4f);
 		paint.setColor(navBarColor);
 		canvas.drawRect(0, height-navBarHeight, width, height, paint);
 		
 		// DOCK
 		int dockBarColor = sharedPrefs.getInt(Keys.DOCK_BACKGROUND, 0x22000000);
-		int dockHeight = (int) (56.f * density * 0.4f);
 		paint.setColor(dockBarColor);
 		canvas.drawRect(0, height-navBarHeight-dockHeight, width, height-navBarHeight, paint);
 		

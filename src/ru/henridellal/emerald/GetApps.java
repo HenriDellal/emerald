@@ -237,7 +237,6 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 		catch (Exception e) {
 		}
 		context.loadFilteredApps();
-		context.setSpinner();
 		context.getDock().update();
 	}
 }

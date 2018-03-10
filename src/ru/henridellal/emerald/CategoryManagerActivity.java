@@ -18,7 +18,7 @@ import java.util.Collections;
 
 public class CategoryManagerActivity extends Activity{
 	private CategoryManager cm;
-	private ArrayList<String> categories;
+	private ArrayList<String> categories, categoriesNames;
 	private ArrayAdapter<String> adapter;
 	private ListView catListView;
 	
@@ -44,8 +44,12 @@ public class CategoryManagerActivity extends Activity{
 		setContentView(R.layout.categorymanager);
 		cm = LauncherApp.getInstance().getCategoryManager();
 		categories = cm.getCategories();
+		categoriesNames = new ArrayList<String>(categories.size());
+		for (String category: categories) {
+			categoriesNames.add(cm.getCategory(category).getRepresentName(this));
+		}
 		adapter = new ArrayAdapter<String>(this, 
-			android.R.layout.simple_list_item_1, categories);
+			android.R.layout.simple_list_item_1, categoriesNames);
 		catListView = (ListView)findViewById(R.id.categoryList);
 		catListView.setAdapter(adapter);
 		catListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -67,7 +71,7 @@ public class CategoryManagerActivity extends Activity{
 	
 	private void buildMenu(final String category) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(category);
+		builder.setTitle(cm.getCategory(category).getRepresentName(this));
 		final boolean isHidden = cm.getCategory(category).isHidden();
 		ArrayList<String> commands = new ArrayList<String>();
 		final ArrayList<Integer> commandCodes = new ArrayList<Integer>();
@@ -133,8 +137,8 @@ public class CategoryManagerActivity extends Activity{
 	}
 	private void deleteCategory(final String category) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(category);
-		builder.setMessage("Do you want to delete "+ category + " category?");
+		builder.setTitle(cm.getCategory(category).getRepresentName(this));
+		builder.setMessage("Do you want to delete "+ cm.getCategory(category).getRepresentName(this) + " category?");
 		builder.setPositiveButton(android.R.string.yes, 
 			new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
@@ -151,8 +155,8 @@ public class CategoryManagerActivity extends Activity{
 	}
 	private void clearCategory(final String category) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(category);
-		builder.setMessage("Do you want to clear "+ category + " category?");
+		builder.setTitle(cm.getCategory(category).getRepresentName(this));
+		builder.setMessage("Do you want to clear "+ cm.getCategory(category).getRepresentName(this) + " category?");
 		builder.setPositiveButton(android.R.string.yes, 
 			new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
@@ -202,7 +206,7 @@ public class CategoryManagerActivity extends Activity{
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-		builder.setTitle(catName);
+		builder.setTitle(cm.getCategory(catName).getRepresentName(this));
 		builder.setCancelable(true);
 		builder.setNegativeButton(android.R.string.cancel,
 			new DialogInterface.OnClickListener(){

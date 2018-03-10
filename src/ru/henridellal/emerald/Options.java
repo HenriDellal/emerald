@@ -24,12 +24,12 @@ public class Options extends PreferenceActivity {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void onCreate(Bundle icicle) {
+	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		addPreferencesFromResource(R.xml.options);
 		setIconPacksList(LauncherApp.getInstance().getIconPackManager().getIconPacks());
 		if (Build.VERSION.SDK_INT < 11) {
-			findPreference("keepInMemory").setEnabled(false);
+			findPreference(Keys.KEEP_IN_MEMORY).setEnabled(false);
 		}
 	}
 	@Override

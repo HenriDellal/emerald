@@ -23,12 +23,10 @@ public class SwipeListener implements View.OnTouchListener {
 				if (e.getX()-x > 30.0 * density) {
 					LauncherApp.getInstance().getCategoryManager().setCurCategory(LauncherApp.getInstance().getCategoryManager().getPrevCategory());
 					appsRef.get().loadFilteredApps();
-					appsRef.get().setSpinner();
 					return true;
 				} else if (x-e.getX() > 30.0 * density) {
 					LauncherApp.getInstance().getCategoryManager().setCurCategory(LauncherApp.getInstance().getCategoryManager().getNextCategory());
 					appsRef.get().loadFilteredApps();
-					appsRef.get().setSpinner();
 					return true;
 				} else v.performClick();
 			default:
