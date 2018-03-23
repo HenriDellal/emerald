@@ -20,7 +20,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
@@ -31,6 +30,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 //import android.util.Log;
+import android.view.GestureDetector;
 import android.view.inputmethod.InputMethodManager;
 import android.view.LayoutInflater;
 import android.view.KeyEvent;
@@ -39,7 +39,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,12 +46,11 @@ import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class Apps extends Activity
 {
+	private GestureDetector gestureDetector;
 	private CategoryManager categories;
 	private ArrayList<AppData> curCatData;
 	private RelativeLayout mainLayout;
@@ -62,10 +60,10 @@ public class Apps extends Activity
 	public SharedPreferences options;
 	public static final String PREF_APPS = "apps";
 	public static final String APP_TAG = "Emerald";
-	private CustomAdapter adapter = null;
+	private CustomAdapter adapter;
 	public static final int GRID = 0;
 	public static final int LIST = 1;
-	private GetApps scanner = null;
+	private GetApps scanner;
 	private OnSharedPreferenceChangeListener prefListener;
 	private boolean lock, returnToHome, searchIsOpened, homeButtonPressed, modPressed;
 	private int historySize;
@@ -158,15 +156,16 @@ public class Apps extends Activity
     //removes app from history if it is already in it
     // to avoid duplicating
     	//Log.v(APP_TAG, "Add app in history");
-		if (categories.getCategoryData(CategoryManager.HISTORY).indexOf(a) != -1) {
-			categories.removeFromCategory(CategoryManager.HISTORY, a);
-		}
-    
-		categories.addToHistory(a);
-    	//removes old entries if History has maximum size
-		if (categories.getCategoryData(CategoryManager.HISTORY).size() > historySize) {
-			categories.removeFromCategory(CategoryManager.HISTORY, categories.getCategoryData(CategoryManager.HISTORY).size()-1);
-		}
+    	if (!dock.hasApp(a)) {
+			if (categories.getCategoryData(CategoryManager.HISTORY).indexOf(a) != -1) {
+				categories.removeFromCategory(CategoryManager.HISTORY, a);
+			}
+			categories.addToHistory(a);
+	    	//removes old entries if History has maximum size
+			if (categories.getCategoryData(CategoryManager.HISTORY).size() > historySize) {
+				categories.removeFromCategory(CategoryManager.HISTORY, categories.getCategoryData(CategoryManager.HISTORY).size()-1);
+			}
+    	}
 	}
 	//launches app and adds it to history
 	public void launch(AppData a) {
@@ -190,10 +189,13 @@ public class Apps extends Activity
 		builder.setCancelable(true);
 		final ArrayList<String> cats = new ArrayList<String>(categories.getCategories());
 		cats.remove(CategoryManager.HIDDEN);
+		ArrayList<String> toRemove = new ArrayList<String>();
 		for (String category: cats) {
 			if (categories.getCategory(category).isHidden())
-				cats.remove(category);
+				toRemove.add(category);
 		}
+		cats.removeAll(toRemove);
+		toRemove = null;
 		final ArrayList<String> categoriesNames = new ArrayList<String>(cats.size());
 		for (String category: cats) {
 			categoriesNames.add(categories.getCategory(category).getRepresentName(this));
@@ -458,6 +460,12 @@ public class Apps extends Activity
 	}
 	
 	@Override
+	public boolean dispatchTouchEvent(MotionEvent event) {
+		gestureDetector.onTouchEvent(event);
+		return super.dispatchTouchEvent(event);
+	}
+	
+	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_MENU) {
 			menu();
@@ -494,10 +502,10 @@ public class Apps extends Activity
 			} else if (keyCode == KeyEvent.KEYCODE_0 && !searchIsOpened) {
 				openSearch();
 			} else if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
-				categories.setCurCategory(categories.getPrevCategory());
+				categories.setCurCategory(categories.getCategory(CategoryManager.PREVIOUS));
 				loadFilteredApps();
 			} else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-				categories.setCurCategory(categories.getNextCategory());
+				categories.setCurCategory(categories.getCategory(CategoryManager.NEXT));
 				loadFilteredApps();
 			} else if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
 				openCategoriesList();
@@ -657,7 +665,7 @@ public class Apps extends Activity
 			notiManager.notify(0, noti);
 		}
 		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		setRequestedOrientation(Integer.parseInt(options.getString(Keys.ORIENTATION, "1")));
+		setRequestedOrientation(Integer.parseInt(options.getString(Keys.ORIENTATION, "2")));
 		setContentView(mainLayout);
 		options.edit().putBoolean(Keys.MESSAGE_SHOWN, false).commit();
 		prefListener = new OnSharedPreferenceChangeListener() {
@@ -690,8 +698,12 @@ public class Apps extends Activity
 		Themer.applyTheme(this, options);
 		dock = new Dock(this);
 		changePrefsOnRotate();
-		
-		//grid.setOnTouchListener(new SwipeListener(this));
+		gestureDetector = new GestureDetector(this, new SwipeListener(this));
+		grid.setOnTouchListener(new View.OnTouchListener() {
+			public boolean onTouch(View view, MotionEvent event) {
+				return gestureDetector.onTouchEvent(event);
+			}
+		});
 	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

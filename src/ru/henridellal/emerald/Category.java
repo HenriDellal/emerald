@@ -47,6 +47,9 @@ public class Category {
 	public String getRepresentName(Context context) {
 		return hasCustomName() ? name : context.getResources().getString(stringResourceId);
 	}
+	public void setName(String name) {
+		this.name = name;
+	}
 	public String getName() {
 		return name;
 	}

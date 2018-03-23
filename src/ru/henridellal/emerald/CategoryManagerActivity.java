@@ -19,7 +19,7 @@ import java.util.Collections;
 public class CategoryManagerActivity extends Activity{
 	private CategoryManager cm;
 	private ArrayList<String> categories, categoriesNames;
-	private ArrayAdapter<String> adapter;
+	private CategoryAdapter adapter;
 	private ListView catListView;
 	
 	private static final int COMMAND_HIDE = 0;
@@ -29,8 +29,12 @@ public class CategoryManagerActivity extends Activity{
 	private static final int COMMAND_RENAME = 4;
 	private static final int COMMAND_EDIT = 5;
 	
-	public ArrayAdapter<String> getAdapter() {
-		return adapter;
+	public void updateCategoriesList() {
+		categories = cm.getCategories();
+		categoriesNames = new ArrayList<String>(categories.size());
+		for (String category: categories) {
+			categoriesNames.add(cm.getCategory(category).getRepresentName(this));
+		}
 	}
 	
 	@Override
@@ -43,12 +47,8 @@ public class CategoryManagerActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.categorymanager);
 		cm = LauncherApp.getInstance().getCategoryManager();
-		categories = cm.getCategories();
-		categoriesNames = new ArrayList<String>(categories.size());
-		for (String category: categories) {
-			categoriesNames.add(cm.getCategory(category).getRepresentName(this));
-		}
-		adapter = new ArrayAdapter<String>(this, 
+		updateCategoriesList();
+		adapter = new CategoryAdapter(this, 
 			android.R.layout.simple_list_item_1, categoriesNames);
 		catListView = (ListView)findViewById(R.id.categoryList);
 		catListView.setAdapter(adapter);
@@ -111,7 +111,6 @@ public class CategoryManagerActivity extends Activity{
 							break;
 						case COMMAND_RENAME:
 							renameCategory(category);
-								//Toast.makeText(CategoryManagerActivity.this, "This category name is not editable", Toast.LENGTH_LONG).show();
 							break;
 						case COMMAND_EDIT:
 							appListEditor(category);
@@ -143,7 +142,8 @@ public class CategoryManagerActivity extends Activity{
 			new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					cm.removeCategory(category);
-					getAdapter().notifyDataSetChanged();
+					updateCategoriesList();
+					adapter.update(categoriesNames);
 				}
 			}).setNegativeButton(android.R.string.no,
 			new DialogInterface.OnClickListener() {
@@ -171,13 +171,8 @@ public class CategoryManagerActivity extends Activity{
 		builder.create().show();
 	}
 	private void renameCategory(final String category) {
-		/*if (! cm.isCustom(catName)) {
-			Toast.makeText(this, "This category name is not editable", Toast.LENGTH_LONG).show();
-			return;
-		}*/
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(getResources().getText(R.string.rename).toString());
-		builder.setMessage("Edit name of category:");
 		final EditText inputBox = new EditText(this);
 		inputBox.setText(category);
 		builder.setView(inputBox);
@@ -185,10 +180,10 @@ public class CategoryManagerActivity extends Activity{
 			new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					if (cm.renameCategory(inputBox.getText().toString(), category)) {
-						Toast.makeText(CategoryManagerActivity.this, "Successfully renamed", Toast.LENGTH_LONG).show();
-						adapter.notifyDataSetChanged();
+						updateCategoriesList();
+						adapter.update(categoriesNames);
 					} else {
-						Toast.makeText(CategoryManagerActivity.this, "Name already in use", Toast.LENGTH_LONG).show();    				
+						Toast.makeText(CategoryManagerActivity.this, getResources().getString(R.string.note_rename_error), Toast.LENGTH_LONG).show();    				
 					}
 				}
 			}).setNegativeButton(android.R.string.no,
@@ -271,9 +266,10 @@ public class CategoryManagerActivity extends Activity{
 			new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					if (!cm.addCategory(inputBox.getText().toString())) {
-						Toast.makeText(CategoryManagerActivity.this, "Name already in use", Toast.LENGTH_LONG).show();
+						Toast.makeText(CategoryManagerActivity.this, getResources().getString(R.string.note_rename_error), Toast.LENGTH_LONG).show();
 					} else {
-						adapter.notifyDataSetChanged();
+						updateCategoriesList();
+						adapter.update(categoriesNames);
 					}
 				}
 			}).setNegativeButton(android.R.string.cancel, 

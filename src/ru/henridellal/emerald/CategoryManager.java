@@ -26,6 +26,10 @@ public class CategoryManager {
 	public static final String UNCLASSIFIED = "Unclassified";
 	public static final String HIDDEN = "Hidden";
 	public static final String HISTORY = "History";
+	
+	public static final byte PREVIOUS = 0;
+	public static final byte NEXT = 1;
+	
 	private SoftReference<Context> contextRef;
 	private String home;
 	private String curCategory;
@@ -63,39 +67,26 @@ public class CategoryManager {
 	}
 	/*Functions for spinner. Return names of categories
 	which are neighbouring to the current*/
-	public String getPrevCategory() {
-		int result;
-		boolean finished = false;
+	public String getCategory(byte direction) {
 		if (!curCategory.equals(HIDDEN)) {
-			result = names.indexOf(curCategory);
+			int result = names.indexOf(curCategory);
+			boolean finished = false;
 			while (!finished) {
-				result--;
-				result = (result > -1) ? result : names.size()-2;
+				if (direction == CategoryManager.PREVIOUS) {
+					result--;
+					result = (result > -1) ? result : names.size()-2;
+				} else {
+					result++;
+					result = (result < names.size()-1) ? result : 0;
+				}
 				if (!categories.get(names.get(result)).isHidden()) {
 					finished = true;
 				}
 			}
+			return names.get(result);
 		} else {
-			result = 0;
+			return null;
 		}
-		return names.get(result);
-	}
-	public String getNextCategory() {
-		int result;
-		boolean finished = false;
-		if (!curCategory.equals(HIDDEN)) {
-			result = names.indexOf(curCategory);
-			while (!finished) {
-				result++;
-				result = (result < names.size()-1) ? result : 0;
-				if (!categories.get(names.get(result)).isHidden()) {
-					finished = true;
-				}
-			}
-		} else {
-			result = 0;
-		}
-		return names.get(result);
 	}
 	public Category getCategory(String categoryName) {
 		return categories.get(categoryName);
@@ -117,8 +108,10 @@ public class CategoryManager {
 				//puts entries from cache to categories
 				if (isEditable(name)) {
 					if (isCustom(name)) {
-						names.add(name);
-						categories.put(name, new Category(name, getEntries(f)));
+						if (!names.contains(name)) {
+							names.add(name);
+							categories.put(name, new Category(name, getEntries(f)));
+						}
 					} else {
 						int stringResourceId = 0;
 						if (HISTORY.equals(name)) {
@@ -557,6 +550,7 @@ public class CategoryManager {
 		categories.put(newName, c);
 		names.remove(cat);
 		names.add(newName);
+		c.setName(newName);
 		sortNames();
 		writeCategoriesProps();
 		setCurCategory(ALL);

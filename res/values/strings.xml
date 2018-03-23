@@ -49,6 +49,7 @@
 	<string name="launcherSettings">Launcher settings</string>
 	
 	<string name="createCategory">Create category</string>
+	<string name="note_rename_error">Name is already in use</string>
 	<string name="rename">Rename</string>
 	<string name="editAppList">Edit application list</string>
 	<string name="findInMarket">Find in app market</string>
@@ -87,7 +88,7 @@
 	<string name="close_tutorial">Close tutorial</string>
 	
 	
-<string name="tutorial">Swipe on the category name to switch to the next/previous category. Click on it to see the full list of categories.
+<string name="tutorial">Swipe left/right on the apps menu to switch to the next/previous category. Click on the category name to see the categories list.
 \n
 \nOpen Launcher settings/Category manager to edit categories.
 \n

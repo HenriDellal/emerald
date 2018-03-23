@@ -66,7 +66,7 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 		// use intent to get apps that can be launched
 		Intent launchIntent = new Intent(Intent.ACTION_MAIN);
 		launchIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-
+		//TODO access shared preferences the other way
 		int appShortcut = Integer.parseInt(context.options.getString(Keys.APP_SHORTCUT, "3"));
 		boolean icons = appShortcut >= CustomAdapter.ICON;
 		Map<String,AppData> cache = new HashMap<String,AppData>();
