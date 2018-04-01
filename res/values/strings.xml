@@ -20,7 +20,7 @@
 	<string name="tileView">Grid</string>
 	<string name="bottom_main_bar">Main bar at the bottom</string>
 	<string name="stack_from_bottom">Stick category content to the bottom</string>
-	<string name="scrollbar">Show letter hint on scroll</string>
+	<string name="scrollbar">Fast scroll</string>
 	<string name="orientation">Screen orientation</string>
 	<string name="theme">Theme</string>
 	<string name="ui_colors">UI colors</string>
@@ -108,32 +108,32 @@
 \nLicensed under GPL-v3
 \nWant to help? Report bugs and submit suggestions via GitHub (https://www.github.com/HenriDellal/emerald) or Google Play listing(http://play.google.com/details?id=ru.henridellal.emerald).
 \n
-\nThanks to:
-\nTheAlaskaLinuxUser (http://thealaskalinuxuser.wordpress.com) for tests and bug fixes.
-\nMaxim Kerekesha for Ukrainian translation.
-\nDaria Szatan (https://github.com/bla-ke) for Polish translation.
-\nThomas Blankenburg for German translation and tests.
-\nDavid Smit for Dutch translation and continuous help.
-\nMonyxie (https://github.com/monyxie) for Simplified Chinese translation.
-\nFijar (https://github.com/f1j4r) for Indonesian translation.
+\n<b>Thanks to:</b>
+\n<b>TheAlaskaLinuxUser</b> (http://thealaskalinuxuser.wordpress.com) for tests and bug fixes.
+\n<b>Maxim Kerekesha</b> for Ukrainian translation.
+\n<b>Daria Szatan</b> (https://github.com/bla-ke) for Polish translation.
+\n<b>Thomas Blankenburg</b> for German translation and tests.
+\n<b>David Smit</b> (https://github.com/heycrip) for Dutch translation and continuous help.
+\n<b>Monyxie</b> (https://github.com/monyxie) for Simplified Chinese translation.
+\n<b>Fijar</b> (https://github.com/f1j4r) for Indonesian translation.
+\n<b>Lowlevel</b> (https://steemit.com/@lowlevel) for the launcher icon.
 \nAll contributors.
 \n
-\nTinyLaunch
+\n<b>TinyLaunch</b>
 \nCopyright (c) 2011-12, Alexander R. Pruss
 \nLicensed under BSD-3-Clause
 \nhttps://github.com/arpruss/tinylaunch
 \n
-\nCWAC ColorMixer
-\n
+\n<b>CWAC ColorMixer</b>
 \nLicensed under the Apache License 2.0.
 \nhttps://github.com/commonsguy/cwac-colormixer
 \n
-\nHayai Launcher
+\n<b>Hayai Launcher</b>
 \nCopyright 2015 Hayai Software
 \nLicensed under the Apache License 2.0.
 \nhttps://github.com/seizonsenryaku/HayaiLauncher
 \n
-\nFont-Awesome
+\n<b>Font-Awesome</b>
 \nThe font licensed under the SIL OFL 1.1.
 \nhttp://fontawesome.io/</string>
 

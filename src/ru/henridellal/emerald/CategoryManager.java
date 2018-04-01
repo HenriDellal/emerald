@@ -166,8 +166,11 @@ public class CategoryManager {
 	//sets previously chosen category as current
 	public void prevCategory() {
 		String c = popCategory();
-		if (c != null)
+		if (c != null) {
 			setCurCategory(c, false);
+		} else {
+			setCurCategory(ALL);
+		}
 	}
 	
 	private void pushCategory(String c) {

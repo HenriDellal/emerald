@@ -21,7 +21,7 @@
   <application 
   android:appCategory="productivity"
   android:label="@string/app_name"
-  android:icon="@drawable/icon"
+  android:icon="@mipmap/icon"
   android:name=".LauncherApp">
       
  		<activity android:name=".AboutActivity" android:label="@string/aboutTitle"/>

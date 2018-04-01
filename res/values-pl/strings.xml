@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">Emerald Launcher</string>
 	<string name="appearancePrefs">Preferencje wyglądu</string>
 	<string name="portraitPrefs">Preferencje układu poziomego</string>
 	<string name="landscapePrefs">Preferencje układu pionowego</string>

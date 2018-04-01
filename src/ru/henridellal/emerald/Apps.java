@@ -477,12 +477,11 @@ public class Apps extends Activity
 			} else if (!isDefaultLauncher()) {
 				moveTaskToBack(false);
 				return true;
-			}
-			if (categories.getCurCategory().equals(CategoryManager.HIDDEN)) {
-				findViewById(R.id.quit_hidden_apps).setVisibility(View.GONE);
-				findViewById(R.id.tabs).setVisibility(View.VISIBLE);
-				categories.setCurCategory(CategoryManager.ALL);
 			} else {
+				if (categories.getCurCategory().equals(CategoryManager.HIDDEN)) {
+					findViewById(R.id.quit_hidden_apps).setVisibility(View.GONE);
+					findViewById(R.id.tabs).setVisibility(View.VISIBLE);
+				}
 				categories.prevCategory();
 			}
 			loadFilteredApps();
@@ -658,7 +657,7 @@ public class Apps extends Activity
 			Notification noti = new Notification.Builder(this)
 				.setContentTitle("Emerald")
 				.setContentText(" ")
-				.setSmallIcon(R.drawable.icon)
+				.setSmallIcon(R.mipmap.icon)
 			//	.setLargeIcon(new Bitmap(Bitmap.ARGB_8888))
 				.build();
 			NotificationManager notiManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
