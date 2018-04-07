@@ -16,7 +16,7 @@ public class SwipeListener extends GestureDetector.SimpleOnGestureListener {
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 		float deltaX = e1.getX() - e2.getX();
 		float deltaY = Math.abs(e1.getY() - e2.getY());
-		if (Math.abs(deltaX) > 30.f*density && (deltaY < Math.abs(deltaX)*0.3f)) {
+		if (Math.abs(deltaX) > 90.f*density && (deltaY < Math.abs(deltaX)*0.9f)) {
 			CategoryManager cm = LauncherApp.getInstance().getCategoryManager();
 			String category = (deltaX > 0.f) ? cm.getCategory(CategoryManager.NEXT) : cm.getCategory(CategoryManager.PREVIOUS);
 			if (null != category) {
