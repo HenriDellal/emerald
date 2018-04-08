@@ -11,6 +11,8 @@
 	<string name="category_unclassified">Несортированное</string>
 	<string name="category_history">История</string>
 	<string name="category_hidden">Скрытые</string>
+	<string name="delete_category_question">Удалить категорию?</string>
+	<string name="clear_category_question">Очистить категорию?</string>
 	
 	<string name="appShortcut">Вид ярлыка</string>
 	<string name="iconSize">Размер иконок</string>
@@ -19,6 +21,7 @@
 	<string name="columnWidth">Ширина столбца</string>
 	<string name="verticalSpacing">Вертикальный отступ</string>
 	<string name="tileView">Сетка</string>
+	<string name="hide_main_bar">Скрыть главную панель</string>
 	<string name="bottom_main_bar">Главная панель внизу</string>
 	<string name="stack_from_bottom">Прикрепить содержимое категорий к низу</string>
 	<string name="orientation">Ориентация экрана</string>
@@ -72,7 +75,8 @@
 	<string name="wrong_password">Неправильный пароль</string>
 	<string name="reset_icon">Сбросить иконку</string>
 	<string name="change_icon">Сменить иконку</string>
-	<string name="change_icon_question">Сменить иконку?</string>
+	<string name="change_icon_title">Изменить иконку %s</string>
+	<string name="change_icon_question">Сменить иконку для %s?</string>
 	<string name="search_icon_hint">Поиск иконки по имени пакета</string>
 	
 	<string name="type_password">Введите пароль</string>

@@ -94,6 +94,17 @@ public class ThemerActivity extends Activity{
 		super.onResume();
 		setPreview();
 	}
+	@Override
+	public void onBackPressed() {
+		if (findViewById(R.id.ui_settings).getVisibility() == View.GONE) {
+			findViewById(R.id.ui_settings).setVisibility(View.VISIBLE);
+    		findViewById(R.id.color_mixer_holder).setVisibility(View.GONE);
+    		findViewById(R.id.color_mixer_panel).setVisibility(View.GONE);
+		} else {
+			super.onBackPressed();
+		}
+	}
+	
 	private void setPreview() {
 		ImageView uiPreview = (ImageView)findViewById(R.id.ui_preview);
 		int width = (int)(realSize.x*0.4f);

@@ -11,6 +11,8 @@
 	<string name="category_unclassified">Unclassified</string>
 	<string name="category_history">History</string>
 	<string name="category_hidden">Hidden</string>
+	<string name="delete_category_question">Do you want to delete the category?</string>
+	<string name="clear_category_question">Do you want to clear the category?</string>
 	<string name="appShortcut">App shortcut</string>
 	<string name="iconSize">Icon size</string>
 	<string name="textSize">Text size</string>
@@ -18,6 +20,7 @@
 	<string name="columnWidth">Column width</string>
 	<string name="verticalSpacing">Vertical spacing</string>
 	<string name="tileView">Grid</string>
+	<string name="hide_main_bar">Hide main bar</string>
 	<string name="bottom_main_bar">Main bar at the bottom</string>
 	<string name="stack_from_bottom">Stick category content to the bottom</string>
 	<string name="scrollbar">Fast scroll</string>
@@ -79,7 +82,8 @@
 	<string name="remove_from_dock">Remove from dock</string>
 	<string name="reset_icon">Reset icon</string>
 	<string name="change_icon">Change icon</string>
-	<string name="change_icon_question">Do you want to change the icon?</string>
+	<string name="change_icon_title">Change icon of %s</string>
+	<string name="change_icon_question">Do you want to change the icon of %s?</string>
 	<string name="search_icon_hint">Search icon by package name</string>
 	<string name="uninstall">Uninstall</string>
 	

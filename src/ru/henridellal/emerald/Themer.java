@@ -24,7 +24,7 @@ public class Themer {
 	public static final int WALLPAPER_DARK = 4;
 	
 	@SuppressWarnings("deprecation")
-	private static void setBarTheme(Activity activity, int theme) {
+	private static void setBarTheme(Activity activity, SharedPreferences options, int theme) {
 		Button menuButton = (Button)activity.findViewById(R.id.menuButton);
 		Button searchButton = (Button)activity.findViewById(R.id.searchButton);
 		Button webSearchButton = (Button)activity.findViewById(R.id.webSearchButton);
@@ -36,12 +36,16 @@ public class Themer {
 			case LIGHT:
 			case WALLPAPER_LIGHT:
 				if (Build.VERSION.SDK_INT >= 16) {
-					menuButton.setBackground(resources.getDrawable(R.drawable.menu_bg));
-					searchButton.setBackground(resources.getDrawable(R.drawable.search_bg));
+					if (!options.getBoolean(Keys.HIDE_MAIN_BAR, false)) {
+						menuButton.setBackground(resources.getDrawable(R.drawable.menu_bg));
+						searchButton.setBackground(resources.getDrawable(R.drawable.search_bg));
+					}
 					webSearchButton.setBackground(resources.getDrawable(R.drawable.web_search_bg));
 				} else {
-					menuButton.setBackgroundDrawable(resources.getDrawable(R.drawable.menu_bg));
-					searchButton.setBackgroundDrawable(resources.getDrawable(R.drawable.search_bg));
+					if (!options.getBoolean(Keys.HIDE_MAIN_BAR, false)) {
+						menuButton.setBackgroundDrawable(resources.getDrawable(R.drawable.menu_bg));
+						searchButton.setBackgroundDrawable(resources.getDrawable(R.drawable.search_bg));
+					}
 					webSearchButton.setBackgroundDrawable(resources.getDrawable(R.drawable.web_search_bg));
 				}
 				categoryButton.setTextColor(Color.WHITE);
@@ -49,12 +53,16 @@ public class Themer {
 				break;
 			default:
 				if (Build.VERSION.SDK_INT >= 16) {
-					menuButton.setBackground(resources.getDrawable(R.drawable.menu_dark_bg));
-					searchButton.setBackground(resources.getDrawable(R.drawable.search_dark_bg));
+					if (!options.getBoolean(Keys.HIDE_MAIN_BAR, false)) {
+						menuButton.setBackground(resources.getDrawable(R.drawable.menu_dark_bg));
+						searchButton.setBackground(resources.getDrawable(R.drawable.search_dark_bg));
+					}
 					webSearchButton.setBackground(resources.getDrawable(R.drawable.web_search_dark_bg));
 				} else {
-					menuButton.setBackgroundDrawable(resources.getDrawable(R.drawable.menu_dark_bg));
-					searchButton.setBackgroundDrawable(resources.getDrawable(R.drawable.search_dark_bg));
+					if (!options.getBoolean(Keys.HIDE_MAIN_BAR, false)) {
+						menuButton.setBackgroundDrawable(resources.getDrawable(R.drawable.menu_dark_bg));
+						searchButton.setBackgroundDrawable(resources.getDrawable(R.drawable.search_dark_bg));
+					}
 					webSearchButton.setBackgroundDrawable(resources.getDrawable(R.drawable.web_search_dark_bg));
 				}
 				categoryButton.setTextColor(Color.BLACK);
@@ -76,7 +84,7 @@ public class Themer {
 				activity.setTheme(R.style.AppTheme_Dark_Wallpaper);
 				break;
 		}
-		setBarTheme(activity, theme);
+		setBarTheme(activity, options, theme);
 	}
 	public static void setWindowDecorations(Activity activity, SharedPreferences options) {
 		if (Build.VERSION.SDK_INT >= 21) {

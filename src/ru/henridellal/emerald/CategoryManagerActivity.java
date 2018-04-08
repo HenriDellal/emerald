@@ -137,7 +137,7 @@ public class CategoryManagerActivity extends Activity{
 	private void deleteCategory(final String category) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(cm.getCategory(category).getRepresentName(this));
-		builder.setMessage("Do you want to delete "+ cm.getCategory(category).getRepresentName(this) + " category?");
+		builder.setMessage(getResources().getString(R.string.delete_category_question));
 		builder.setPositiveButton(android.R.string.yes, 
 			new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
@@ -156,7 +156,7 @@ public class CategoryManagerActivity extends Activity{
 	private void clearCategory(final String category) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(cm.getCategory(category).getRepresentName(this));
-		builder.setMessage("Do you want to clear "+ cm.getCategory(category).getRepresentName(this) + " category?");
+		builder.setMessage(getResources().getString(R.string.clear_category_question));
 		builder.setPositiveButton(android.R.string.yes, 
 			new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
@@ -256,7 +256,6 @@ public class CategoryManagerActivity extends Activity{
 		//Log.v(APP_TAG, "new category");
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(getResources().getString(R.string.createCategory));
-		builder.setMessage("Enter name of category:");
 		final EditText inputBox = new EditText(this);
 		inputBox.setInputType(InputType.TYPE_CLASS_TEXT | 
 				InputType.TYPE_TEXT_FLAG_CAP_WORDS);

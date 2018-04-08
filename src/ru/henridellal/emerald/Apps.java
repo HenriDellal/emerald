@@ -65,7 +65,7 @@ public class Apps extends Activity
 	public static final int LIST = 1;
 	private GetApps scanner;
 	private OnSharedPreferenceChangeListener prefListener;
-	private boolean lock, returnToHome, searchIsOpened, homeButtonPressed, modPressed;
+	private boolean lock, searchIsOpened, homeButtonPressed, modPressed;
 	private int historySize;
 	
 	public void loadList(boolean cleanCategory) {
@@ -148,7 +148,9 @@ public class Apps extends Activity
 		curCatData = categories.filterApps(map);
 		//Log.v(APP_TAG, "filtered");
 		adapter.update(curCatData);
-		((Button)findViewById(R.id.category_button)).setText(categories.getCategory(categories.getCurCategory()).getRepresentName(this));
+		if (!options.getBoolean(Keys.HIDE_MAIN_BAR, false)) {
+			((Button)findViewById(R.id.category_button)).setText(categories.getCategory(categories.getCurCategory()).getRepresentName(this));
+		}
 		//Log.v(APP_TAG, "loadFilteredApps : finished");
 	}
 	//handles history filling
@@ -322,6 +324,7 @@ public class Apps extends Activity
 					case 5:
 						Intent intent = new Intent(Apps.this, ChangeIconActivity.class);
 						intent.putExtra(ChangeIconActivity.COMPONENT_NAME, item.getComponent());
+						intent.putExtra(ChangeIconActivity.SHORTCUT_NAME, item.name);
 						startActivity(intent);
 						break;
 				}
@@ -393,6 +396,9 @@ public class Apps extends Activity
 		//Log.v(APP_TAG, "Start searching");
 		categories.setCurCategory(CategoryManager.ALL);
 		loadFilteredApps();
+		if (options.getBoolean(Keys.HIDE_MAIN_BAR, false)) {
+			findViewById(R.id.main_bar).setVisibility(View.VISIBLE);
+		}
 		findViewById(R.id.tabs).setVisibility(View.GONE);
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		if (imm != null) {
@@ -433,11 +439,18 @@ public class Apps extends Activity
 		findViewById(R.id.searchBar).setVisibility(View.GONE);
 		findViewById(R.id.webSearchButton).setVisibility(View.GONE);
 		text.setVisibility(View.GONE);
-		findViewById(R.id.tabs).setVisibility(View.VISIBLE);
+		hideMainBarIfNeeded();
 		if (!dock.isEmpty()) {
 			dock.unhide();
 		}
 		searchIsOpened=false;
+	}
+	private void hideMainBarIfNeeded() {
+		if (options.getBoolean(Keys.HIDE_MAIN_BAR, false)) {
+			findViewById(R.id.main_bar).setVisibility(View.GONE);
+		} else {
+			findViewById(R.id.tabs).setVisibility(View.VISIBLE);
+		}
 	}
 	public void onMyClick(View v) {
 		switch(v.getId()) {
@@ -453,7 +466,7 @@ public class Apps extends Activity
 			case R.id.quit_hidden_apps:
 				categories.setCurCategory(CategoryManager.ALL);
 				v.setVisibility(View.GONE);
-				findViewById(R.id.tabs).setVisibility(View.VISIBLE);
+				hideMainBarIfNeeded();
 				loadFilteredApps();
 				break;
 		}
@@ -480,7 +493,7 @@ public class Apps extends Activity
 			} else {
 				if (categories.getCurCategory().equals(CategoryManager.HIDDEN)) {
 					findViewById(R.id.quit_hidden_apps).setVisibility(View.GONE);
-					findViewById(R.id.tabs).setVisibility(View.VISIBLE);
+					hideMainBarIfNeeded();
 				}
 				categories.prevCategory();
 			}
@@ -531,7 +544,6 @@ public class Apps extends Activity
 	
 	@Override
 	protected void onStop() {
-		returnToHome = true;
 		super.onStop();
 	}
 	
@@ -539,7 +551,6 @@ public class Apps extends Activity
 	protected void onPause() {
 		//Log.v(APP_TAG, "onPause");
 		super.onPause();
-		returnToHome = false;
 		modPressed = false;
 		if (searchIsOpened) {
 			closeSearch();
@@ -562,11 +573,9 @@ public class Apps extends Activity
 		if (categories == null) {
 			loadList(false);
 		}
-		if (returnToHome) {
-			categories.setCurCategory(categories.getHome());
-		} else if (categories.getCurCategory().equals(CategoryManager.HIDDEN)) {
+		if (categories.getCurCategory().equals(CategoryManager.HIDDEN)) {
 			findViewById(R.id.quit_hidden_apps).setVisibility(View.GONE);
-			findViewById(R.id.tabs).setVisibility(View.VISIBLE);
+			hideMainBarIfNeeded();
 			categories.setCurCategory(categories.getHome());
 		} else if (categories.getCurCategory().equals(categories.getHome())) {
 			String newCategory = options.getString(Keys.HOME_BUTTON, "");
@@ -616,13 +625,16 @@ public class Apps extends Activity
 			layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
 			mainBar.setLayoutParams(layoutParams);
 			mainLayout.addView(mainBar);
-			
+				
 			layoutParams = new RelativeLayout.LayoutParams(grid.getLayoutParams());
 			layoutParams.addRule(RelativeLayout.ABOVE, R.id.dock_bar);
 			layoutParams.addRule(RelativeLayout.BELOW, R.id.main_bar);
 			grid.setLayoutParams(layoutParams);
 			mainLayout.addView(grid);
 			
+		}
+		if (options.getBoolean(Keys.HIDE_MAIN_BAR, false)) {
+			mainBar.setVisibility(View.GONE);
 		}
 		mainBar.setBackgroundColor(options.getInt(Keys.BAR_BACKGROUND, 0x22000000));
 		grid.setBackgroundColor(options.getInt(Keys.APPS_WINDOW_BACKGROUND, 0));
@@ -727,6 +739,9 @@ public class Apps extends Activity
 			categories.setCurCategory(CategoryManager.HIDDEN);
 			findViewById(R.id.searchBar).setVisibility(View.GONE);
 			findViewById(R.id.tabs).setVisibility(View.GONE);
+			if (options.getBoolean(Keys.HIDE_MAIN_BAR, false)) {
+				findViewById(R.id.main_bar).setVisibility(View.VISIBLE);
+			}
 			findViewById(R.id.quit_hidden_apps).setVisibility(View.VISIBLE);
 			if (searchIsOpened) {
 				closeSearch();
