@@ -49,7 +49,6 @@ public class CategoryManager {
 		names.add(UNCLASSIFIED);
 		names.add(HISTORY);
 		names.add(HIDDEN);
-
 		categories = new HashMap<String,Category>();
 	}
 	public String getHome() {
@@ -72,7 +71,7 @@ public class CategoryManager {
 			int result = names.indexOf(curCategory);
 			boolean finished = false;
 			while (!finished) {
-				if (direction == CategoryManager.PREVIOUS) {
+				if (direction == PREVIOUS) {
 					result--;
 					result = (result > -1) ? result : names.size()-2;
 				} else {
@@ -169,7 +168,7 @@ public class CategoryManager {
 		if (c != null) {
 			setCurCategory(c, false);
 		} else {
-			setCurCategory(ALL);
+			setCurCategory(home);
 		}
 	}
 	
@@ -191,7 +190,7 @@ public class CategoryManager {
 				return c;
 			}
 		}
-		return ALL;
+		return home;
 //		return null;
 	}
 	
@@ -256,7 +255,7 @@ public class CategoryManager {
 		if (home.equals(catName)) {
 			setHome(ALL);
 		}
-		setCurCategory(ALL);
+		setCurCategory(home);
 	}
 	//makes the current category empty
 	public void clearCategory(String cat) {
@@ -521,17 +520,14 @@ public class CategoryManager {
 		return curCategory;
 	}
 	public void hide(String catName) {
-		categories.get(catName).hide();
-		if (home.equals(catName)) {
-			setHome(ALL);
+		if (catName.equals(getCurCategory())) {
+			setCurCategory(home);
 		}
+		categories.get(catName).hide();
 		writeCategoriesProps();
 	}
 	public void unhide(String catName) {
 		categories.get(catName).unhide();
-		if (catName.equals(getCurCategory())) {
-			setCurCategory(ALL);
-		}
 		writeCategoriesProps();
 	}
 	//returns true if rename was successful
@@ -557,6 +553,9 @@ public class CategoryManager {
 		sortNames();
 		writeCategoriesProps();
 		setCurCategory(ALL);
+		if (cat.equals(home)) {
+			setHome(newName);
+		}
 		return true;
 	}
 

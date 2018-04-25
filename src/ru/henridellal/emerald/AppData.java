@@ -7,7 +7,6 @@ import java.util.Comparator;
 
 public class AppData implements Comparable<AppData> {
 	//component is a package name
-	//public String component;
 	private String component;
 	
 	//name is app name
@@ -16,11 +15,9 @@ public class AppData implements Comparable<AppData> {
 	public String getComponent() {
 		return this.component;
 	}
-//	public int versionCode;
 	//Constants for parsing
 	private static final String COMPONENT = "C";
 	private static final String NAME = "N";
-//	private static final String VERSION = "V";
 	
 	//app names comparator
 	public static final Comparator<AppData> NameComparator = 
@@ -55,7 +52,6 @@ public class AppData implements Comparable<AppData> {
 	public AppData(String component, String name) {
 		this.component = component;
 		this.name = name;
-	//	this.versionCode = versionCode;
 	}
 	
 	public void read(BufferedReader reader) throws IOException {
@@ -67,21 +63,15 @@ public class AppData implements Comparable<AppData> {
 		if (name == null || !name.startsWith(NAME))
 			throw new IOException();
 		this.name = name.substring(1).trim();
-//		String version = reader.readLine();
-//		if (version == null || !version.startsWith(VERSION))
-//			throw new IOException();
-//		try {
-//			versionCode = Integer.parseInt(version.substring(1).trim());
-//		}
-//		catch(NumberFormatException e) {
-//			throw new IOException();
-//		}
 	}
 	//writes app data in given file writer
 	public void write(BufferedWriter writer) throws IOException {
-		writer.write(COMPONENT+this.component+"\n"+
-					 NAME+this.name+"\n"/*+
-					 VERSION+this.versionCode+"\n"*/);
+		writer.write(new StringBuilder(COMPONENT)
+		.append(this.component)
+		.append("\n")
+		.append(NAME)
+		.append(this.name)
+		.append("\n").toString());
 	}
 
 	@Override

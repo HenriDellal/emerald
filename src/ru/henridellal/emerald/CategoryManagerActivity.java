@@ -75,7 +75,7 @@ public class CategoryManagerActivity extends Activity{
 		final boolean isHidden = cm.getCategory(category).isHidden();
 		ArrayList<String> commands = new ArrayList<String>();
 		final ArrayList<Integer> commandCodes = new ArrayList<Integer>();
-		if (!category.equals(CategoryManager.HIDDEN) && !category.equals(CategoryManager.ALL) && !category.equals(cm.getHome())) {
+		if (!category.equals(CategoryManager.HIDDEN) && !category.equals(cm.getHome())) {
 			commands.add(isHidden ?
 				getResources().getString(R.string.unhide)
 				: getResources().getString(R.string.hide));
