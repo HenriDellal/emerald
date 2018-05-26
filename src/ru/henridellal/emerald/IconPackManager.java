@@ -71,17 +71,16 @@ public class IconPackManager {
 	public Bitmap getDefaultBitmap(Drawable d) {
 		if (d instanceof BitmapDrawable) {
 			return ((BitmapDrawable) d).getBitmap();
-		} else if (Build.VERSION.SDK_INT >= 26) {
-			if (d instanceof AdaptiveIconDrawable) {
+		} else if ((Build.VERSION.SDK_INT >= 26)
+			&& (d instanceof AdaptiveIconDrawable)) {
 				AdaptiveIconDrawable icon = ((AdaptiveIconDrawable)d);
 				int w = icon.getIntrinsicWidth();
 				int h = icon.getIntrinsicHeight();
 				Bitmap result = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
 				Canvas canvas = new Canvas(result);
-				icon.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+				icon.setBounds(0, 0, w, h);
 				icon.draw(canvas);
 				return result;
-			}
 		}
 		float density = context.getResources().getDisplayMetrics().density;
 		int defaultWidth = (int)(48* density);

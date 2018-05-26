@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      android:versionCode="32"
-      android:versionName="0.5.5" package="ru.henridellal.emerald"
+      android:versionCode="35"
+      android:versionName="0.5.6.2" package="ru.henridellal.emerald"
       >
 
     <!--android:configChanges="keyboard|keyboardHidden|orientation|screenSize"-->
@@ -21,7 +21,7 @@
   <application 
   android:appCategory="productivity"
   android:label="@string/app_name"
-  android:icon="@drawable/icon"
+  android:icon="@mipmap/icon"
   android:name=".LauncherApp">
       
  		<activity android:name=".AboutActivity" android:label="@string/aboutTitle"/>
@@ -29,7 +29,7 @@
  		<activity android:name=".CategoryManagerActivity" android:label="@string/categoryManager"/>
  		<activity android:name=".Options" android:label="@string/launcherSettings"/>
  		<activity android:name=".ThemerActivity" android:label="@string/ui_colors"/>
- 		<activity android:name=".ChangeIconActivity" android:label="@string/change_icon"/>
+ 		<activity android:name=".ChangeIconActivity" />
  		<activity android:name=".FileActivity"/>
             <!--
             -->

@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="set_as_default">Установить лаунчером по умолчанию</string>
 	<string name="appearancePrefs">Настройки вида</string>
 	<string name="portraitPrefs">Настройки портретного режима</string>
 	<string name="landscapePrefs">Настройки ландшафтного режима</string>
 
+	<string name="home_button">Действие при нажатии Домой</string>
 	<string name="categoryManager">Управление категориями</string>
+	
+	<string name="category_all">Все приложения</string>
+	<string name="category_unclassified">Несортированное</string>
+	<string name="category_history">История</string>
+	<string name="category_hidden">Скрытые</string>
+	<string name="delete_category_question">Удалить категорию?</string>
+	<string name="clear_category_question">Очистить категорию?</string>
+	
 	<string name="appShortcut">Вид ярлыка</string>
 	<string name="iconSize">Размер иконок</string>
 	<string name="textSize">Размер текста</string>
@@ -13,10 +21,11 @@
 	<string name="columnWidth">Ширина столбца</string>
 	<string name="verticalSpacing">Вертикальный отступ</string>
 	<string name="tileView">Сетка</string>
-	<string name="bottom_main_bar">Расположить главную панель внизу</string>
+	<string name="hide_main_bar">Скрыть главную панель</string>
+	<string name="bottom_main_bar">Главная панель внизу</string>
 	<string name="stack_from_bottom">Прикрепить содержимое категорий к низу</string>
 	<string name="orientation">Ориентация экрана</string>
-	<string name="scrollbar">Показывать подсказку при прокручивании списка</string>
+	<string name="scrollbar">Быстрая прокрутка</string>
 	<string name="theme">Тема оформления</string>
 	<string name="iconPack">Пакет иконок</string>
 	<string name="transformIcons">Преобразовать иконки</string>
@@ -27,6 +36,8 @@
 	<string name="passwordSummary">Блокирует настройки и скрытые приложения</string>
 	<string name="passwordHint">Оставьте пустым, чтобы снять блокировку</string>
 	<string name="backupPrefs">Создать копию настроек</string>
+	<string name="successfulBackup">Файл настроек сохранëн в </string>
+	<string name="successfulRestore">Настройки успешно восстановлены.</string>
 	<string name="restorePrefs">Восстановить настройки</string>
 	<string name="restart">Перезапустить лаунчер</string>
 	<string name="restart_needed">Лаунчер будет перезапущен</string>
@@ -64,7 +75,8 @@
 	<string name="wrong_password">Неправильный пароль</string>
 	<string name="reset_icon">Сбросить иконку</string>
 	<string name="change_icon">Сменить иконку</string>
-	<string name="change_icon_question">Сменить иконку?</string>
+	<string name="change_icon_title">Изменить иконку %s</string>
+	<string name="change_icon_question">Сменить иконку для %s?</string>
 	<string name="search_icon_hint">Поиск иконки по имени пакета</string>
 	
 	<string name="type_password">Введите пароль</string>
@@ -73,5 +85,7 @@
 	<string name="uninstall">Удалить</string>
 	
 	<string name="aboutTitle">О программе</string>
+	<string name="how_to_use">Как использовать</string>
+	<string name="close_tutorial">Закрыть обучение</string>
 	
 </resources>

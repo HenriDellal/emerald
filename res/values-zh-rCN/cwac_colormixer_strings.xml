@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="cwac_colormixer_alpha">不透明度</string>
+  <string name="cwac_colormixer_red">红</string>
+  <string name="cwac_colormixer_green">绿</string>
+  <string name="cwac_colormixer_blue">蓝</string>
+  <string name="cwac_colormixer_set">设置</string>
+  <string name="cwac_colormixer_cancel">取消</string>
+</resources>

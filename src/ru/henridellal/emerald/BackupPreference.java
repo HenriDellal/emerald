@@ -12,7 +12,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 
 public class BackupPreference extends DialogPreference {
-	FileLoaderDialog dialog;
+	private FileLoaderDialog dialog;
 	public BackupPreference(Context c) {
 		this(c, null);
 	}

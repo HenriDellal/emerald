@@ -20,10 +20,12 @@
 			android:onClick="onMyClick"
 			android:background="@drawable/menu_bg"
 			android:layout_alignParentLeft="true" />
-		<Spinner
-			android:id="@+id/category"
+		<Button
+			android:id="@+id/category_button"
 			android:layout_width="0dp"
 			android:layout_height="40dp"
+			android:onClick="onMyClick"
+			android:background="@drawable/button_background"
 			android:layout_toLeftOf="@+id/searchButton"
 			android:layout_toRightOf="@id/menuButton"
 			android:layout_marginLeft="5dp"
@@ -57,7 +59,7 @@
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:visibility="gone"
-			android:textSize="14sp"
+			android:textSize="18sp"
 			android:layout_alignParentLeft="true"
 			android:layout_toStartOf="@id/searchBar"
 			android:layout_toLeftOf="@id/webSearchButton" />

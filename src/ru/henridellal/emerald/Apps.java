@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-//import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.Notification;
@@ -18,11 +17,9 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-//import android.content.pm.ActivityInfo;
-//import android.content.pm.PackageManager;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
-//import android.content.res.Resources;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
@@ -33,32 +30,27 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 //import android.util.Log;
-//import android.view.animation.Animation;
-//import android.view.animation.AnimationUtils;
-//import android.view.GestureDetector;
-//import android.view.GestureDetector.OnGestureListener;
+import android.view.GestureDetector;
 import android.view.inputmethod.InputMethodManager;
 import android.view.LayoutInflater;
 import android.view.KeyEvent;
-//import android.view.KeyCharacterMap;
+import android.view.MotionEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
-//import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-public class Apps extends Activity //implements OnGestureListener 
+public class Apps extends Activity
 {
+	private GestureDetector gestureDetector;
 	private CategoryManager categories;
 	private ArrayList<AppData> curCatData;
 	private RelativeLayout mainLayout;
@@ -68,14 +60,13 @@ public class Apps extends Activity //implements OnGestureListener
 	public SharedPreferences options;
 	public static final String PREF_APPS = "apps";
 	public static final String APP_TAG = "Emerald";
-	private Spinner spin;
-	private CustomAdapter adapter = null;
+	private CustomAdapter adapter;
 	public static final int GRID = 0;
 	public static final int LIST = 1;
-	private GetApps scanner = null;
+	private GetApps scanner;
 	private OnSharedPreferenceChangeListener prefListener;
-	private boolean lock, returnToHome, searchIsOpened, homeButtonPressed;
-	private int historySize, appShortcut;
+	private boolean lock, searchIsOpened, homeButtonPressed, modPressed;
+	private int historySize;
 	
 	public void loadList(boolean cleanCategory) {
 		ArrayList<AppData> data = new ArrayList<AppData>(); 
@@ -117,47 +108,8 @@ public class Apps extends Activity //implements OnGestureListener
 			categories.cleanCategories();
 
 		loadFilteredApps();
-		setSpinner();
 	}
-	public void setSpinner() {
-		//Log.v(APP_TAG, "Updating spinner");
-		final ArrayList<String> cats = new ArrayList<String>();
-		cats.addAll(categories.getCategories());
-		cats.remove(CategoryManager.HIDDEN);
-		ArrayAdapter<String> aa = new ArrayAdapter<String>(this, 
-				android.R.layout.simple_spinner_item,
-				cats);
-		//		aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		aa.setDropDownViewResource(R.layout.spinner_item);
-		spin.setAdapter(aa);
-		//Set chosen item of spinner
-		String cur = categories.getCurCategory();
-		int pos = -1;
-		for (int i = 0 ; i < cats.size(); i++ )
-			if ( cats.get(i).equals(cur)) {
-				pos = i;
-				break;
-			}
-
-		spin.setSelection(pos);
-
-		spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1,
-					int catNum, long arg3) {
-				//Log.v(APP_TAG, "selected from spinner");
-				String newCat = cats.get(catNum);
-				if (!newCat.equals(categories.getCurCategory())) {
-					categories.setCurCategory(newCat);
-					loadFilteredApps();
-				}
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
-	}
+	
 	public void changePrefsOnRotate() {
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 			//Log.v(APP_TAG, "loadFilteredApps : Portrait orientation");
@@ -196,6 +148,9 @@ public class Apps extends Activity //implements OnGestureListener
 		curCatData = categories.filterApps(map);
 		//Log.v(APP_TAG, "filtered");
 		adapter.update(curCatData);
+		if (!options.getBoolean(Keys.HIDE_MAIN_BAR, false)) {
+			((Button)findViewById(R.id.category_button)).setText(categories.getCategory(categories.getCurCategory()).getRepresentName(this));
+		}
 		//Log.v(APP_TAG, "loadFilteredApps : finished");
 	}
 	//handles history filling
@@ -203,19 +158,16 @@ public class Apps extends Activity //implements OnGestureListener
     //removes app from history if it is already in it
     // to avoid duplicating
     	//Log.v(APP_TAG, "Add app in history");
-		if (categories.getCategoryData(CategoryManager.HISTORY).indexOf(a) != -1) {
-			categories.removeFromCategory(CategoryManager.HISTORY, a);
-		}
-    
-		categories.addToHistory(a);
-		//categories.addToCategory(Categories.HISTORY, a);
-    //removes old entries if History has maximum size
-		/*if (categories.getCategoryData(Categories.HISTORY).size() == 1) {
-			categories.unhideCategory(Categories.HISTORY);
-		}*/
-		if (categories.getCategoryData(CategoryManager.HISTORY).size() > historySize) {
-			categories.removeFromCategory(CategoryManager.HISTORY, categories.getCategoryData(CategoryManager.HISTORY).size()-1);
-		}
+    	if (!dock.hasApp(a)) {
+			if (categories.getCategoryData(CategoryManager.HISTORY).indexOf(a) != -1) {
+				categories.removeFromCategory(CategoryManager.HISTORY, a);
+			}
+			categories.addToHistory(a);
+	    	//removes old entries if History has maximum size
+			if (categories.getCategoryData(CategoryManager.HISTORY).size() > historySize) {
+				categories.removeFromCategory(CategoryManager.HISTORY, categories.getCategoryData(CategoryManager.HISTORY).size()-1);
+			}
+    	}
 	}
 	//launches app and adds it to history
 	public void launch(AppData a) {
@@ -234,6 +186,36 @@ public class Apps extends Activity //implements OnGestureListener
 		}
 	}
 
+	private void openCategoriesList() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setCancelable(true);
+		final ArrayList<String> cats = new ArrayList<String>(categories.getCategories());
+		cats.remove(CategoryManager.HIDDEN);
+		ArrayList<String> toRemove = new ArrayList<String>();
+		for (String category: cats) {
+			if (categories.getCategory(category).isHidden())
+				toRemove.add(category);
+		}
+		cats.removeAll(toRemove);
+		toRemove = null;
+		final ArrayList<String> categoriesNames = new ArrayList<String>(cats.size());
+		for (String category: cats) {
+			categoriesNames.add(categories.getCategory(category).getRepresentName(this));
+		}
+		builder.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, categoriesNames), 
+			new DialogInterface.OnClickListener(){
+			@Override
+			public void onClick(DialogInterface di, int catNum) {
+				String newCat = cats.get(catNum);
+				if (!newCat.equals(categories.getCurCategory())) {
+					categories.setCurCategory(newCat);
+					loadFilteredApps();
+				}
+			}
+		});
+		if (!isFinishing())
+			builder.create().show();
+	}
 	//launches popup window for editing apps
 	private void itemEdit(final AppData item) {
 		//Log.v(APP_TAG, "Open app edit window");
@@ -245,20 +227,26 @@ public class Apps extends Activity //implements OnGestureListener
 
 		ArrayList<String> editableCategories =  categories.getEditableCategories();
 		final int nCategories = editableCategories.size();
+		ArrayList<String> editableCategoriesNames = new ArrayList<String>(nCategories);
 		final int position = grid.getFirstVisiblePosition();
-
+		for (String category: editableCategories) {
+			editableCategoriesNames.add(categories.getCategory(category).getRepresentName(this));
+		}
 		if (nCategories > 0) {
-			final String[] editableCategoryNames = new String[nCategories];
-			editableCategories.toArray(editableCategoryNames);
+			final String[] editableCategoriesArray = new String[nCategories];
+			editableCategories.toArray(editableCategoriesArray);
+			final String[] editableCategoriesNamesArray = new String[nCategories];
+			editableCategoriesNames.toArray(editableCategoriesNamesArray);
+			
 			final boolean[] checked = new boolean[nCategories];			
 
 			for (int i = 0; i < nCategories ; i++) {
-				checked[i] = categories.in(item, editableCategoryNames[i]);
+				checked[i] = categories.in(item, editableCategoriesArray[i]);
 			}
 
 			final boolean[] oldChecked = checked.clone();
 
-			builder.setMultiChoiceItems(editableCategoryNames, checked, 
+			builder.setMultiChoiceItems(editableCategoriesNamesArray, checked, 
 				new DialogInterface.OnMultiChoiceClickListener() {							
 				@Override
 				public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -269,9 +257,9 @@ public class Apps extends Activity //implements OnGestureListener
 				public void onClick(DialogInterface arg0, int arg1) {
 					for (int i = 0 ; i < nCategories ; i++) {
 						if (checked[i] && ! oldChecked[i])
-							categories.addToCategory(editableCategoryNames[i], item);
+							categories.addToCategory(editableCategoriesArray[i], item);
 						else if (!checked[i] && oldChecked[i])
-							categories.removeFromCategory(editableCategoryNames[i], item);
+							categories.removeFromCategory(editableCategoriesArray[i], item);
 					}
 					loadFilteredApps();
 					grid.setSelection(position);
@@ -336,6 +324,7 @@ public class Apps extends Activity //implements OnGestureListener
 					case 5:
 						Intent intent = new Intent(Apps.this, ChangeIconActivity.class);
 						intent.putExtra(ChangeIconActivity.COMPONENT_NAME, item.getComponent());
+						intent.putExtra(ChangeIconActivity.SHORTCUT_NAME, item.name);
 						startActivity(intent);
 						break;
 				}
@@ -344,20 +333,7 @@ public class Apps extends Activity //implements OnGestureListener
 		if (!isFinishing())
 			builder.create().show();
 	}
-//	@Override
-//	public boolean dispatchKeyEvent(KeyEvent event) {
-//		Log.v(APP_TAG, "key "+event);
-//		if (event.getKeyCode() == KeyEvent.KEYCODE_HOME &&
-//				event.getAction() == KeyEvent.ACTION_UP &&
-//				event.getDownTime() < 500) {
-//			categories.setCurCategory(Categories.ALL);
-//			categories.clearHistory();
-//			loadFilteredApps();
-//			setSpinner();
-//			return true;			
-//		}
-//		return super.dispatchKeyEvent(event);
-//	}
+	
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		//Log.v(APP_TAG, "Configuration changed");
@@ -366,7 +342,7 @@ public class Apps extends Activity //implements OnGestureListener
 		loadFilteredApps();
 	}
 	
-	void menu() {
+	private void menu() {
 		//Log.v(APP_TAG, "Trying to open menu");
 		if (lock) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -393,6 +369,14 @@ public class Apps extends Activity //implements OnGestureListener
 			openOptionsMenu();
 		}
 	}
+	private boolean isDefaultLauncher() {
+		final Intent intent = new Intent(Intent.ACTION_MAIN);
+		intent.addCategory(Intent.CATEGORY_HOME);
+		final ResolveInfo resolveInfo =
+				getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        return resolveInfo != null &&
+				getPackageName().equals(resolveInfo.activityInfo.packageName);
+	}
 	
 	protected void onMenuButton(View v) {
 		menu();
@@ -412,6 +396,9 @@ public class Apps extends Activity //implements OnGestureListener
 		//Log.v(APP_TAG, "Start searching");
 		categories.setCurCategory(CategoryManager.ALL);
 		loadFilteredApps();
+		if (options.getBoolean(Keys.HIDE_MAIN_BAR, false)) {
+			findViewById(R.id.main_bar).setVisibility(View.VISIBLE);
+		}
 		findViewById(R.id.tabs).setVisibility(View.GONE);
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		if (imm != null) {
@@ -452,16 +439,26 @@ public class Apps extends Activity //implements OnGestureListener
 		findViewById(R.id.searchBar).setVisibility(View.GONE);
 		findViewById(R.id.webSearchButton).setVisibility(View.GONE);
 		text.setVisibility(View.GONE);
-		findViewById(R.id.tabs).setVisibility(View.VISIBLE);
+		hideMainBarIfNeeded();
 		if (!dock.isEmpty()) {
 			dock.unhide();
 		}
 		searchIsOpened=false;
 	}
+	private void hideMainBarIfNeeded() {
+		if (options.getBoolean(Keys.HIDE_MAIN_BAR, false)) {
+			findViewById(R.id.main_bar).setVisibility(View.GONE);
+		} else {
+			findViewById(R.id.tabs).setVisibility(View.VISIBLE);
+		}
+	}
 	public void onMyClick(View v) {
 		switch(v.getId()) {
 			case R.id.searchButton:
 				openSearch();
+				break;
+			case R.id.category_button:
+				openCategoriesList();
 				break;
 			case R.id.menuButton:
 				menu();
@@ -469,11 +466,16 @@ public class Apps extends Activity //implements OnGestureListener
 			case R.id.quit_hidden_apps:
 				categories.setCurCategory(CategoryManager.ALL);
 				v.setVisibility(View.GONE);
-				findViewById(R.id.tabs).setVisibility(View.VISIBLE);
+				hideMainBarIfNeeded();
 				loadFilteredApps();
-				setSpinner();
 				break;
 		}
+	}
+	
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent event) {
+		gestureDetector.onTouchEvent(event);
+		return super.dispatchTouchEvent(event);
 	}
 	
 	@Override
@@ -485,19 +487,56 @@ public class Apps extends Activity //implements OnGestureListener
 			//Log.v(APP_TAG, "BACK pressed");
 			if (searchIsOpened) {
 				closeSearch();
-			}
-			if (categories.getCurCategory().equals(CategoryManager.HIDDEN)) {
-				findViewById(R.id.quit_hidden_apps).setVisibility(View.GONE);
-				findViewById(R.id.tabs).setVisibility(View.VISIBLE);
-				categories.setCurCategory(CategoryManager.ALL);
+			} else if (!isDefaultLauncher()) {
+				moveTaskToBack(false);
+				return true;
 			} else {
+				if (categories.getCurCategory().equals(CategoryManager.HIDDEN)) {
+					findViewById(R.id.quit_hidden_apps).setVisibility(View.GONE);
+					hideMainBarIfNeeded();
+				}
 				categories.prevCategory();
 			}
 			loadFilteredApps();
-			setSpinner();
 			return true;
+		} else if (KeyEvent.isModifierKey(keyCode)) {
+			modPressed = !modPressed;
+			return true;
+		} else if (modPressed && getCurrentFocus().getId() != R.id.textField) {
+			if (keyCode >= KeyEvent.KEYCODE_1 && keyCode <= KeyEvent.KEYCODE_9) {
+				AppData app = dock.getApp(keyCode-KeyEvent.KEYCODE_1);
+				if (app != null) {
+					launch(app);
+					return true;
+				} else {
+					return false;
+				}
+			} else if (keyCode == KeyEvent.KEYCODE_0 && !searchIsOpened) {
+				openSearch();
+			} else if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
+				categories.setCurCategory(categories.getCategory(CategoryManager.PREVIOUS));
+				loadFilteredApps();
+			} else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+				categories.setCurCategory(categories.getCategory(CategoryManager.NEXT));
+				loadFilteredApps();
+			} else if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+				openCategoriesList();
+			}
+			return true;
+		} else if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) {
+			View view = getCurrentFocus();
+			if (view != null) {
+				Object viewTag = view.getTag();
+				if (viewTag instanceof AppData) {
+					launch((AppData)viewTag);
+					return true;
+				}
+				return false;
+			}
+			return false;
+		} else {
+			return false;
 		}
-		return false;
 	}
 	
 	@Override
@@ -505,7 +544,6 @@ public class Apps extends Activity //implements OnGestureListener
 	
 	@Override
 	protected void onStop() {
-		returnToHome = true;
 		super.onStop();
 	}
 	
@@ -513,7 +551,7 @@ public class Apps extends Activity //implements OnGestureListener
 	protected void onPause() {
 		//Log.v(APP_TAG, "onPause");
 		super.onPause();
-		returnToHome = false;
+		modPressed = false;
 		if (searchIsOpened) {
 			closeSearch();
 		}
@@ -523,6 +561,7 @@ public class Apps extends Activity //implements OnGestureListener
 		//Log.v(APP_TAG, "onDestroy");
 		options.unregisterOnSharedPreferenceChangeListener(prefListener);
 		grid.setOnScrollListener(null);
+		grid.setOnTouchListener(null);
 		prefListener = null;
 		super.onDestroy();
 	}
@@ -534,11 +573,9 @@ public class Apps extends Activity //implements OnGestureListener
 		if (categories == null) {
 			loadList(false);
 		}
-		if (returnToHome) {
-			categories.setCurCategory(categories.getHome());
-		} else if (categories.getCurCategory().equals(CategoryManager.HIDDEN)) {
+		if (categories.getCurCategory().equals(CategoryManager.HIDDEN)) {
 			findViewById(R.id.quit_hidden_apps).setVisibility(View.GONE);
-			findViewById(R.id.tabs).setVisibility(View.VISIBLE);
+			hideMainBarIfNeeded();
 			categories.setCurCategory(categories.getHome());
 		} else if (categories.getCurCategory().equals(categories.getHome())) {
 			String newCategory = options.getString(Keys.HOME_BUTTON, "");
@@ -551,7 +588,6 @@ public class Apps extends Activity //implements OnGestureListener
 			categories.setCurCategory(categories.getHome());
 		}
 		loadFilteredApps();
-		setSpinner();
 		super.onNewIntent(i);
 	}
 	
@@ -583,17 +619,22 @@ public class Apps extends Activity //implements OnGestureListener
 			layoutParams.addRule(RelativeLayout.ABOVE, R.id.main_bar);
 			grid.setLayoutParams(layoutParams);
 			mainLayout.addView(grid);
+			
 		} else {
 			layoutParams = new RelativeLayout.LayoutParams(mainBar.getLayoutParams());
 			layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
 			mainBar.setLayoutParams(layoutParams);
 			mainLayout.addView(mainBar);
-			
+				
 			layoutParams = new RelativeLayout.LayoutParams(grid.getLayoutParams());
 			layoutParams.addRule(RelativeLayout.ABOVE, R.id.dock_bar);
 			layoutParams.addRule(RelativeLayout.BELOW, R.id.main_bar);
 			grid.setLayoutParams(layoutParams);
 			mainLayout.addView(grid);
+			
+		}
+		if (options.getBoolean(Keys.HIDE_MAIN_BAR, false)) {
+			mainBar.setVisibility(View.GONE);
 		}
 		mainBar.setBackgroundColor(options.getInt(Keys.BAR_BACKGROUND, 0x22000000));
 		grid.setBackgroundColor(options.getInt(Keys.APPS_WINDOW_BACKGROUND, 0));
@@ -628,14 +669,14 @@ public class Apps extends Activity //implements OnGestureListener
 			Notification noti = new Notification.Builder(this)
 				.setContentTitle("Emerald")
 				.setContentText(" ")
-				.setSmallIcon(R.drawable.icon)
+				.setSmallIcon(R.mipmap.icon)
 			//	.setLargeIcon(new Bitmap(Bitmap.ARGB_8888))
 				.build();
 			NotificationManager notiManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 			notiManager.notify(0, noti);
 		}
 		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		setRequestedOrientation(Integer.parseInt(options.getString(Keys.ORIENTATION, "1")));
+		setRequestedOrientation(Integer.parseInt(options.getString(Keys.ORIENTATION, "2")));
 		setContentView(mainLayout);
 		options.edit().putBoolean(Keys.MESSAGE_SHOWN, false).commit();
 		prefListener = new OnSharedPreferenceChangeListener() {
@@ -650,7 +691,6 @@ public class Apps extends Activity //implements OnGestureListener
 					scanner = new GetApps(Apps.this);
 					scanner.execute(true);
 					loadFilteredApps();
-					setSpinner();
 				} else if (key.equals(Keys.DIRTY) && sharedPreferences.getBoolean(Keys.DIRTY, false)) {
 					if (scanner == null || scanner.getStatus() != AsyncTask.Status.RUNNING) {
 						scanner = new GetApps(Apps.this);
@@ -669,9 +709,12 @@ public class Apps extends Activity //implements OnGestureListener
 		Themer.applyTheme(this, options);
 		dock = new Dock(this);
 		changePrefsOnRotate();
-		
-		spin = (Spinner)findViewById(R.id.category);
-		spin.setOnTouchListener(new SwipeListener(this));
+		gestureDetector = new GestureDetector(this, new SwipeListener(this));
+		grid.setOnTouchListener(new View.OnTouchListener() {
+			public boolean onTouch(View view, MotionEvent event) {
+				return gestureDetector.onTouchEvent(event);
+			}
+		});
 	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -696,6 +739,9 @@ public class Apps extends Activity //implements OnGestureListener
 			categories.setCurCategory(CategoryManager.HIDDEN);
 			findViewById(R.id.searchBar).setVisibility(View.GONE);
 			findViewById(R.id.tabs).setVisibility(View.GONE);
+			if (options.getBoolean(Keys.HIDE_MAIN_BAR, false)) {
+				findViewById(R.id.main_bar).setVisibility(View.VISIBLE);
+			}
 			findViewById(R.id.quit_hidden_apps).setVisibility(View.VISIBLE);
 			if (searchIsOpened) {
 				closeSearch();
@@ -717,7 +763,8 @@ public class Apps extends Activity //implements OnGestureListener
 	protected void onResume() {
 		super.onResume();
 		//Log.v(APP_TAG, "onResume");
-		appShortcut = Integer.parseInt(options.getString(Keys.APP_SHORTCUT, "3"));
+		
+		int appShortcut = Integer.parseInt(options.getString(Keys.APP_SHORTCUT, "3"));
 	    lock = options.getString(Keys.PASSWORD, "").length() > 0;
 	    if (!homeButtonPressed) {
 	    	loadList(false);
@@ -739,12 +786,10 @@ public class Apps extends Activity //implements OnGestureListener
 			}
 		}
 
-		if (needReload || options.getBoolean(Keys.DIRTY, false)) {
-			//			Log.v(APP_TAG, "scan");
-			if (scanner == null || scanner.getStatus() != Status.RUNNING) {
-				scanner = new GetApps(this);
-				scanner.execute(false);
-			}
+		if ((needReload || options.getBoolean(Keys.DIRTY, false))
+			&& (scanner == null || scanner.getStatus() != Status.RUNNING)) {
+			scanner = new GetApps(this);
+			scanner.execute(false);
 		}
 		historySize = options.getInt(Keys.HISTORY_SIZE, 10);
 		boolean historySizeChanged = false;

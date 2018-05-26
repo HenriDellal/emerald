@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">Emerald Launcher</string>
-	<string name="set_as_default">Set as default launcher</string>
 	<string name="appearancePrefs">Appearance preferences</string>
 	<string name="portraitPrefs">Portrait mode preferences</string>
 	<string name="landscapePrefs">Landscape mode preferences</string>
 	
 	<string name="home_button">Home button behaviour</string>
 	<string name="categoryManager">Category manager</string>
+	<string name="category_all">All apps</string>
+	<string name="category_unclassified">Unclassified</string>
+	<string name="category_history">History</string>
+	<string name="category_hidden">Hidden</string>
+	<string name="delete_category_question">Do you want to delete the category?</string>
+	<string name="clear_category_question">Do you want to clear the category?</string>
 	<string name="appShortcut">App shortcut</string>
 	<string name="iconSize">Icon size</string>
 	<string name="textSize">Text size</string>
@@ -15,9 +20,10 @@
 	<string name="columnWidth">Column width</string>
 	<string name="verticalSpacing">Vertical spacing</string>
 	<string name="tileView">Grid</string>
+	<string name="hide_main_bar">Hide main bar</string>
 	<string name="bottom_main_bar">Main bar at the bottom</string>
 	<string name="stack_from_bottom">Stick category content to the bottom</string>
-	<string name="scrollbar">Show letter hint on scroll</string>
+	<string name="scrollbar">Fast scroll</string>
 	<string name="orientation">Screen orientation</string>
 	<string name="theme">Theme</string>
 	<string name="ui_colors">UI colors</string>
@@ -46,6 +52,7 @@
 	<string name="launcherSettings">Launcher settings</string>
 	
 	<string name="createCategory">Create category</string>
+	<string name="note_rename_error">Name is already in use</string>
 	<string name="rename">Rename</string>
 	<string name="editAppList">Edit application list</string>
 	<string name="findInMarket">Find in app market</string>
@@ -75,7 +82,8 @@
 	<string name="remove_from_dock">Remove from dock</string>
 	<string name="reset_icon">Reset icon</string>
 	<string name="change_icon">Change icon</string>
-	<string name="change_icon_question">Do you want to change the icon?</string>
+	<string name="change_icon_title">Change icon of %s</string>
+	<string name="change_icon_question">Do you want to change the icon of %s?</string>
 	<string name="search_icon_hint">Search icon by package name</string>
 	<string name="uninstall">Uninstall</string>
 	
@@ -84,7 +92,7 @@
 	<string name="close_tutorial">Close tutorial</string>
 	
 	
-<string name="tutorial">Swipe on the category name to switch to the next/previous category. Click on it to see the full list of categories.
+<string name="tutorial">Swipe left/right on the apps menu to switch to the next/previous category. Click on the category name to see the categories list.
 \n
 \nOpen Launcher settings/Category manager to edit categories.
 \n
@@ -104,25 +112,32 @@
 \nLicensed under GPL-v3
 \nWant to help? Report bugs and submit suggestions via GitHub (https://www.github.com/HenriDellal/emerald) or Google Play listing(http://play.google.com/details?id=ru.henridellal.emerald).
 \n
-\nThanks to:
-\nTheAlaskaLinuxUser (http://thealaskalinuxuser.wordpress.com) for tests and bug fixes.
-\nMaxim Kerekesha for Ukrainian translation.
-\nDaria Szatan (https://github.com/bla-ke) for Polish translation.
-\nThomas Blankenburg for German translation and tests.
-\nDavid Smit for Dutch translation and continuous help.
+\n<b>Thanks to:</b>
+\n<b>TheAlaskaLinuxUser</b> (http://thealaskalinuxuser.wordpress.com) for tests and bug fixes.
+\n<b>Maxim Kerekesha</b> for Ukrainian translation.
+\n<b>Daria Szatan</b> (https://github.com/bla-ke) for Polish translation.
+\n<b>Thomas Blankenburg</b> for German translation and tests.
+\n<b>David Smit</b> (https://github.com/heycrip) for Dutch translation and continuous help.
+\n<b>Monyxie</b> (https://github.com/monyxie) for Simplified Chinese translation.
+\n<b>Fijar</b> (https://github.com/f1j4r) for Indonesian translation.
+\n<b>Lowlevel</b> (https://steemit.com/@lowlevel) for the launcher icon.
 \nAll contributors.
 \n
-\nTinyLaunch
+\n<b>TinyLaunch</b>
 \nCopyright (c) 2011-12, Alexander R. Pruss
 \nLicensed under BSD-3-Clause
 \nhttps://github.com/arpruss/tinylaunch
 \n
-\nCWAC ColorMixer
-\n
+\n<b>CWAC ColorMixer</b>
 \nLicensed under the Apache License 2.0.
 \nhttps://github.com/commonsguy/cwac-colormixer
 \n
-\nFont-Awesome
+\n<b>Hayai Launcher</b>
+\nCopyright 2015 Hayai Software
+\nLicensed under the Apache License 2.0.
+\nhttps://github.com/seizonsenryaku/HayaiLauncher
+\n
+\n<b>Font-Awesome</b>
 \nThe font licensed under the SIL OFL 1.1.
 \nhttp://fontawesome.io/</string>
 

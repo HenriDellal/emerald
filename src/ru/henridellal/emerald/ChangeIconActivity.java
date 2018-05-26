@@ -30,16 +30,18 @@ import java.util.ArrayList;
 
 public class ChangeIconActivity extends Activity{
 	public final static String COMPONENT_NAME = "ru.henridellal.emerald.component_name";
+	public final static String SHORTCUT_NAME = "ru.henridellal.emerald.shortcut_name";
 	private GridView iconGrid;
-	private EditText iconSearchBar;
 	private IconGridAdapter iconGridAdapter;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.change_icon_activity);
 		Intent intent = getIntent();
+		final String shortcutName = intent.getStringExtra(SHORTCUT_NAME);
+		setTitle(String.format(getResources().getString(R.string.change_icon_title), shortcutName));
+		setContentView(R.layout.change_icon_activity);
 		final String component = intent.getStringExtra(COMPONENT_NAME);
-		iconSearchBar = (EditText)findViewById(R.id.icon_search_bar);
+		EditText iconSearchBar = (EditText)findViewById(R.id.icon_search_bar);
 		final File customIconFile = MyCache.getCustomIconFile(this, component);
 		if (customIconFile.exists()) {
 			((Button)findViewById(R.id.reset_icon)).setEnabled(true);
@@ -58,7 +60,7 @@ public class ChangeIconActivity extends Activity{
 			);
 		}
 		iconGrid = (GridView)findViewById(R.id.icon_grid);
-		iconGridAdapter = new IconGridAdapter(this);
+		iconGridAdapter = new IconGridAdapter(this, shortcutName);
 		iconGridAdapter.setComponent(component);
 		iconGrid.setAdapter(iconGridAdapter);
 		iconSearchBar.addTextChangedListener(new TextWatcher() {
@@ -110,7 +112,7 @@ public class ChangeIconActivity extends Activity{
 			this.component = component;
 		}
 		
-		public IconGridAdapter(Context context) {
+		public IconGridAdapter(Context context, final String shortcutName) {
 			super();
 			Map<String, String> iconsList = LauncherApp.getInstance().getIconPackManager().getIcons();
 			Set<String> iconsSet = iconsList.keySet();
@@ -121,7 +123,7 @@ public class ChangeIconActivity extends Activity{
 				public void onClick(View view) {
 					final Object tag = view.getTag();
 					AlertDialog.Builder builder = new AlertDialog.Builder(ChangeIconActivity.this);
-					builder.setMessage("Do you want to change the icon?");
+					builder.setMessage(String.format(getResources().getString(R.string.change_icon_question), shortcutName));
 					builder.setPositiveButton(android.R.string.yes, 
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int which) {

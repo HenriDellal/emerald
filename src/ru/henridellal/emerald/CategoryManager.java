@@ -22,11 +22,15 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class CategoryManager {
-	SoftReference<Context> contextRef;
 	public static final String ALL = "All";
 	public static final String UNCLASSIFIED = "Unclassified";
 	public static final String HIDDEN = "Hidden";
 	public static final String HISTORY = "History";
+	
+	public static final byte PREVIOUS = 0;
+	public static final byte NEXT = 1;
+	
+	private SoftReference<Context> contextRef;
 	private String home;
 	private String curCategory;
 	private ArrayList<String> names;
@@ -45,7 +49,6 @@ public class CategoryManager {
 		names.add(UNCLASSIFIED);
 		names.add(HISTORY);
 		names.add(HIDDEN);
-
 		categories = new HashMap<String,Category>();
 	}
 	public String getHome() {
@@ -63,41 +66,26 @@ public class CategoryManager {
 	}
 	/*Functions for spinner. Return names of categories
 	which are neighbouring to the current*/
-	public String getPrevCategory() {
-		int result;
-		boolean finished = false;
+	public String getCategory(byte direction) {
 		if (!curCategory.equals(HIDDEN)) {
-			result = names.indexOf(curCategory);
+			int result = names.indexOf(curCategory);
+			boolean finished = false;
 			while (!finished) {
-				result--;
-				result = (result > -1) ? result : names.size()-2;
+				if (direction == PREVIOUS) {
+					result--;
+					result = (result > -1) ? result : names.size()-2;
+				} else {
+					result++;
+					result = (result < names.size()-1) ? result : 0;
+				}
 				if (!categories.get(names.get(result)).isHidden()) {
 					finished = true;
 				}
 			}
+			return names.get(result);
+		} else {
+			return null;
 		}
-		else {
-			result = 0;
-		}
-		return names.get(result);
-	}
-	public String getNextCategory() {
-		int result;
-		boolean finished = false;
-		if (!curCategory.equals(HIDDEN)) {
-			result = names.indexOf(curCategory);
-			while (!finished) {
-				result++;
-				result = (result < names.size()-1) ? result : 0;
-				if (!categories.get(names.get(result)).isHidden()) {
-					finished = true;
-				}
-			}
-		}
-		else {
-			result = 0;
-		}
-		return names.get(result);
 	}
 	public Category getCategory(String categoryName) {
 		return categories.get(categoryName);
@@ -119,19 +107,34 @@ public class CategoryManager {
 				//puts entries from cache to categories
 				if (isEditable(name)) {
 					if (isCustom(name)) {
-						names.add(name);
-						categories.put(name, new Category(name, getEntries(f)));
+						if (!names.contains(name)) {
+							names.add(name);
+							categories.put(name, new Category(name, getEntries(f)));
+						}
 					} else {
-						categories.put(name, new Category(name, getEntries(f), false));
+						int stringResourceId = 0;
+						if (HISTORY.equals(name)) {
+							stringResourceId = R.string.category_history;
+						} else if (HIDDEN.equals(name)) {
+							stringResourceId = R.string.category_hidden;
+						}
+						categories.put(name, new Category(name, getEntries(f), stringResourceId));
 					}
 				}
 				//sets category names
 			}
 		}
 		//if category has just created, it adds an empty category
-		for (String n : names) {
-			if (null == categories.get(n))
-				categories.put(n, new Category(n, new ArrayList<AppData>()));
+		for (String name : names) {
+			if (null == categories.get(name)) {
+				int stringResourceId = 0;
+				if (ALL.equals(name)) {
+					stringResourceId = R.string.category_all;
+				} else if (UNCLASSIFIED.equals(name)) {
+					stringResourceId = R.string.category_unclassified;
+				}
+				categories.put(name, new Category(name, new ArrayList<AppData>(), stringResourceId));
+			}
 		}
 		readCategoriesProps();
 	}
@@ -146,10 +149,6 @@ public class CategoryManager {
 		setHome(options.getString(Keys.HOME, ALL));
 		curCategory = options.getString(Keys.CATEGORY, ALL);
 	}
-	
-	/*public static void setHome(String cat) {
-		HOME = cat;
-	}*/
 	
 	/*Sets current category and saves its name in preferences*/
 	public void setCurCategory(String category) {
@@ -166,8 +165,11 @@ public class CategoryManager {
 	//sets previously chosen category as current
 	public void prevCategory() {
 		String c = popCategory();
-		if (c != null)
+		if (c != null) {
 			setCurCategory(c, false);
+		} else {
+			setCurCategory(home);
+		}
 	}
 	
 	private void pushCategory(String c) {
@@ -188,7 +190,7 @@ public class CategoryManager {
 				return c;
 			}
 		}
-		return ALL;
+		return home;
 //		return null;
 	}
 	
@@ -253,7 +255,7 @@ public class CategoryManager {
 		if (home.equals(catName)) {
 			setHome(ALL);
 		}
-		setCurCategory(ALL);
+		setCurCategory(home);
 	}
 	//makes the current category empty
 	public void clearCategory(String cat) {
@@ -380,21 +382,10 @@ public class CategoryManager {
 					key = d.substring(0, index).trim();
 					value = d.substring(index+1, d.length()).trim();
 					if (key.equals("hidden")) {
-						if (value.equals("true")) {
+						if ("true".equals(value)) {
 							c.hide();
 						} else {
 							c.unhide();
-						}
-					}
-					d = reader.readLine();
-					index = d.indexOf('=');
-					key = d.substring(0, index).trim();
-					value = d.substring(index+1, d.length()).trim();
-					if (key.equals("customName")) {
-						if (value.equals("true")) {
-							c.setCustom(true);
-						} else {
-							c.setCustom(false);
 						}
 					}
 				}
@@ -437,7 +428,7 @@ public class CategoryManager {
 		
 		if (!isEditable(curCategory)) {
 			data.addAll(map.values());
-			if (curCategory == UNCLASSIFIED) {
+			if (UNCLASSIFIED.equals(curCategory)) {
 				for (Category c : categories.values()) {
 					if (!c.getName().equals(HISTORY)) {
 						data.removeAll(c.getData());
@@ -502,7 +493,7 @@ public class CategoryManager {
 				return lhs.compareToIgnoreCase(rhs);
 			}});
 	}
-
+	
 	public ArrayList<String> getEditableCategories() {
 		ArrayList<String> customNames = new ArrayList<String>();
 		for (String s : names) {
@@ -528,19 +519,15 @@ public class CategoryManager {
 	public String getCurCategory() {
 		return curCategory;
 	}
-	
 	public void hide(String catName) {
-		categories.get(catName).hide();
-		if (home.equals(catName)) {
-			setHome(ALL);
+		if (catName.equals(getCurCategory())) {
+			setCurCategory(home);
 		}
+		categories.get(catName).hide();
 		writeCategoriesProps();
 	}
 	public void unhide(String catName) {
 		categories.get(catName).unhide();
-		if (catName.equals(getCurCategory())) {
-			setCurCategory(ALL);
-		}
 		writeCategoriesProps();
 	}
 	//returns true if rename was successful
@@ -562,9 +549,13 @@ public class CategoryManager {
 		categories.put(newName, c);
 		names.remove(cat);
 		names.add(newName);
+		c.setName(newName);
 		sortNames();
 		writeCategoriesProps();
 		setCurCategory(ALL);
+		if (cat.equals(home)) {
+			setHome(newName);
+		}
 		return true;
 	}
 

@@ -25,6 +25,7 @@
   <string name="stack_from_bottom">Penyesuaian konten kategori ke bawah</string>
   <string name="scrollbar">Gulir cepat</string>
   <string name="orientation">Orientasi layar</string>
+
   <string name="theme">Tema</string>
   <string name="ui_colors">Warna UI</string>
   <string name="appsBackground">Jendela aplikasi</string>
@@ -104,45 +105,5 @@
 \n
 \nTekan tombol kembali untuk beralih ke kategori yang sebelumnya dibuka.
 </string>
-	
-<string name="about" translatable="false">Emerald Launcher
-\n
-\nCopyright 2018 Anri Dellal
-\n
-\nLicensed under GPL-v3
-\nWant to help? Report bugs and submit suggestions via GitHub (https://www.github.com/HenriDellal/emerald) or Google Play listing(http://play.google.com/details?id=ru.henridellal.emerald).
-\n
-\n<b>Thanks to:</b>
-\n<b>TheAlaskaLinuxUser</b> (http://thealaskalinuxuser.wordpress.com) for tests and bug fixes.
-\n<b>Maxim Kerekesha</b> for Ukrainian translation.
-\n<b>Daria Szatan</b> (https://github.com/bla-ke) for Polish translation.
-\n<b>Thomas Blankenburg</b> for German translation and tests.
-\n<b>David Smit</b> (https://github.com/heycrip) for Dutch translation and continuous help.
-\n<b>Monyxie</b> (https://github.com/monyxie) for Simplified Chinese translation.
-\n<b>Fijar</b> (https://github.com/f1j4r) for Indonesian translation.
-\n<b>Lowlevel</b> (https://steemit.com/@lowlevel) for the launcher icon.
-\nAll contributors.
-\n
-\n<b>TinyLaunch</b>
-\nCopyright (c) 2011-12, Alexander R. Pruss
-\nLicensed under BSD-3-Clause
-\nhttps://github.com/arpruss/tinylaunch
-\n
-\n<b>CWAC ColorMixer</b>
-\nLicensed under the Apache License 2.0.
-\nhttps://github.com/commonsguy/cwac-colormixer
-\n
-\n<b>Hayai Launcher</b>
-\nCopyright 2015 Hayai Software
-\nLicensed under the Apache License 2.0.
-\nhttps://github.com/seizonsenryaku/HayaiLauncher
-\n
-\n<b>Font-Awesome</b>
-\nThe font licensed under the SIL OFL 1.1.
-\nhttp://fontawesome.io/</string>
 
-	<!-- DEFAULT VALUES FOR SETTINGS -->
-	
-	<string name="defaultThemeValue" translatable="false">1</string>
-	
 </resources>
