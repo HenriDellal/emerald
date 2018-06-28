@@ -5,12 +5,15 @@
 	<style name="AppTheme.Preferences.Dark" parent="@android:style/Theme.Material">
 	</style>-->
 	<style name="AppTheme.Light" parent="@android:style/Theme.Material.Light.NoActionBar">
+		<item name="android:windowTranslucentNavigation">true</item>
+		<item name="android:fitsSystemWindows">true</item>
 	</style>
 	<style name="AppTheme.Dark" parent="@android:style/Theme.Material.NoActionBar">
+		<item name="android:windowTranslucentNavigation">true</item>
+		<item name="android:fitsSystemWindows">true</item>
 	</style>
 	<style name="AppTheme.Dark.Wallpaper" parent="AppTheme.Dark">
 		<item name="android:windowDrawsSystemBarBackgrounds">true</item>
-		<item name="android:windowTranslucentNavigation">false</item>
 		<item name="android:windowTranslucentStatus">false</item>
 		<item name="android:windowBackground">@android:color/transparent</item>
 		<item name="android:statusBarColor">@android:color/transparent</item>
@@ -19,7 +22,6 @@
 	</style>
 	<style name="AppTheme.Light.Wallpaper" parent="AppTheme.Light">
 		<item name="android:windowDrawsSystemBarBackgrounds">true</item>
-		<item name="android:windowTranslucentNavigation">false</item>
 		<item name="android:windowTranslucentStatus">false</item>
 		<item name="android:windowBackground">@android:color/transparent</item>
 		<item name="android:statusBarColor">@android:color/transparent</item>
