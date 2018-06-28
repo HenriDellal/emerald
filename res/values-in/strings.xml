@@ -1,82 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="set_as_default">Jadikan sebagai peluncur baku</string>
+  <string name="app_name">Peluncur Emerald</string>
   <string name="appearancePrefs">Preferensi penampilan</string>
-  <string name="portraitPrefs">Preferensi modus potret</string>
-  <string name="landscapePrefs">Preferensi modus lansekap</string>
-  <string name="home_button">Perilaku tombol rumah</string>
+  <string name="portraitPrefs">Preferensi mode potret</string>
+  <string name="landscapePrefs">Preferensi mode lansekap</string>
+  
+  <string name="home_button">Perilaku tombol beranda</string>
   <string name="categoryManager">Pengelolah kategori</string>
+  <string name="category_all">Semua aplikasi</string>
+  <string name="category_unclassified">Tidak diklasifikasikan</string>
+  <string name="category_history">Riwayat</string>
+  <string name="category_hidden">Sembunyikan</string>
+  <string name="delete_category_question">Apakah Anda ingin menghapus kategori?</string>
+  <string name="clear_category_question">Apakah Anda ingin menghapus kategori?</string>
   <string name="appShortcut">Pintasan aplikasi</string>
   <string name="iconSize">Ukuran ikon</string>
   <string name="textSize">Ukuran teks</string>
-  <string name="fontStyle">Gaya huruf</string>
+  <string name="fontStyle">Gaya font</string>
   <string name="columnWidth">Lebar kolom</string>
   <string name="verticalSpacing">Jarak vertikal</string>
   <string name="tileView">Grid</string>
-  <string name="bottom_main_bar">Bar utama dibagian bawah</string>
-  <string name="stack_from_bottom">Penyesuaian kategori konten ke bagian bawah</string>
-  <string name="scrollbar">Perlihatkan huruf ketika menggulir</string>
-  <string name="orientation">Perputaran layar</string>
+  <string name="hide_main_bar">Sembunyikan bilah utama</string>
+  <string name="bottom_main_bar">Bar utama di bagian bawah</string>
+  <string name="stack_from_bottom">Penyesuaian konten kategori ke bawah</string>
+  <string name="scrollbar">Gulir cepat</string>
+  <string name="orientation">Orientasi layar</string>
+
   <string name="theme">Tema</string>
   <string name="ui_colors">Warna UI</string>
   <string name="appsBackground">Jendela aplikasi</string>
   <string name="statusBarBackground">Status bar</string>
-  <string name="barBackground">Bar atas</string>
-  <string name="navBarBackground">Bar navogasi</string>
+  <string name="barBackground">Bar bagian atas</string>
+  <string name="navBarBackground">Bilah navigasi</string>
   <string name="iconPack">Paket ikon</string>
-  <string name="transformIcons">Mengubah ikon</string>
-  <string name="transformIconsSummary">Edit ikon berdasarkan pengaturan paket ikon</string>
-  <string name="defaultIconPack">Baku</string>
-  <string name="fullscreen">Mode layar Penuh</string>
+  <string name="transformIcons">Ubah ikon</string>
+  <string name="transformIconsSummary">Edit ikon sesuai dengan pengaturan paket ikon</string>
+  <string name="defaultIconPack">Default</string>
+  <string name="fullscreen">Mode layar penuh</string>
   <string name="historySize">Ukuran riwayat</string>
   <string name="password">Kata sandi</string>
-  <string name="passwordSummary">Kunci pengaturan dan aplikasi tersembunyi</string>
-  <string name="passwordHint">Kosongkan untuk mematikan</string>
+  <string name="passwordSummary">Mengunci pengaturan dan aplikasi tersembunyi</string>
+  <string name="passwordHint">Biarkan kosong untuk menonaktifkan kunci</string>
   <string name="searchProvider">Penyedia pencarian</string>
-  <string name="keepInMemory">Keep in memory</string>
-  <string name="backupPrefs">Cadangkan preferensi</string>
-  <string name="successfulBackup">Mencadangkan selesai, file dapat ditemukan di</string>
-  <string name="successfulRestore">Mengembalikan berhasil</string>
-  <string name="restorePrefs">Mengembalikan preferensi</string>
+  <string name="keepInMemory">Tetapkan di memori ram</string>
+  <string name="backupPrefs">Preferensi cadangan</string>
+  <string name="successfulBackup">Pencadangan selesai. File cadangan dapat ditemukan di</string>
+  <string name="successfulRestore">Berhasil dipulihkan.</string>
+  <string name="restorePrefs">Pulihkan preferensi</string>
   <string name="restart">Mulai ulang peluncur</string>
-  <string name="restart_needed">Peluncur akan di mulai ulang</string>
+  <string name="restart_needed">Peluncur akan dimulai ulang</string>
+  
   <string name="launcherSettings">Pengaturan peluncur</string>
+  
   <string name="createCategory">Buat kategori</string>
-  <string name="rename">Namai ulang</string>
+  <string name="note_rename_error">Nama sudah digunakan</string>
+  <string name="rename">Ganti nama</string>
   <string name="editAppList">Edit daftar aplikasi</string>
   <string name="findInMarket">Temukan di play store</string>
   <string name="editAppCategories">Edit kategori aplikasi</string>
   <string name="delete">Hapus</string>
-  <string name="setHome">Set sebagai baku</string>
+  <string name="setHome">Jadikan sebagai rumah</string>
   <string name="hide">Sembunyikan</string>
   <string name="unhide">Tampilkan</string>
+  
   <string name="save_here">Simpan di folder ini</string>
-  <string name="dock_is_full">Dock penuh</string>
-  <string name="dock_preferences">Preferensi dock</string>
+  <string name="dock_is_full">Dock sudah penuh</string>
+  <string name="dock_preferences">Preferensi Dock</string>
   <string name="dock_height">Tinggi dock</string>
-  <string name="dock_icon_size">Ukuran ikon dock</string>
-  <string name="show_dock_in_landscape">Tampilkan dock dalam landskap mode</string>
+  <string name="dock_icon_size">Ukuran ikon dermaga</string>
+  <string name="show_dock_in_landscape">Tampilkan dock dalam mode lanskap</string>
   <string name="dock_background">Dock</string>
+  
   <string name="change_wallpaper">Ubah wallpaper</string>
   <string name="accessHidden">Akses aplikasi tersembunyi</string>
   <string name="quit_hidden_apps">Keluar dari aplikasi tersembunyi</string>
-  <string name="fullScan">Pemindaian aplikasi</string>
-  <string name="clear">Selesai</string>
-  <string name="wrong_password">Kata sandi salah</string>
-  <string name="type_password">Masukkan kata sandi</string>
+  <string name="fullScan">Memindai keseluruhan</string>
+  <string name="clear">Bersihkan</string>
+  <string name="wrong_password">Kata sandi salah.</string>
+  <string name="type_password">Ketik kata sandi</string>
+  
   <string name="add_to_dock">Tambahkan ke dock</string>
-  <string name="remove_from_dock">Hilangkan dari dock</string>
-  <string name="reset_icon">Reset ikon</string>
+  <string name="remove_from_dock">Hapus dari dock</string>
+  <string name="reset_icon">Setel ulang ikon</string>
   <string name="change_icon">Ubah ikon</string>
-  <string name="change_icon_question">Apakah Anda ingin mengubah ikon?</string>
-  <string name="search_icon_hint">Cari ikon berdasrkan nama paket</string>
+  <string name="change_icon_title">Ubah ikon dari %s</string>
+  <string name="change_icon_question">Apakah Anda ingin mengubah ikon %s?</string>
+  <string name="search_icon_hint">Cari ikon berdasarkan nama paket</string>
   <string name="uninstall">Uninstall</string>
+  
   <string name="aboutTitle">Tentang</string>
   <string name="how_to_use">Cara menggunakan</string>
   <string name="close_tutorial">Tutup tutorial</string>
-  <string name="tutorial">Usap pada nama kategori untuk beralih ke kategori sebelum/selanjutnya. Klik di atasnya untuk melihat daftar lengkap kategori.
+  
+  
+  <string name="tutorial">Usap ke kiri/kanan pada nama kategori untuk beralih ke kategori sebelum/selanjutnya. Klik di atasnya untuk melihat daftar lengkap kategori.
 \n
-\nBuka peluncur pengaturan / pengelolah kategori untuk mengedit kategori.
+\nBuka Pengaturan peluncur/Pengelolah kategori untuk mengedit kategori.
 \n
 \nKlik pada tombol cari untuk menelusuri melalui semua aplikasi (kecuali aplikasi tersembunyi). Untuk mencari di web, buka cari, ketik ... dan klik panah di kanan kolom teks.
 \n
