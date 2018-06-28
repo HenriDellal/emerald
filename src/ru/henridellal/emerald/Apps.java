@@ -38,6 +38,8 @@ import android.view.MotionEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -52,11 +54,11 @@ public class Apps extends Activity
 {
 	private GestureDetector gestureDetector;
 	private CategoryManager categories;
-	private ArrayList<AppData> curCatData;
+	private ArrayList<BaseData> curCatData;
 	private RelativeLayout mainLayout;
 	private GridView grid;
 	private Dock dock;
-	private Map<String,AppData> map;
+	private Map<String,BaseData> map;
 	public SharedPreferences options;
 	public static final String PREF_APPS = "apps";
 	public static final String APP_TAG = "Emerald";
@@ -69,31 +71,31 @@ public class Apps extends Activity
 	private int historySize;
 	
 	public void loadList(boolean cleanCategory) {
-		ArrayList<AppData> data = new ArrayList<AppData>(); 
+		ArrayList<BaseData> data = new ArrayList<BaseData>(); 
 		MyCache.read(this, GetApps.CACHE_NAME, data);
 		loadList(data, cleanCategory);
 	}
 	public Dock getDock() {
 		return dock;
 	}
-	public boolean hasApp(AppData app) {
+	public boolean hasApp(BaseData app) {
 		return (map.get(app.getComponent()) != null);
 	}
 	/*returns map with pairs of package names 
 	and AppData related to them*/
-	private Map<String, AppData> makeMap(ArrayList<AppData> data) {
-		Map<String, AppData> map = new HashMap<String, AppData>();
+	private Map<String, BaseData> makeMap(ArrayList<BaseData> data) {
+		Map<String, BaseData> map = new HashMap<String, BaseData>();
 
-		for (AppData a : data)
+		for (BaseData a : data)
 			map.put(a.getComponent(), a);
 		return map;
 	}
 
-	public void loadList(ArrayList<AppData> data, boolean cleanCategory) {
+	public void loadList(ArrayList<BaseData> data, boolean cleanCategory) {
 		loadList(makeMap(data), cleanCategory);
 	}
 
-	public void loadList(Map<String,AppData> map, boolean cleanCategory) {
+	public void loadList(Map<String, BaseData> map, boolean cleanCategory) {
 		this.map = map;
 
 		if (categories == null) {
@@ -154,7 +156,7 @@ public class Apps extends Activity
 		//Log.v(APP_TAG, "loadFilteredApps : finished");
 	}
 	//handles history filling
-	private void addInHistory(AppData a) {
+	private void addInHistory(BaseData a) {
     //removes app from history if it is already in it
     // to avoid duplicating
     	//Log.v(APP_TAG, "Add app in history");
@@ -178,6 +180,19 @@ public class Apps extends Activity
 		i.addCategory(Intent.CATEGORY_LAUNCHER);
 		i.setComponent(ComponentName.unflattenFromString(
 				a.getComponent()));
+		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+		try {
+			startActivity(i);
+		} catch (ActivityNotFoundException e) {
+			Toast.makeText(this, "Activity is not found", Toast.LENGTH_LONG).show();
+		}
+	}
+	public void launch(ShortcutData a) {
+		//Log.v(APP_TAG, "User launched an app");
+		if (!categories.in(a, CategoryManager.HIDDEN))
+			addInHistory(a);
+		Intent i = new Intent(Intent.ACTION_MAIN, Uri.fromParts(a.getIntent(), "", ""));
+		i.addCategory(Intent.CATEGORY_LAUNCHER);
 		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 		try {
 			startActivity(i);
@@ -217,7 +232,7 @@ public class Apps extends Activity
 			builder.create().show();
 	}
 	//launches popup window for editing apps
-	private void itemEdit(final AppData item) {
+	private void itemEdit(final BaseData item) {
 		//Log.v(APP_TAG, "Open app edit window");
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -322,6 +337,60 @@ public class Apps extends Activity
 						dock.update();
 						break;
 					case 5:
+						Intent intent = new Intent(Apps.this, ChangeIconActivity.class);
+						intent.putExtra(ChangeIconActivity.COMPONENT_NAME, item.getComponent());
+						intent.putExtra(ChangeIconActivity.SHORTCUT_NAME, item.name);
+						startActivity(intent);
+						break;
+				}
+			}
+		});
+		if (!isFinishing())
+			builder.create().show();
+	}
+	
+	public void itemContextMenu(final ShortcutData item) {
+		//Log.v(APP_TAG, "Open app edit window");
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+		builder.setTitle(item.name);
+		builder.setCancelable(true);
+		
+		String[] commands = new String[]{
+			getResources().getString(R.string.editAppCategories),
+			getResources().getString(R.string.uninstall),
+			(dock.hasApp(item)) ? 
+				getResources().getString(R.string.remove_from_dock): 
+				getResources().getString(R.string.add_to_dock),
+			getResources().getString(R.string.change_icon)
+		};
+		builder.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, commands),
+		new DialogInterface.OnClickListener(){
+			public void onClick(DialogInterface di, int which) {
+				Uri uri;
+				switch(which) {
+					case 0:
+						itemEdit(item);
+						break;
+					case 1:
+						uri = Uri.parse("package:"+ComponentName.unflattenFromString(
+							item.getComponent()).getPackageName());
+						startActivity(new Intent(Intent.ACTION_DELETE, uri));
+						break;
+					case 2:
+						if (dock.hasApp(item)) {
+							dock.remove(item);
+						} else {
+							if (!dock.isFull()) {
+								dock.add(item);
+							} else {
+								Toast.makeText(Apps.this, getResources().getString(R.string.dock_is_full), Toast.LENGTH_LONG).show();
+							}
+						}
+						dock.update();
+						break;
+					case 3:
 						Intent intent = new Intent(Apps.this, ChangeIconActivity.class);
 						intent.putExtra(ChangeIconActivity.COMPONENT_NAME, item.getComponent());
 						intent.putExtra(ChangeIconActivity.SHORTCUT_NAME, item.name);
@@ -488,7 +557,8 @@ public class Apps extends Activity
 			if (searchIsOpened) {
 				closeSearch();
 			} else if (!isDefaultLauncher()) {
-				moveTaskToBack(false);
+				finish();
+				//moveTaskToBack(false);
 				return true;
 			} else {
 				if (categories.getCurCategory().equals(CategoryManager.HIDDEN)) {
@@ -504,9 +574,13 @@ public class Apps extends Activity
 			return true;
 		} else if (modPressed && getCurrentFocus().getId() != R.id.textField) {
 			if (keyCode >= KeyEvent.KEYCODE_1 && keyCode <= KeyEvent.KEYCODE_9) {
-				AppData app = dock.getApp(keyCode-KeyEvent.KEYCODE_1);
+				Object app = dock.getApp(keyCode-KeyEvent.KEYCODE_1);
 				if (app != null) {
-					launch(app);
+					if (app instanceof AppData) {
+						launch((AppData)app);
+					} else if (app instanceof ShortcutData) {
+						launch((ShortcutData)app);
+					}
 					return true;
 				} else {
 					return false;
@@ -529,6 +603,9 @@ public class Apps extends Activity
 				Object viewTag = view.getTag();
 				if (viewTag instanceof AppData) {
 					launch((AppData)viewTag);
+					return true;
+				} else if (viewTag instanceof ShortcutData) {
+					launch((ShortcutData)viewTag);
 					return true;
 				}
 				return false;
@@ -593,9 +670,6 @@ public class Apps extends Activity
 	
 	private void layoutInit() {
 		mainLayout = new RelativeLayout(this);
-		if (Build.VERSION.SDK_INT >= 21) {
-			mainLayout.setFitsSystemWindows(true);
-		}
 		LayoutInflater layoutInflater = (LayoutInflater) 
 			this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
@@ -608,6 +682,7 @@ public class Apps extends Activity
 		
 		FrameLayout mainBar = (FrameLayout) layoutInflater.inflate(R.layout.main_bar, mainLayout, false);
 		grid = (GridView) layoutInflater.inflate(R.layout.apps_grid, mainLayout, false);
+		boolean kitkatNoImmersiveMode = (Build.VERSION.SDK_INT == 19 && !options.getBoolean(Keys.FULLSCREEN, false));
 		if (options.getBoolean(Keys.BOTTOM_MAIN_BAR, false)) {
 			layoutParams = new RelativeLayout.LayoutParams(mainBar.getLayoutParams());
 			layoutParams.addRule(RelativeLayout.ABOVE, R.id.dock_bar);
@@ -615,17 +690,36 @@ public class Apps extends Activity
 			mainLayout.addView(mainBar);
 			
 			layoutParams = new RelativeLayout.LayoutParams(grid.getLayoutParams());
-			layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+			//if (!kitkatNoImmersiveMode) {
+				layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+			//}
 			layoutParams.addRule(RelativeLayout.ABOVE, R.id.main_bar);
 			grid.setLayoutParams(layoutParams);
 			mainLayout.addView(grid);
-			
+			/*if (kitkatNoImmersiveMode) {
+				View fakeStatusBar = layoutInflater.inflate(R.layout.kitkat_status_bar, mainLayout, false);
+				fakeStatusBar.setBackgroundColor(options.getInt(Keys.STATUS_BAR_BACKGROUND, 0x22000000));
+				layoutParams = new RelativeLayout.LayoutParams(fakeStatusBar.getLayoutParams());
+				layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+				mainLayout.addView(fakeStatusBar);
+			}*/
 		} else {
-			layoutParams = new RelativeLayout.LayoutParams(mainBar.getLayoutParams());
-			layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+			/*if (kitkatNoImmersiveMode) {
+				View fakeStatusBar = layoutInflater.inflate(R.layout.kitkat_status_bar, mainLayout, false);
+				fakeStatusBar.setBackgroundColor(options.getInt(Keys.STATUS_BAR_BACKGROUND, 0x22000000));
+				layoutParams = new RelativeLayout.LayoutParams(fakeStatusBar.getLayoutParams());
+				layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+				mainLayout.addView(fakeStatusBar);
+				
+				layoutParams = new RelativeLayout.LayoutParams(mainBar.getLayoutParams());
+				layoutParams.addRule(RelativeLayout.BELOW, R.id.kitkat_status_bar);
+			} else {*/
+				layoutParams = new RelativeLayout.LayoutParams(mainBar.getLayoutParams());
+				layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+			//}
 			mainBar.setLayoutParams(layoutParams);
 			mainLayout.addView(mainBar);
-				
+			
 			layoutParams = new RelativeLayout.LayoutParams(grid.getLayoutParams());
 			layoutParams.addRule(RelativeLayout.ABOVE, R.id.dock_bar);
 			layoutParams.addRule(RelativeLayout.BELOW, R.id.main_bar);
@@ -658,8 +752,12 @@ public class Apps extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//Log.v(APP_TAG, "onCreate");
-		super.onCreate(savedInstanceState);
 		options = PreferenceManager.getDefaultSharedPreferences(this);
+		if (options.getBoolean(Keys.FULLSCREEN, false)) {
+			requestWindowFeature(Window.FEATURE_NO_TITLE);
+        	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		}
+		super.onCreate(savedInstanceState);
 		Themer.theme = Integer.parseInt(options.getString(Keys.THEME, getResources().getString(R.string.defaultThemeValue)));
 		layoutInit();
 		if (options.getBoolean(Keys.SHOW_TUTORIAL, true)) {
@@ -767,7 +865,11 @@ public class Apps extends Activity
 		int appShortcut = Integer.parseInt(options.getString(Keys.APP_SHORTCUT, "3"));
 	    lock = options.getString(Keys.PASSWORD, "").length() > 0;
 	    if (!homeButtonPressed) {
-	    	loadList(false);
+	    	try {
+	    		loadList(false);
+	    	} catch (Exception e) {
+	    		Toast.makeText(Apps.this, e.toString(), Toast.LENGTH_LONG).show();
+	    	}
 	    } else {
 	    	homeButtonPressed = false;
 	    }
@@ -791,6 +893,7 @@ public class Apps extends Activity
 			scanner = new GetApps(this);
 			scanner.execute(false);
 		}
+		//removes the oldest result from history
 		historySize = options.getInt(Keys.HISTORY_SIZE, 10);
 		boolean historySizeChanged = false;
 		while (categories.getCategoryData(CategoryManager.HISTORY).size() > historySize) {
@@ -801,5 +904,8 @@ public class Apps extends Activity
 			loadFilteredApps();
 		}
 		dock.initApps(map);
+		if (options.getBoolean(Keys.SHOW_KEYBOARD_ON_START, false)) {
+			openSearch();
+		}
 	}
 }

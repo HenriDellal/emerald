@@ -3,33 +3,12 @@ package ru.henridellal.emerald;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.Comparator;
 
-public class AppData implements Comparable<AppData> {
-	//component is a package name
-	private String component;
+public class AppData extends BaseData {
 	
-	//name is app name
-	public String name;
-
-	public String getComponent() {
-		return this.component;
-	}
 	//Constants for parsing
-	private static final String COMPONENT = "C";
-	private static final String NAME = "N";
-	
-	//app names comparator
-	public static final Comparator<AppData> NameComparator = 
-		new Comparator<AppData>() {
-
-		public int compare(AppData a, AppData b) {
-			return a.name.compareToIgnoreCase(b.name);
-		}
-	};
-	
-	public AppData() {			
-	}
+	public static final String COMPONENT = "C";
+	public static final String NAME = "N";
 	
 	@Override
 	public boolean equals(Object a) {
@@ -49,20 +28,29 @@ public class AppData implements Comparable<AppData> {
 			return ("AppData:"+component).hashCode();
 	}
 	
-	public AppData(String component, String name) {
-		this.component = component;
-		this.name = name;
+	public AppData() {
+		super();
 	}
 	
-	public void read(BufferedReader reader) throws IOException {
-		String component = reader.readLine();
+	public AppData(String component, String name) {
+		super(component, name);
+	}
+	
+	public void read(BufferedReader reader, String firstLineOfData){
+		try {
+			this.component = firstLineOfData.substring(1).trim();
+			this.name = readLine(reader, NAME).substring(1).trim();
+		} catch (IOException e) {
+		
+		}
+		/*String component = reader.readLine();
 		if (component == null || !component.startsWith(COMPONENT))
 			throw new IOException();
 		this.component = component.substring(1).trim();
 		String name = reader.readLine();
 		if (name == null || !name.startsWith(NAME))
 			throw new IOException();
-		this.name = name.substring(1).trim();
+		this.name = name.substring(1).trim();*/
 	}
 	//writes app data in given file writer
 	public void write(BufferedWriter writer) throws IOException {
@@ -74,8 +62,4 @@ public class AppData implements Comparable<AppData> {
 		.append("\n").toString());
 	}
 
-	@Override
-	public int compareTo(AppData arg0) {
-		return arg0.name.compareToIgnoreCase(this.name);
-	}
 }

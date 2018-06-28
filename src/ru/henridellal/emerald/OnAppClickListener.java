@@ -13,6 +13,8 @@ public class OnAppClickListener implements View.OnClickListener {
 	public void onClick(View arg0) {
 		if (arg0.getTag() instanceof AppData) {
 			appsRef.get().launch((AppData)arg0.getTag());
+		} else if (arg0.getTag() instanceof ShortcutData) {
+			appsRef.get().launch((ShortcutData)arg0.getTag());
 		}
 	}
 }

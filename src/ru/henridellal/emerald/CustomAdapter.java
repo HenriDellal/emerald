@@ -34,7 +34,7 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 	private View.OnLongClickListener onLongClickListener;
 	private SoftReference<Context> contextRef;
 	private SharedPreferences options;
-	private ArrayList<AppData> categoryData, toDisplay;
+	private ArrayList<BaseData> categoryData, toDisplay;
 	private ArrayList<String> sectionsList;
 	private HashMap<String, Integer> indexData;
 	private String[] sections;
@@ -44,7 +44,7 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 	private TextView tv;
 	private String searchInput;
 	private Set<String> sectionsSet;
-	private Comparator<AppData> comparator;
+	private Comparator<BaseData> comparator;
 	
 	public void setIconSize(int size) {iconSize = size;}
 	public void setTextSize(int size) {textSize = size;}
@@ -52,8 +52,8 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 	public void filter(CharSequence searchInput) {
 		indexData.clear();
 		this.searchInput = searchInput.toString();
-		toDisplay = new ArrayList<AppData>();
-		for (AppData a: categoryData) {
+		toDisplay = new ArrayList<BaseData>();
+		for (BaseData a: categoryData) {
 			if (a.name.toLowerCase().contains(this.searchInput.toLowerCase())) {
 				toDisplay.add(a);
 			}
@@ -68,7 +68,7 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 			if (this.searchInput.equals("")) {
 				String ch;
 				int appIndex = 0;
-				for (AppData a: categoryData) {
+				for (BaseData a: categoryData) {
 					ch = (a.name.length() > 1) ? a.name.substring(0,1).toUpperCase() : a.name;
 					indexData.put(ch, appIndex);
 					appIndex++;
@@ -93,7 +93,7 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 		View view;
 		AppData a;
 
-		a = toDisplay.get(position);
+		a = (AppData)toDisplay.get(position);
 		boolean isEmptyView = (convertView == null);
 		if (isEmptyView) {
 			LayoutInflater inflater = (LayoutInflater)contextRef.get().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -165,9 +165,9 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 	public long getItemId(int position) {
 		return 0;
 	}			
-	public void update(ArrayList<AppData> curCatData) {
+	public void update(ArrayList<BaseData> curCatData) {
 		categoryData = curCatData;
-		toDisplay = new ArrayList<AppData>(categoryData);
+		toDisplay = new ArrayList<BaseData>(categoryData);
 		setSections();
 		notifyDataSetChanged();
 	}
@@ -183,8 +183,8 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 		lock = options.getString(Keys.PASSWORD, "").length() > 0;
 		int theme = Themer.theme;
 		textColor = (theme == Themer.LIGHT || theme == Themer.WALLPAPER_DARK || theme == Themer.DEFAULT_THEME) ? Color.BLACK : Color.WHITE;
-		categoryData = new ArrayList<AppData>();
-		toDisplay = new ArrayList<AppData>();
+		categoryData = new ArrayList<BaseData>();
+		toDisplay = new ArrayList<BaseData>();
 		onClickListener = new OnAppClickListener((Apps)context);
 		if (lock) {
 			onLongClickListener = new View.OnLongClickListener() {
@@ -216,9 +216,9 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 		} else {
 			onLongClickListener = new OnAppLongClickListener((Apps)context);
 		}
-		comparator = new Comparator<AppData>() {
+		comparator = new Comparator<BaseData>() {
 			@Override
-			public int compare(AppData first, AppData second) {
+			public int compare(BaseData first, BaseData second) {
 				boolean firstStarts = first.name.toLowerCase().startsWith(searchInput);
 				boolean secondStarts = second.name.toLowerCase().startsWith(searchInput);
 				if (firstStarts && !secondStarts) {
@@ -226,7 +226,7 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 				} else if (!firstStarts && secondStarts) {
 					return 1;
 				} else {
-					return AppData.NameComparator.compare(first, second);
+					return BaseData.NameComparator.compare(first, second);
 				}
 			}
 		};

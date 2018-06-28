@@ -211,12 +211,12 @@ public class CategoryManagerActivity extends Activity{
 			}
 		);
 		//Toast.makeText(this, "Password:" +cm.getCategoryData("All").size(), Toast.LENGTH_LONG).show();
-		ArrayList<AppData> data = new ArrayList<AppData>();
+		ArrayList<BaseData> data = new ArrayList<BaseData>();
 		MyCache.read(this, GetApps.CACHE_NAME, data);
-		Collections.sort(data, AppData.NameComparator);
-		final ArrayList<AppData> allApps = data;
+		Collections.sort(data, BaseData.NameComparator);
+		final ArrayList<? extends BaseData> allApps = data;
 		data = null;
-		final ArrayList<AppData> categoryApps = cm.getCategoryData(catName);
+		final ArrayList<? extends BaseData> categoryApps = cm.getCategoryData(catName);
 		final int nApps = allApps.size();
 
 		if (nApps > 0) {

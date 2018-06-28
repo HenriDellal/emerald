@@ -25,7 +25,7 @@ import android.widget.TableRow;
 import android.widget.Toast;
 
 public class Dock {
-	private ArrayList<AppData> apps;
+	private ArrayList<BaseData> apps;
 	private ArrayList<ImageView> buttons;
 	private SoftReference<Context> contextRef;
 	private LinearLayout dockBar;
@@ -36,7 +36,7 @@ public class Dock {
 		contextRef = new SoftReference<Context>(context);
 		dockBar = (LinearLayout) ((Apps)context).findViewById(R.id.dock_bar);
 		defaultHeight = dockBar.getLayoutParams().height;
-		apps = new ArrayList<AppData>();
+		apps = new ArrayList<BaseData>();
 		buttons = new ArrayList<ImageView>();
 		buttons.add((ImageView)((Apps)context).findViewById(R.id.button1));
 		buttons.add((ImageView)((Apps)context).findViewById(R.id.button2));
@@ -48,13 +48,13 @@ public class Dock {
 	/*
 		dockContentHolder.removeView(findViewWithTag(app));
 	*/
-	public AppData getApp(int index) {
-		return (apps.size() > index) ? apps.get(index) : null;
+	public Object getApp(int index) {
+		return ((apps.size() > index) ? apps.get(index) : null);
 	}
-	public boolean hasApp(AppData app) {
+	public boolean hasApp(BaseData app) {
 		return apps.contains(app);
 	}
-	public void add(AppData app) {
+	public void add(BaseData app) {
 		apps.add(app);
 		/*try {
 		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -80,7 +80,7 @@ public class Dock {
 		apps.add(position, app);
 		putEntries(apps);
 	}*/
-	public void remove(AppData app) {
+	public void remove(BaseData app) {
 		apps.remove(app);
 		//dockContentHolder.removeView(dockContentHolder.findViewWithTag(app));
 		saveApps();
@@ -94,8 +94,8 @@ public class Dock {
 		return apps.size() == 0;
 	}
 	//receives data from dock file if there is one
-	public void initApps(Map<String, AppData> map) {
-		apps = new ArrayList<AppData>();
+	public void initApps(Map<String, ? extends BaseData> map) {
+		apps = new ArrayList<BaseData>();
 		BufferedReader reader = null;
 		File f = new File(contextRef.get().getFilesDir(), "dock");
 		try {
@@ -111,7 +111,7 @@ public class Dock {
 			while (null != (d = reader.readLine())) {
 				d = d.trim();
 				if (d.length()>0 ) {
-					AppData a = map.get(d);
+					BaseData a = map.get(d);
 					if (a != null)
 						apps.add(a);
 				}
@@ -141,7 +141,7 @@ public class Dock {
 			}
 			writer = new BufferedWriter(new FileWriter(file));
 
-			for (AppData a : apps) {
+			for (BaseData a : apps) {
 				writer.write(a.getComponent() + "\n");
 			}
 		} catch (IOException e) {

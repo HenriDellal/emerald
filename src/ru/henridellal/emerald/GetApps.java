@@ -25,7 +25,7 @@ import android.os.Build;
 import android.os.Process;
 import android.util.Log;
 
-public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
+public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<BaseData>> {
 	final PackageManager pm;
 	final Apps	 context;
 	public final static String CACHE_NAME = "apps"; 
@@ -58,10 +58,10 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 		}
 	}
 	@Override
-	protected ArrayList<AppData> doInBackground(Boolean... slow) {
+	protected ArrayList<BaseData> doInBackground(Boolean... slow) {
 		//		Log.v("getting", "installed");
 		
-		ArrayList<AppData> apps = new ArrayList<AppData>();
+		ArrayList<BaseData> apps = new ArrayList<BaseData>();
 
 		// use intent to get apps that can be launched
 		Intent launchIntent = new Intent(Intent.ACTION_MAIN);
@@ -69,17 +69,17 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 		//TODO access shared preferences the other way
 		int appShortcut = Integer.parseInt(context.options.getString(Keys.APP_SHORTCUT, "3"));
 		boolean icons = appShortcut >= CustomAdapter.ICON;
-		Map<String,AppData> cache = new HashMap<String,AppData>();
+		Map<String,BaseData> cache = new HashMap<String,BaseData>();
 		// delete icons from cache if they aren't used
 		if (slow[0] || !icons) {
 			MyCache.deleteIcons(context);
 		}
 		// copy apps information into local cache variable
 		if (!slow[0]) {
-			ArrayList<AppData> cacheData = new ArrayList<AppData>();
+			ArrayList<BaseData> cacheData = new ArrayList<BaseData>();
 			MyCache.read(context, CACHE_NAME, cacheData);
 			//			Log.v("TinyLaunch", "cache "+cacheData.size());
-			for (AppData a : cacheData) {
+			for (BaseData a : cacheData) {
 				cache.put(a.getComponent(), a);
 			}
 		}
@@ -108,7 +108,7 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 				// if cache is not empty
 				// get app data from cache
 				if (!slow[0]) {
-					AppData a = cache.get(component);
+					BaseData a = cache.get(component);
 					if (a != null) {
 						name = a.name;
 						cacheValid = true;
@@ -160,7 +160,7 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 				// if cache is not empty
 				// get app data from cache
 				if (!slow[0]) {
-					AppData a = cache.get(component);
+					AppData a = (AppData)cache.get(component);
 					if (a != null) {
 						name = a.name;
 						cacheValid = true;
@@ -224,7 +224,7 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<AppData>> {
 	}
 
 	@Override
-	protected void onPostExecute(ArrayList<AppData> data) {
+	protected void onPostExecute(ArrayList<BaseData> data) {
 		// send apps list to activity
 		context.loadList(data, true);
 		context.options.edit().putString(Keys.PREV_APP_SHORTCUT, 

@@ -6,13 +6,13 @@ import java.util.ArrayList;
 
 public class Category {
 	private boolean isHidden;
-	private ArrayList<AppData> entries;
+	private ArrayList<BaseData> entries;
 	private String name;
 	private int stringResourceId;
-	public Category(String name, ArrayList<AppData> entries) {
+	public Category(String name, ArrayList<BaseData> entries) {
 		this(name, entries, 0);
 	}
-	public Category(String name, ArrayList<AppData> entries, int stringResourceId) {
+	public Category(String name, ArrayList<BaseData> entries, int stringResourceId) {
 		this.entries = entries;
 		this.name = name;
 		this.stringResourceId = stringResourceId;
@@ -29,16 +29,16 @@ public class Category {
 	public void unhide() {
 		isHidden = false;
 	}
-	public ArrayList<AppData> getData() {
+	public ArrayList<BaseData> getData() {
 		return entries;
 	}
-	public AppData get(int index) {
+	public BaseData get(int index) {
 		return entries.get(index);
 	}
 	public void remove(int index) {
 		entries.remove(index);
 	}
-	public void remove(AppData app) {
+	public void remove(Object app) {
 		entries.remove(app);
 	}
 	public void removeAll() {

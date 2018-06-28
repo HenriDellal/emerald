@@ -7,6 +7,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
+import android.content.SharedPreferences.Editor;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.Bitmap;
@@ -55,7 +56,13 @@ public class IconPackManager {
 		return iconPackName;
 	}
 	public void setIconPack(String iconPackName) {
-		this.iconPackName = iconPackName;
+		if (getIconPacks().containsValue(iconPackName) || "default".equals(iconPackName)) {
+			this.iconPackName = iconPackName;
+		} else {
+			this.iconPackName = "default";
+			Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+			editor.putString(Keys.ICON_PACK, this.iconPackName).commit();
+		}
 		setIcons();
 	}
 	private Bitmap loadBitmap(String drawableName) {
@@ -157,7 +164,7 @@ public class IconPackManager {
 		return iconPacks;
 	}
 	//sets icon from cache in ImageView
-	public static void setIcon(Context c, ImageView img, AppData a) {
+	public static void setIcon(Context c, ImageView img, BaseData a) {
 		File iconFile;
 		iconFile = MyCache.getCustomIconFile(c, a.getComponent());
 		if (!iconFile.exists()) {

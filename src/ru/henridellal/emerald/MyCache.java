@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.net.Uri;
+import android.widget.Toast;
 import android.util.Log;
 
 public class MyCache {
@@ -18,13 +19,13 @@ public class MyCache {
 	static public final int MODE_WRITE = 1;
 	
 	public static boolean write(Context c, String fname, 
-			ArrayList<AppData> data) {
+			ArrayList<BaseData> data) {
 		String path = genFilename(c, fname);
 //		Log.v("TinyLaunch", "cache write "+path+" "+data.size()+" items");
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(
 					path+".temp"));
-			for (AppData a: data) {
+			for (BaseData a: data) {
 				a.write(writer);
 			}
 			writer.close();
@@ -41,17 +42,25 @@ public class MyCache {
 		return true;		
 	}
 	
-	public static void read(Context c, String fname, ArrayList<AppData> data) {
+	public static void read(Context c, String fname, ArrayList<BaseData> data) {
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(genFilename(c,fname)));
 			for(;;) {
-				AppData a = new AppData();
-				a.read(reader);
+				String firstLineOfData = reader.readLine();
+				BaseData a;
+				if (firstLineOfData.startsWith(AppData.COMPONENT)) {
+					a = new AppData();
+				} else if (firstLineOfData.startsWith(ShortcutData.SHORTCUT_PACKAGE)) {
+					a = new ShortcutData();
+				} else {
+					a = new BaseData();
+				}
+				a.read(reader, firstLineOfData);
 				data.add(a);
 			}
 		} catch (FileNotFoundException e) {
 		} catch (IOException e) {
-		}
+		} catch (NullPointerException e) {}
 	}
 
 	static public String genFilename(Context c, String name) {
@@ -75,9 +84,9 @@ public class MyCache {
 		}
 	}
 	/* removes icons of deleted apps */
-	public static void cleanIcons(Context c, ArrayList<AppData> data) {
+	public static void cleanIcons(Context c, ArrayList<BaseData> data) {
 		ArrayList<String> components = new ArrayList<String>();
-		for (AppData a : data)
+		for (BaseData a : data)
 			components.add(Uri.encode(a.getComponent())+".icon.png");
 		
 		File[] dirs = c.getCacheDir().listFiles();

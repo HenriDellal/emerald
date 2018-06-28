@@ -35,7 +35,7 @@ public class CategoryManager {
 	private String curCategory;
 	private ArrayList<String> names;
 	private Map<String,Category> categories;
-	private Map<String,AppData> map;
+	private Map<String, BaseData> map;
 	private SharedPreferences options;
 	private ArrayList<String> history;
 	private static final int HISTORY_MAX = 10;
@@ -91,7 +91,7 @@ public class CategoryManager {
 		return categories.get(categoryName);
 	}
 	
-	public ArrayList<AppData> getCategoryData(String category) {
+	public ArrayList<? extends BaseData> getCategoryData(String category) {
 		return categories.get(category).getData();
 	}
 	/*looks for files which represent categories
@@ -133,16 +133,16 @@ public class CategoryManager {
 				} else if (UNCLASSIFIED.equals(name)) {
 					stringResourceId = R.string.category_unclassified;
 				}
-				categories.put(name, new Category(name, new ArrayList<AppData>(), stringResourceId));
+				categories.put(name, new Category(name, new ArrayList<BaseData>(), stringResourceId));
 			}
 		}
 		readCategoriesProps();
 	}
 	
-	public void setMap(Map<String,AppData> map) {
+	public void setMap(Map<String, BaseData> map) {
 		this.map = map;
 	}
-	public void setInitialMap(Map<String,AppData> map) {
+	public void setInitialMap(Map<String, BaseData> map) {
 		setMap(map);
 		loadCategories();
 		sortNames();
@@ -207,28 +207,28 @@ public class CategoryManager {
 	public void removeFromCategory(String cat, int i) {
 		if (!isEditable(cat))
 			return;
-		ArrayList<AppData> data = categories.get(cat).getData();
+		ArrayList<? extends BaseData> data = categories.get(cat).getData();
 		//update category file
 		if (data != null) {
 			data.remove(i);				
 			putEntries(catPath(cat), data);
 		}
 	}
-	public void removeFromCategory(String cat, AppData a) {
+	public void removeFromCategory(String cat, BaseData a) {
 		if (!isEditable(cat))
 			return;
-		ArrayList<AppData> data = categories.get(cat).getData();
+		ArrayList<BaseData> data = categories.get(cat).getData();
 		if (data != null) {
 			data.remove(a);				
 			putEntries(catPath(cat), data);
 		}
 	}
 	//adds app to category
-	public void addToCategory(String cat, AppData a) {
+	public void addToCategory(String cat, BaseData a) {
 		if (!isEditable(cat))
 			return;
 		
-		ArrayList<AppData> data = categories.get(cat).getData();
+		ArrayList<BaseData> data = categories.get(cat).getData();
 		if (data != null) {
 //			Log.d("TinyLaunch", "adding "+a.name);
 			data.add(a);	
@@ -236,8 +236,8 @@ public class CategoryManager {
 		}
 	}
 	
-	public void addToHistory(AppData a) {
-		ArrayList<AppData> data = categories.get(HISTORY).getData();
+	public void addToHistory(BaseData a) {
+		ArrayList<BaseData> data = categories.get(HISTORY).getData();
 		if (data != null) {
 //			Log.d("TinyLaunch", "adding "+a.name);
 			data.add(0, a);	
@@ -270,7 +270,7 @@ public class CategoryManager {
 		if (!isEditable(category))
 			return;
 		
-		ArrayList<AppData> data = categories.get(category).getData();
+		ArrayList<? extends BaseData> data = categories.get(category).getData();
 			
 		if (data == null) 
 			return; // should not happen
@@ -278,7 +278,7 @@ public class CategoryManager {
 		boolean dirty = false;
 		
 		for (int i = data.size() - 1 ; i >= 0 ; i--) {
-			AppData a = data.get(i);
+			BaseData a = data.get(i);
 			if (null == map.get(a.getComponent())) {
 				data.remove(i);
 				dirty = true;
@@ -307,15 +307,15 @@ public class CategoryManager {
 		} catch (IOException e) {
 			return false;
 		}
-		categories.put(c, new Category(c, new ArrayList<AppData>()));
+		categories.put(c, new Category(c, new ArrayList<BaseData>()));
 		names.add(c);
 		sortNames();
 		writeCategoriesProps();
 		return true;
 	}
 	//get entries of category from category file
-	private ArrayList<AppData> getEntries(File f) {
-		ArrayList<AppData> data = new ArrayList<AppData>();
+	private ArrayList<BaseData> getEntries(File f) {
+		ArrayList<BaseData> data = new ArrayList<BaseData>();
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new FileReader(f));
@@ -325,7 +325,7 @@ public class CategoryManager {
 			while (null != (d = reader.readLine())) {
 				d = d.trim();
 				if (d.length()>0) {
-					AppData a = map.get(d);
+					BaseData a = map.get(d);
 					if (a != null)
 						data.add(a);
 				}
@@ -343,12 +343,12 @@ public class CategoryManager {
 		return data;
 	}
 	//writes app data into category file
-	private void putEntries(File file, ArrayList<AppData> data) {
+	private void putEntries(File file, ArrayList<? extends BaseData> data) {
 		BufferedWriter writer = null;
 		try {
 			writer = new BufferedWriter(new FileWriter(file));
 
-			for (AppData a : data) 
+			for (BaseData a : data) 
 				writer.write(a.getComponent() + "\n");
 				
 		} catch (IOException e) {
@@ -423,8 +423,8 @@ public class CategoryManager {
 	}
 	
 	//return list of apps for default categories (All, Unclassified, Hidden)
-	public ArrayList<AppData> filterApps(Map<String,AppData> map) {
-		ArrayList<AppData> data = new ArrayList<AppData>();
+	public ArrayList<BaseData> filterApps(Map<String,? extends BaseData> map) {
+		ArrayList<BaseData> data = new ArrayList<BaseData>();
 		
 		if (!isEditable(curCategory)) {
 			data.addAll(map.values());
@@ -435,13 +435,13 @@ public class CategoryManager {
 					}
 				}
 			} else {
-				ArrayList<AppData> c = categories.get(HIDDEN).getData();
+				ArrayList<BaseData> c = categories.get(HIDDEN).getData();
 				if (c != null)
 					data.removeAll(c);
 			}
 		}
 		else {
-			ArrayList<AppData> c = categories.get(curCategory).getData();
+			ArrayList<BaseData> c = categories.get(curCategory).getData();
 			//Log.v("TinyLaunch", "filtering via "+curCategory+" "+c.size());
 			if (c != null) {
 				data.addAll(c);
@@ -449,7 +449,7 @@ public class CategoryManager {
 		}
 		//if (customSorting) {}
 		if (!curCategory.equals(HISTORY))
-			Collections.sort(data, AppData.NameComparator);
+			Collections.sort(data, BaseData.NameComparator);
 		
 		return data;		
 	}
@@ -512,7 +512,7 @@ public class CategoryManager {
 		return ! c.equals(ALL) && ! c.equals(UNCLASSIFIED);
 	}
 	//checks if category has an app
-	public boolean in(AppData item, String cat) {
+	public boolean in(BaseData item, String cat) {
 		return categories.get(cat).getData().contains(item);
 	}
 

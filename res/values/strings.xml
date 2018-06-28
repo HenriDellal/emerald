@@ -22,6 +22,7 @@
 	<string name="tileView">Grid</string>
 	<string name="hide_main_bar">Hide main bar</string>
 	<string name="bottom_main_bar">Main bar at the bottom</string>
+	<string name="show_keyboard">Show keyboard on start</string>
 	<string name="stack_from_bottom">Stick category content to the bottom</string>
 	<string name="scrollbar">Fast scroll</string>
 	<string name="orientation">Screen orientation</string>
@@ -90,6 +91,7 @@
 	<string name="aboutTitle">About</string>
 	<string name="how_to_use">How to use</string>
 	<string name="close_tutorial">Close tutorial</string>
+	<string name="fullscreen_mode">Fullscreen mode</string>
 	
 	
 <string name="tutorial">Swipe left/right on the apps menu to switch to the next/previous category. Click on the category name to see the categories list.

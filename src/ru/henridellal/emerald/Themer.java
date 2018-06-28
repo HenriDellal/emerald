@@ -88,7 +88,9 @@ public class Themer {
 	}
 	public static void setWindowDecorations(Activity activity, SharedPreferences options) {
 		if (Build.VERSION.SDK_INT >= 21) {
-			activity.getWindow().setStatusBarColor(options.getInt(Keys.STATUS_BAR_BACKGROUND, 0x22000000));
+			if (options.getBoolean(Keys.FULLSCREEN, false)) {
+				activity.getWindow().setStatusBarColor(options.getInt(Keys.STATUS_BAR_BACKGROUND, 0x22000000));
+			}
 			activity.getWindow().setNavigationBarColor(options.getInt(Keys.NAV_BAR_BACKGROUND, 0x22000000));
 		} /*else {
 			activity.findViewById(R.id.dummy_top_view).setBackgroundColor(options.getInt(Keys.BAR_BACKGROUND, 0x22000000));
