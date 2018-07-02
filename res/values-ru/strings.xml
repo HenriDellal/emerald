@@ -88,4 +88,7 @@
 	<string name="how_to_use">Как использовать</string>
 	<string name="close_tutorial">Закрыть обучение</string>
 	
+	<string name="show_keyboard">Показывать клавиатуру при запуске</string>
+	<string name="fullscreen_mode">Полноэкранный режим</string>
+	
 </resources>

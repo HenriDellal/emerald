@@ -30,6 +30,7 @@ public class Options extends PreferenceActivity {
 		setIconPacksList(LauncherApp.getInstance().getIconPackManager().getIconPacks());
 		if (Build.VERSION.SDK_INT < 11) {
 			findPreference(Keys.KEEP_IN_MEMORY).setEnabled(false);
+			findPreference(Keys.THEME).setEnabled(false);
 		}
 	}
 	@Override

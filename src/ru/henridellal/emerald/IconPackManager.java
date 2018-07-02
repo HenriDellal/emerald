@@ -17,6 +17,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.PorterDuff.Mode;
 import android.preference.PreferenceManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 //import android.util.Log;
 
 /* Imports required by Oreo adaptive icons
@@ -166,9 +167,9 @@ public class IconPackManager {
 	//sets icon from cache in ImageView
 	public static void setIcon(Context c, ImageView img, BaseData a) {
 		File iconFile;
-		iconFile = MyCache.getCustomIconFile(c, a.getComponent());
+		iconFile = MyCache.getOldCustomIconFile(c, a);
 		if (!iconFile.exists()) {
-			iconFile = MyCache.getIconFile(c, a.getComponent());
+			iconFile = MyCache.getIconFile(c, a);
 		}
 		if (iconFile.exists()){
 			try {

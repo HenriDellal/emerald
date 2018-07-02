@@ -185,19 +185,20 @@ public class Apps extends Activity
 			startActivity(i);
 		} catch (ActivityNotFoundException e) {
 			Toast.makeText(this, "Activity is not found", Toast.LENGTH_LONG).show();
+		} finally {
+			if (searchIsOpened) {
+				closeSearch();
+			}
 		}
 	}
-	public void launch(ShortcutData a) {
+	public void launch(ShortcutData shortcut) {
 		//Log.v(APP_TAG, "User launched an app");
-		if (!categories.in(a, CategoryManager.HIDDEN))
-			addInHistory(a);
-		Intent i = new Intent(Intent.ACTION_MAIN, Uri.fromParts(a.getIntent(), "", ""));
-		i.addCategory(Intent.CATEGORY_LAUNCHER);
-		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+		if (!categories.in(shortcut, CategoryManager.HIDDEN))
+			addInHistory(shortcut);
 		try {
-			startActivity(i);
-		} catch (ActivityNotFoundException e) {
-			Toast.makeText(this, "Activity is not found", Toast.LENGTH_LONG).show();
+			startActivity(Intent.parseUri(shortcut.getUri(), 0));
+		} catch (Exception e) {
+			Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -354,7 +355,7 @@ public class Apps extends Activity
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-		builder.setTitle(item.name);
+		builder.setTitle(item.getName());
 		builder.setCancelable(true);
 		
 		String[] commands = new String[]{
@@ -373,11 +374,9 @@ public class Apps extends Activity
 					case 0:
 						itemEdit(item);
 						break;
-					case 1:
-						uri = Uri.parse("package:"+ComponentName.unflattenFromString(
-							item.getComponent()).getPackageName());
+				/*	case 1:
 						startActivity(new Intent(Intent.ACTION_DELETE, uri));
-						break;
+						break;*/
 					case 2:
 						if (dock.hasApp(item)) {
 							dock.remove(item);
@@ -390,12 +389,12 @@ public class Apps extends Activity
 						}
 						dock.update();
 						break;
-					case 3:
+				/*	case 3:
 						Intent intent = new Intent(Apps.this, ChangeIconActivity.class);
 						intent.putExtra(ChangeIconActivity.COMPONENT_NAME, item.getComponent());
-						intent.putExtra(ChangeIconActivity.SHORTCUT_NAME, item.name);
+						intent.putExtra(ChangeIconActivity.SHORTCUT_NAME, item.getName());
 						startActivity(intent);
-						break;
+						break;*/
 				}
 			}
 		});
@@ -470,11 +469,11 @@ public class Apps extends Activity
 		}
 		findViewById(R.id.tabs).setVisibility(View.GONE);
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		final EditText text = (EditText)findViewById(R.id.textField);
 		if (imm != null) {
 			imm.showSoftInput(grid, InputMethodManager.SHOW_IMPLICIT);
 		}
 		findViewById(R.id.searchBar).setVisibility(View.VISIBLE);
-		final EditText text = (EditText)findViewById(R.id.textField);
 		text.setVisibility(View.VISIBLE);
 		findViewById(R.id.webSearchButton).setVisibility(View.VISIBLE);
 		if (dock.isVisible()) {
@@ -689,22 +688,28 @@ public class Apps extends Activity
 			mainBar.setLayoutParams(layoutParams);
 			mainLayout.addView(mainBar);
 			
-			layoutParams = new RelativeLayout.LayoutParams(grid.getLayoutParams());
-			//if (!kitkatNoImmersiveMode) {
-				layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-			//}
-			layoutParams.addRule(RelativeLayout.ABOVE, R.id.main_bar);
-			grid.setLayoutParams(layoutParams);
-			mainLayout.addView(grid);
-			/*if (kitkatNoImmersiveMode) {
+			if (kitkatNoImmersiveMode) {
 				View fakeStatusBar = layoutInflater.inflate(R.layout.kitkat_status_bar, mainLayout, false);
 				fakeStatusBar.setBackgroundColor(options.getInt(Keys.STATUS_BAR_BACKGROUND, 0x22000000));
 				layoutParams = new RelativeLayout.LayoutParams(fakeStatusBar.getLayoutParams());
 				layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+				fakeStatusBar.setLayoutParams(layoutParams);
 				mainLayout.addView(fakeStatusBar);
-			}*/
+			}
+			layoutParams = new RelativeLayout.LayoutParams(grid.getLayoutParams());
+			if (kitkatNoImmersiveMode) {
+				layoutParams.addRule(RelativeLayout.BELOW, R.id.kitkat_status_bar);
+			} else {
+				layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+			}
+			layoutParams.addRule(RelativeLayout.ABOVE, R.id.main_bar);
+			grid.setLayoutParams(layoutParams);
+			mainLayout.addView(grid);
 		} else {
-			/*if (kitkatNoImmersiveMode) {
+			if (!kitkatNoImmersiveMode) {
+				layoutParams = new RelativeLayout.LayoutParams(mainBar.getLayoutParams());
+				layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+			} else {
 				View fakeStatusBar = layoutInflater.inflate(R.layout.kitkat_status_bar, mainLayout, false);
 				fakeStatusBar.setBackgroundColor(options.getInt(Keys.STATUS_BAR_BACKGROUND, 0x22000000));
 				layoutParams = new RelativeLayout.LayoutParams(fakeStatusBar.getLayoutParams());
@@ -713,10 +718,8 @@ public class Apps extends Activity
 				
 				layoutParams = new RelativeLayout.LayoutParams(mainBar.getLayoutParams());
 				layoutParams.addRule(RelativeLayout.BELOW, R.id.kitkat_status_bar);
-			} else {*/
-				layoutParams = new RelativeLayout.LayoutParams(mainBar.getLayoutParams());
-				layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-			//}
+			}
+			
 			mainBar.setLayoutParams(layoutParams);
 			mainLayout.addView(mainBar);
 			
@@ -725,7 +728,6 @@ public class Apps extends Activity
 			layoutParams.addRule(RelativeLayout.BELOW, R.id.main_bar);
 			grid.setLayoutParams(layoutParams);
 			mainLayout.addView(grid);
-			
 		}
 		if (options.getBoolean(Keys.HIDE_MAIN_BAR, false)) {
 			mainBar.setVisibility(View.GONE);
@@ -765,7 +767,7 @@ public class Apps extends Activity
 		}
 		if (Build.VERSION.SDK_INT >= 11 && options.getBoolean(Keys.KEEP_IN_MEMORY, false)) {
 			Notification noti = new Notification.Builder(this)
-				.setContentTitle("Emerald")
+				.setContentTitle(getResources().getString(R.string.app_name))
 				.setContentText(" ")
 				.setSmallIcon(R.mipmap.icon)
 			//	.setLargeIcon(new Bitmap(Bitmap.ARGB_8888))
@@ -773,7 +775,6 @@ public class Apps extends Activity
 			NotificationManager notiManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 			notiManager.notify(0, noti);
 		}
-		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setRequestedOrientation(Integer.parseInt(options.getString(Keys.ORIENTATION, "2")));
 		setContentView(mainLayout);
 		options.edit().putBoolean(Keys.MESSAGE_SHOWN, false).commit();
@@ -801,10 +802,12 @@ public class Apps extends Activity
 			}
 		};
 		options.registerOnSharedPreferenceChangeListener(prefListener);
-		if (Build.VERSION.SDK_INT >= 19) {
-			Themer.setWindowDecorations(this, options);
+		if (Build.VERSION.SDK_INT >= 11) {
+			if (Build.VERSION.SDK_INT >= 21) {
+				Themer.setWindowDecorations(this, options);
+			}
+			Themer.applyTheme(this, options);
 		}
-		Themer.applyTheme(this, options);
 		dock = new Dock(this);
 		changePrefsOnRotate();
 		gestureDetector = new GestureDetector(this, new SwipeListener(this));
@@ -904,6 +907,10 @@ public class Apps extends Activity
 			loadFilteredApps();
 		}
 		dock.initApps(map);
+	}
+	@Override
+	protected void onPostResume() {
+		super.onPostResume();
 		if (options.getBoolean(Keys.SHOW_KEYBOARD_ON_START, false)) {
 			openSearch();
 		}

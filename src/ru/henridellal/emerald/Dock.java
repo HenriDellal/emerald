@@ -31,8 +31,12 @@ public class Dock {
 	private LinearLayout dockBar;
 	private int defaultHeight;
 	private boolean alwaysHide = false;
+	private OnAppClickListener onAppClickListener;
+	private OnAppLongClickListener onAppLongClickListener;
 	
 	public Dock(Context context) {
+		onAppClickListener = new OnAppClickListener((Apps)context);
+		onAppLongClickListener = new OnAppLongClickListener((Apps)context);
 		contextRef = new SoftReference<Context>(context);
 		dockBar = (LinearLayout) ((Apps)context).findViewById(R.id.dock_bar);
 		defaultHeight = dockBar.getLayoutParams().height;
@@ -43,7 +47,6 @@ public class Dock {
 		buttons.add((ImageView)((Apps)context).findViewById(R.id.button3));
 		buttons.add((ImageView)((Apps)context).findViewById(R.id.button4));
 		buttons.add((ImageView)((Apps)context).findViewById(R.id.button5));
-		//update();
 	}
 	/*
 		dockContentHolder.removeView(findViewWithTag(app));
@@ -97,6 +100,7 @@ public class Dock {
 	public void initApps(Map<String, ? extends BaseData> map) {
 		apps = new ArrayList<BaseData>();
 		BufferedReader reader = null;
+		boolean needSave = false;
 		File f = new File(contextRef.get().getFilesDir(), "dock");
 		try {
 			if (!f.exists()) {
@@ -105,15 +109,27 @@ public class Dock {
 				return;
 			}
 			reader = new BufferedReader(new FileReader(f));
-			
-			String d;
-			
-			while (null != (d = reader.readLine())) {
-				d = d.trim();
-				if (d.length()>0 ) {
-					BaseData a = map.get(d);
-					if (a != null)
-						apps.add(a);
+			String data;
+			while (null != (data = reader.readLine())) {
+				BaseData a;
+				if (data.startsWith(AppData.COMPONENT)) {
+					a = new AppData();
+					a.read(reader, data);
+					apps.add(a);
+				} else if (data.startsWith(ShortcutData.SHORTCUT_NAME)) {
+					a = new ShortcutData();
+					a.read(reader, data);
+					apps.add(a);
+					//Toast.makeText(contextRef.get(), "shortcutdata", Toast.LENGTH_LONG).show();
+				} else {
+						data = data.trim();
+						if (data.length()>0 ) {
+							a = map.get(data);
+							if (a != null)
+								apps.add(a);
+						}
+						//Toast.makeText(contextRef.get(), data, Toast.LENGTH_LONG).show();
+					needSave = true;
 				}
 			}
 		} catch (FileNotFoundException e) {
@@ -130,6 +146,9 @@ public class Dock {
 			} catch (IOException e) {
 			}
 		update();
+		if (needSave) {
+			saveApps();
+		}
 	}
 	//writes app data into dock file
 	private void saveApps() {
@@ -142,7 +161,7 @@ public class Dock {
 			writer = new BufferedWriter(new FileWriter(file));
 
 			for (BaseData a : apps) {
-				writer.write(a.getComponent() + "\n");
+				a.write(writer);
 			}
 		} catch (IOException e) {
 			Toast.makeText(contextRef.get(), " "+e, Toast.LENGTH_LONG).show();
@@ -185,12 +204,13 @@ public class Dock {
 				button.setVisibility(View.VISIBLE);
 				IconPackManager.setIcon(contextRef.get(), buttons.get(i), apps.get(i));
 				button.setTag(apps.get(i));
-				button.setOnClickListener(new OnAppClickListener((Apps)contextRef.get()));
+				button.setOnClickListener(onAppClickListener);
+				button.setOnLongClickListener(onAppLongClickListener);
 			} else {
 				button.setVisibility(i > 0 ? View.GONE : View.INVISIBLE);
 				button.setImageResource(android.R.color.transparent);
 				button.setOnClickListener(null);
-				//button.setOnLongClickListener(null);
+				button.setOnLongClickListener(null);
 			}
 		}
 		if (apps.size() == 0) {

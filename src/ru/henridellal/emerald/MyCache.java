@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.net.Uri;
-import android.widget.Toast;
 import android.util.Log;
 
 public class MyCache {
@@ -50,7 +49,7 @@ public class MyCache {
 				BaseData a;
 				if (firstLineOfData.startsWith(AppData.COMPONENT)) {
 					a = new AppData();
-				} else if (firstLineOfData.startsWith(ShortcutData.SHORTCUT_PACKAGE)) {
+				} else if (firstLineOfData.startsWith(ShortcutData.SHORTCUT_NAME)) {
 					a = new ShortcutData();
 				} else {
 					a = new BaseData();
@@ -67,34 +66,58 @@ public class MyCache {
 		File dir = c.getCacheDir();
 		return dir.getPath() + "/" + name + ".MyCache"; 
 	}
-	public static File getCustomIconFile(Context c, String componentName) {
-		return new File(c.getCacheDir(), 
-				Uri.encode(componentName)+".custom.png");
+	public static File getOldCustomIconFile(Context c, BaseData data) {
+		return new File(c.getCacheDir(),
+				Uri.encode(data.getComponent())+".custom.png");
 	}
-	public static File getIconFile(Context c, String componentName) {
-		return new File(c.getCacheDir(), 
-				Uri.encode(componentName)+".icon.png");
+	public static File getCustomIconFile(Context c, String component) {
+		return new File(c.getCacheDir(),
+				Uri.encode(component)+".custom.png");
+	}
+	public static File getCustomIconFile(Context c, BaseData data) {
+		return new File(c.getFilesDir(),
+				getIconFileName(data, ".png"));
+	}
+	public static String getIconFileName(String component) {
+		return Uri.encode(component)+".icon.png";
+	}
+	public static String getIconFileName(BaseData data) {
+		return getIconFileName(data, ".icon.png");
+	}
+	public static String getIconFileName(BaseData data, String postfix) {
+		String component = data.getComponent();
+		if (component != null) {
+			return Uri.encode(component)+postfix;
+		} else {
+			return ((Integer)data.hashCode()).toString() + postfix;
+		}
+	}
+	public static File getIconFile(Context c, String component) {
+		return new File(c.getCacheDir(), getIconFileName(component));
+	}
+	public static File getIconFile(Context c, BaseData data) {
+		return new File(c.getCacheDir(), getIconFileName(data));
 	}
 	
-	public static void deleteIcon(Context c, String componentName) {
-		if (componentName.startsWith(" "))
+	public static void deleteIcon(Context c, AppData app) {
+		if (app == null)
 			return;
-		if (getIconFile(c, componentName).delete()) {
-//			Log.v("TinyLaunch", "successful delete of "+componentName+" icon");
-		}
+		getIconFile(c, app).delete();
 	}
 	/* removes icons of deleted apps */
 	public static void cleanIcons(Context c, ArrayList<BaseData> data) {
-		ArrayList<String> components = new ArrayList<String>();
-		for (BaseData a : data)
-			components.add(Uri.encode(a.getComponent())+".icon.png");
-		
 		File[] dirs = c.getCacheDir().listFiles();
-		
 		for (File f : dirs) {
-			String name = f.getName();
-			if (name.endsWith(".icon.png") && !components.contains(f.getName()))
+			boolean deleteFile = true;
+			for (BaseData a : data) {
+				if ((getIconFileName(a)).equals(f.getName())) {
+					deleteFile = false;	
+					break;
+				}
+			}
+			if (deleteFile && f.getName().contains(".icon.png")) {
 				f.delete();
+			}
 		}
 	}
 	/* removes all icons in cache */

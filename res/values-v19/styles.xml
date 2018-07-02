@@ -11,10 +11,12 @@
 	<style name="AppTheme.Dark.Wallpaper" parent="AppTheme.Dark">
 		<item name="android:windowBackground">@android:color/transparent</item>
 		<item name="android:windowShowWallpaper">true</item>
+		<item name="android:windowTranslucentStatus">true</item>
 	</style>
 	<style name="AppTheme.Light.Wallpaper" parent="AppTheme.Light">
 		<item name="android:windowBackground">@android:color/transparent</item>
 		<item name="android:windowShowWallpaper">true</item>
+		<item name="android:windowTranslucentStatus">true</item>
 	</style>
 	<style name="AppTheme.Default" parent="AppTheme.Light.Wallpaper">
 	</style>

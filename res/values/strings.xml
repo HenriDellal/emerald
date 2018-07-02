@@ -94,7 +94,7 @@
 	<string name="fullscreen_mode">Fullscreen mode</string>
 	
 	
-<string name="tutorial">Swipe left/right on the apps menu to switch to the next/previous category. Click on the category name to see the categories list.
+<string name="tutorial">Swipe left/right on the apps menu to switch categories. Click on the category name to see the categories list.
 \n
 \nOpen Launcher settings/Category manager to edit categories.
 \n

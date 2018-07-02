@@ -1,16 +1,10 @@
 package ru.henridellal.emerald;
 
 import android.app.Activity;
-//import android.content.Context;
 import android.content.res.Resources;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-//import android.graphics.Point;
 import android.os.Build;
-//import android.view.Display;
-//import android.view.View;
-//import android.view.ViewGroup;
-//import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -87,27 +81,9 @@ public class Themer {
 		setBarTheme(activity, options, theme);
 	}
 	public static void setWindowDecorations(Activity activity, SharedPreferences options) {
-		if (Build.VERSION.SDK_INT >= 21) {
-			if (options.getBoolean(Keys.FULLSCREEN, false)) {
-				activity.getWindow().setStatusBarColor(options.getInt(Keys.STATUS_BAR_BACKGROUND, 0x22000000));
-			}
-			activity.getWindow().setNavigationBarColor(options.getInt(Keys.NAV_BAR_BACKGROUND, 0x22000000));
-		} /*else {
-			activity.findViewById(R.id.dummy_top_view).setBackgroundColor(options.getInt(Keys.BAR_BACKGROUND, 0x22000000));
-			Display display = ((WindowManager)activity.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-			Point size = new Point();
-			Point realSize = new Point();
-			display.getSize(size);
-			display.getRealSize(realSize);
-			int navBarHeight = size.y-realSize.y;
-			View dummyBottomView = activity.findViewById(R.id.dummy_bottom_view);
-			ViewGroup.LayoutParams p = dummyBottomView.getLayoutParams();
-			p.height = navBarHeight;
-			dummyBottomView.setLayoutParams(p);
-			if (navBarHeight > 0) {
-				dummyBottomView.setVisibility(View.VISIBLE);
-				dummyBottomView.setBackgroundColor(options.getInt(Keys.NAV_BAR_BACKGROUND, 0x22000000));
-			}
-		}*/
+		if (options.getBoolean(Keys.FULLSCREEN, false)) {
+			activity.getWindow().setStatusBarColor(options.getInt(Keys.STATUS_BAR_BACKGROUND, 0x22000000));
+		}
+		activity.getWindow().setNavigationBarColor(options.getInt(Keys.NAV_BAR_BACKGROUND, 0x22000000));
 	}
 }

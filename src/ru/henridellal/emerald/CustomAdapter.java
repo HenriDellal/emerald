@@ -91,9 +91,9 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view;
-		AppData a;
+		BaseData a;
 
-		a = (AppData)toDisplay.get(position);
+		a = toDisplay.get(position);
 		boolean isEmptyView = (convertView == null);
 		if (isEmptyView) {
 			LayoutInflater inflater = (LayoutInflater)contextRef.get().getSystemService(Context.LAYOUT_INFLATER_SERVICE);

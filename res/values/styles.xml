@@ -1,33 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<!--<style name="AppTheme.Preferences.Light" parent="@android:style/Theme.Light">
-	</style>
-	<style name="AppTheme.Preferences.Dark" parent="@android:style/Theme.Black">
-	</style>-->
-	<style name="AppTheme.Light" parent="@android:style/Theme.Light.NoTitleBar">
-	</style>
-	<style name="AppTheme.Dark" parent="@android:style/Theme.Black.NoTitleBar">
-	</style>
-	<style name="AppTheme.Dark.Wallpaper" parent="AppTheme.Dark">
-		<item name="android:windowBackground">@android:color/transparent</item>
-		<item name="android:windowShowWallpaper">true</item>
-	</style>
-	<style name="AppTheme.Light.Wallpaper" parent="AppTheme.Light">
-		<item name="android:windowBackground">@android:color/transparent</item>
-		<item name="android:windowShowWallpaper">true</item>
-	</style>
-	<style name="AppTheme.Default" parent="AppTheme.Light">
-	</style>
-	<!--<style name="AppTheme.Dark.Wallpaper" parent="android:Theme.Wallpaper">
-		<item name="android:windowBackground">@null</item>
-		<item name="android:windowNoTitle">true</item>
-	</style>
-	<style name="AppTheme.Light.Wallpaper" parent="android:Theme">
-		<item name="android:windowBackground">@null</item>
-		<item name="android:windowNoTitle">true</item>
-	</style>
 	<style name="AppTheme.Default" parent="android:Theme.Wallpaper">
-		<item name="android:windowBackground">@null</item>
-		<item name="android:windowNoTitle">true</item>
-	</style>-->
+        <item name="android:windowNoTitle">true</item>
+	</style>
 </resources>

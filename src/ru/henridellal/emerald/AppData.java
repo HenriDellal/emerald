@@ -25,7 +25,7 @@ public class AppData extends BaseData {
 		if (component == null)
 			return "NULL null NULL".hashCode();
 		else
-			return ("AppData:"+component).hashCode();
+			return (component).hashCode();
 	}
 	
 	public AppData() {

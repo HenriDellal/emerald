@@ -91,8 +91,6 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<BaseData>> {
 		if (Build.VERSION.SDK_INT >= 21) {
 			List<LauncherActivityInfo> list = ((LauncherApps)context.getSystemService(Context.LAUNCHER_APPS_SERVICE))
 				.getActivityList(null, Process.myUserHandle());
-			/*List<ResolveInfo> list = 
-					pm.queryIntentActivities(launchIntent, 0);*/
 	
 			for (int i = 0 ; i < list.size() ; i++) {
 				// call function to update the progress bar
@@ -117,9 +115,9 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<BaseData>> {
 				// if cache is not valid then set name from package manager
 				if (!cacheValid) {
 					name = info.getLabel().toString();
-					if (name == null)
+					if (name == null) {
 						name = component;
-					if (name.equals("Emerald Launcher")) {
+					} else if (name.equals(context.getResources().getString(R.string.app_name))) {
 						continue;
 					}
 				}
@@ -135,12 +133,6 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<BaseData>> {
 					}
 				}
 			}
-			// when apps are retrieved
-			// save apps list in cache
-			MyCache.write(context, CACHE_NAME, apps);
-			// clean icons of deleted apps
-			MyCache.cleanIcons(context, apps);
-			publishProgress(list.size(), list.size());
 		} else {
 			List<ResolveInfo> list = 
 					pm.queryIntentActivities(launchIntent, 0);
@@ -169,9 +161,9 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<BaseData>> {
 				// if cache is not valid then set name from package manager
 				if (!cacheValid) {
 					name = info.activityInfo.loadLabel(pm).toString();
-					if (name == null)
+					if (name == null) {
 						name = component;
-					if (name.equals("Emerald Launcher")) {
+					} else if (name.equals(context.getResources().getString(R.string.app_name))) {
 						continue;
 					}
 				}
@@ -192,15 +184,12 @@ public class GetApps extends AsyncTask<Boolean, Integer, ArrayList<BaseData>> {
 					}
 				}
 			}
-			// when apps are retrieved
-			// save apps list in cache
-			MyCache.write(context, CACHE_NAME, apps);
-			// clean icons of deleted apps
-			MyCache.cleanIcons(context, apps);
-	
-			publishProgress(list.size(), list.size());
 		}
-
+		// when apps are retrieved
+			// save apps list in cache
+		MyCache.write(context, CACHE_NAME, apps);
+			// clean icons of deleted apps
+		MyCache.cleanIcons(context, apps);
 
 		return apps;
 	}

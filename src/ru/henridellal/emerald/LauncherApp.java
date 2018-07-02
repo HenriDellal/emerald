@@ -1,10 +1,7 @@
 package ru.henridellal.emerald;
 
 import android.app.Application;
-import android.content.Context;
 import android.preference.PreferenceManager;
-
-import java.util.Map;
 
 public class LauncherApp extends Application {
 	private static LauncherApp singleton;

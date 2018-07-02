@@ -13,3 +13,18 @@ Emerald is a simple home screen for Android phones. It aims good performance whi
 - App categories;
 - History of last launched apps;
 - Resizeable layout.
+
+## To do
+- Shortcuts;
+- Oreo icons and package service;
+- Some bug fixes and improvements.
+
+## How to use
+- Swipe left or right to switch categories;
+- Tap on category name to see the list of categories.
+
+## Questions and answers
+##### Is it possible to use Emerald as an app drawer?
+Yes.
+##### Will Emerald Launcher support widgets?
+The launcher is most likely not to introduce widgets in future updates.

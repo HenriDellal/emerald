@@ -19,7 +19,17 @@ public class BaseData implements Comparable<BaseData> {
 			return a.name.compareToIgnoreCase(b.name);
 		}
 	};
-
+	
+	@Override
+	public boolean equals(Object a) {
+		if (! (a instanceof BaseData))
+			return false;
+		if (component == null) {
+			return a == null || ((BaseData)a).component == null;
+		}
+		return component.equals( ((BaseData)a).component );
+	}
+	
 	public BaseData() {}
 	public BaseData(String component, String name) {
 		this.component = component;
@@ -45,5 +55,13 @@ public class BaseData implements Comparable<BaseData> {
 	@Override
 	public int compareTo(BaseData arg0) {
 		return arg0.name.compareToIgnoreCase(this.name);
+	}
+	
+	@Override
+	public int hashCode() {
+		if (component == null)
+			return "NULL null NULL".hashCode();
+		else
+			return (component).hashCode();
 	}
 }
