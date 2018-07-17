@@ -13,6 +13,8 @@ public class OnAppLongClickListener implements View.OnLongClickListener {
 	public boolean onLongClick(View arg0) {
 		if (arg0.getTag() instanceof AppData) {
 			appsRef.get().itemContextMenu((AppData)arg0.getTag());
+		} else if (arg0.getTag() instanceof ShortcutData) {
+			appsRef.get().itemContextMenu((ShortcutData)arg0.getTag());
 		}
 		return false;
 	}

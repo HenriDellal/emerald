@@ -12,6 +12,9 @@ public class BaseData implements Comparable<BaseData> {
 	//name is app name
 	protected String name;
 
+	public String getId() {
+		return component;
+	}
 	public static final Comparator<BaseData> NameComparator = 
 		new Comparator<BaseData>() {
 

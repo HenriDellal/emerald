@@ -79,7 +79,7 @@ public class Apps extends Activity
 		return dock;
 	}
 	public boolean hasApp(BaseData app) {
-		return (map.get(app.getComponent()) != null);
+		return (map.get(app.getId()) != null);
 	}
 	/*returns map with pairs of package names 
 	and AppData related to them*/
@@ -87,11 +87,14 @@ public class Apps extends Activity
 		Map<String, BaseData> map = new HashMap<String, BaseData>();
 
 		for (BaseData a : data)
-			map.put(a.getComponent(), a);
+			map.put(a.getId(), a);
 		return map;
 	}
 
 	public void loadList(ArrayList<BaseData> data, boolean cleanCategory) {
+		ArrayList<BaseData> shortcuts = new ArrayList<BaseData>();
+		MyCache.read(this, "shortcuts", shortcuts);
+		data.addAll(shortcuts);
 		loadList(makeMap(data), cleanCategory);
 	}
 

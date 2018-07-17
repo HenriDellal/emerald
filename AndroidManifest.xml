@@ -9,6 +9,8 @@
 	<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="26"/>
 	 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
      <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+     <uses-permission android:permission="com.android.launcher.permission.CREATE_SHORTCUT" />
+     <uses-permission android:permission="com.android.launcher.permission.INSTALL_SHORTCUT" />
      
 	 <uses-permission-sdk23 android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
      <uses-permission-sdk23 android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -59,5 +61,13 @@
         	</intent-filter> 
         </receiver>
         <!--<service android:name=".PackageService"/>-->
+        <receiver android:name="InstallShortcutReceiver"
+        	android:permission="com.android.launcher.permission.INSTALL_SHORTCUT"
+        	>
+            <intent-filter>
+                <action android:name="com.android.launcher.action.INSTALL_SHORTCUT" />
+                <action android:name="com.android.launcher.action.CREATE_SHORTCUT" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

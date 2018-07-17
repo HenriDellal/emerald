@@ -279,7 +279,7 @@ public class CategoryManager {
 		
 		for (int i = data.size() - 1 ; i >= 0 ; i--) {
 			BaseData a = data.get(i);
-			if (null == map.get(a.getComponent())) {
+			if (null == map.get(a.getId())) {
 				data.remove(i);
 				dirty = true;
 			}
@@ -349,7 +349,7 @@ public class CategoryManager {
 			writer = new BufferedWriter(new FileWriter(file));
 
 			for (BaseData a : data) 
-				writer.write(a.getComponent() + "\n");
+				writer.write(a.getId() + "\n");
 				
 		} catch (IOException e) {
 		}

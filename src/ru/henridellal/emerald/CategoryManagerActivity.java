@@ -213,9 +213,13 @@ public class CategoryManagerActivity extends Activity{
 		//Toast.makeText(this, "Password:" +cm.getCategoryData("All").size(), Toast.LENGTH_LONG).show();
 		ArrayList<BaseData> data = new ArrayList<BaseData>();
 		MyCache.read(this, GetApps.CACHE_NAME, data);
+		ArrayList<BaseData> shortcuts = new ArrayList<BaseData>();
+		MyCache.read(this, "shortcuts", shortcuts);
+		data.addAll(shortcuts);
 		Collections.sort(data, BaseData.NameComparator);
 		final ArrayList<? extends BaseData> allApps = data;
 		data = null;
+		shortcuts = null;
 		final ArrayList<? extends BaseData> categoryApps = cm.getCategoryData(catName);
 		final int nApps = allApps.size();
 

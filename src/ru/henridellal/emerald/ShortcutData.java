@@ -11,6 +11,10 @@ public class ShortcutData extends BaseData {
 	public static String SHORTCUT_COMPONENT = "P";
 	
 	private String uri;
+	@Override
+	public String getId() {
+		return uri;
+	}
 	public String getUri() {
 		return uri;
 	}
