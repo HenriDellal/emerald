@@ -43,6 +43,7 @@
 	<string name="passwordHint">Leave it empty to disable lock</string>
 	<string name="searchProvider">Search provider</string>
 	<string name="keepInMemory">Keep in memory</string>
+	<string name="volumeButtons">Use volume buttons to switch categories</string>
 	<string name="backupPrefs">Backup preferences</string>
 	<string name="successfulBackup">Backup finished. Backup file can be found at </string>
 	<string name="successfulRestore">Successfully restored.</string>

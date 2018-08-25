@@ -613,6 +613,18 @@ public class Apps extends Activity
 				return false;
 			}
 			return false;
+		} else if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Keys.VOLUME_BUTTONS, false)) {
+			if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+				categories.setCurCategory(categories.getCategory(CategoryManager.PREVIOUS));
+				loadFilteredApps();
+				return true;
+			} else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+				categories.setCurCategory(categories.getCategory(CategoryManager.NEXT));
+				loadFilteredApps();
+				return true;
+			} else {
+				return false;
+			}
 		} else {
 			return false;
 		}

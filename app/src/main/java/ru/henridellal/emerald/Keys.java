@@ -4,6 +4,7 @@ public final class Keys {
 	public static final String SHOW_TUTORIAL = "show_tutorial";
 	public static final String MESSAGE_SHOWN = "message_shown";
 	public static final String KEEP_IN_MEMORY = "keep_in_memory";
+	public static final String VOLUME_BUTTONS = "volume_buttons";
 	public static final String FULLSCREEN = "fullscreen";
 	
 	public static final String BAR_BACKGROUND = "bar_background";
