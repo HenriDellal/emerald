@@ -1,11 +1,9 @@
 package ru.henridellal.emerald;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -17,7 +15,7 @@ public class MyCache {
 	static public final int MODE_READ = 0;
 	static public final int MODE_WRITE = 1;
 	
-	public static boolean write(Context c, String fname, 
+	/*public static boolean write(Context c, String fname, 
 			ArrayList<BaseData> data) {
 		String path = genFilename(c, fname);
 //		Log.v("TinyLaunch", "cache write "+path+" "+data.size()+" items");
@@ -39,7 +37,7 @@ public class MyCache {
 			return false;
 		}
 		return true;		
-	}
+	}*/
 	
 	public static void read(Context c, String fname, ArrayList<BaseData> data) {
 		try {
@@ -61,7 +59,6 @@ public class MyCache {
 		} catch (IOException e) {
 		} catch (NullPointerException e) {}
 	}
-
 	static public String genFilename(Context c, String name) {
 		File dir = c.getCacheDir();
 		return dir.getPath() + "/" + name + ".MyCache"; 
@@ -71,15 +68,18 @@ public class MyCache {
 				Uri.encode(data.getComponent())+".custom.png");
 	}
 	public static File getCustomIconFile(Context c, String component) {
-		return new File(c.getCacheDir(),
-				Uri.encode(component)+".custom.png");
+		return new File(c.getFilesDir(),
+				Uri.encode(component)+".png");
 	}
 	public static File getCustomIconFile(Context c, BaseData data) {
 		return new File(c.getFilesDir(),
 				getIconFileName(data, ".png"));
 	}
-	public static String getIconFileName(String component) {
-		return Uri.encode(component)+".icon.png";
+	public static String getShortcutIconFileName(String uri) {
+		return ((Integer)uri.hashCode()).toString() + ".icon.png";
+	}
+	public static String getIconFileName(String id) {
+		return Uri.encode(id)+".icon.png";
 	}
 	public static String getIconFileName(BaseData data) {
 		return getIconFileName(data, ".icon.png");
@@ -91,6 +91,9 @@ public class MyCache {
 		} else {
 			return ((Integer)data.hashCode()).toString() + postfix;
 		}
+	}
+	public static File getShortcutIconFile(Context c, String uri) {
+		return new File(c.getCacheDir(), getShortcutIconFileName(uri));
 	}
 	public static File getIconFile(Context c, String component) {
 		return new File(c.getCacheDir(), getIconFileName(component));

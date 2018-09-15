@@ -49,12 +49,17 @@
             </intent-filter>
        
         </activity>
-        <receiver android:name="DirtinessReceiver">
+        <receiver android:name="PackageInstallReceiver">
         	<intent-filter>
         	<action android:name="android.intent.action.PACKAGE_INSTALL"/>
         	<action android:name="android.intent.action.PACKAGE_ADDED"/>
-        	<action android:name="android.intent.action.PACKAGE_REMOVED"/>
         	<action android:name="android.intent.action.PACKAGE_REPLACED"/>
+        	<data android:scheme="package"/>
+        	</intent-filter> 
+        </receiver>
+        <receiver android:name="PackageUninstallReceiver">
+        	<intent-filter>
+        	<action android:name="android.intent.action.PACKAGE_REMOVED"/>
         	<data android:scheme="package"/>
         	</intent-filter> 
         </receiver>

@@ -1,7 +1,8 @@
 package ru.henridellal.emerald;
 
+import android.database.Cursor;
+
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 
 public class ShortcutData extends BaseData {
@@ -10,7 +11,8 @@ public class ShortcutData extends BaseData {
 	public static String SHORTCUT_URI = "U";
 	public static String SHORTCUT_COMPONENT = "P";
 	
-	private String uri;
+	
+	private String uri, packageName, iconResource;
 	@Override
 	public String getId() {
 		return uri;
@@ -40,6 +42,14 @@ public class ShortcutData extends BaseData {
 		return uri.equals( ((ShortcutData)shortcut).getUri() );
 	}
 	
+	public ShortcutData(Cursor cursor) {
+		super();
+		name = cursor.getString(0);
+		uri = cursor.getString(1);
+		packageName = cursor.getString(2);
+		iconResource = cursor.getString(3);
+	}
+	
 	public void read(BufferedReader reader, String firstLineOfData){
 		try {
 			this.name = firstLineOfData.substring(1).trim();
@@ -51,7 +61,7 @@ public class ShortcutData extends BaseData {
 		}
 	}
 	
-	public void write(BufferedWriter writer) throws IOException {
+	/*public void write(BufferedWriter writer) throws IOException {
 		writer.write(new StringBuilder(SHORTCUT_NAME)
 		.append(this.name)
 		.append("\n")
@@ -61,7 +71,7 @@ public class ShortcutData extends BaseData {
 		.append(SHORTCUT_COMPONENT)
 		.append(this.component)
 		.append("\n").toString());
-	}
+	}*/
 	@Override
 	public int hashCode() {
 		return getUri().hashCode();

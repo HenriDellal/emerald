@@ -49,3 +49,6 @@ captures/
 
 assets/
 build-release.sh
+
+# Anacode IDE
+.anacodept.act

@@ -91,4 +91,7 @@
 	<string name="show_keyboard">Показывать клавиатуру при запуске</string>
 	<string name="fullscreen_mode">Полноэкранный режим</string>
 	
+	<string name="hide_history">Скрыть историю</string>
+	<string name="hide_unclassified">Скрыть несортированное</string>
+	
 </resources>

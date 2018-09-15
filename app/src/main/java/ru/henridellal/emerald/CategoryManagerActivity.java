@@ -22,7 +22,6 @@ public class CategoryManagerActivity extends Activity{
 	private CategoryAdapter adapter;
 	private ListView catListView;
 	
-	private static final int COMMAND_HIDE = 0;
 	private static final int COMMAND_SET_HOME = 1;
 	private static final int COMMAND_CLEAR = 2;
 	private static final int COMMAND_DELETE = 3;
@@ -30,6 +29,7 @@ public class CategoryManagerActivity extends Activity{
 	private static final int COMMAND_EDIT = 5;
 	
 	public void updateCategoriesList() {
+		cm.loadCategoriesList();
 		categories = cm.getCategories();
 		categoriesNames = new ArrayList<String>(categories.size());
 		for (String category: categories) {
@@ -72,16 +72,9 @@ public class CategoryManagerActivity extends Activity{
 	private void buildMenu(final String category) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(cm.getCategory(category).getRepresentName(this));
-		final boolean isHidden = cm.getCategory(category).isHidden();
 		ArrayList<String> commands = new ArrayList<String>();
 		final ArrayList<Integer> commandCodes = new ArrayList<Integer>();
 		if (!category.equals(CategoryManager.HIDDEN) && !category.equals(cm.getHome())) {
-			commands.add(isHidden ?
-				getResources().getString(R.string.unhide)
-				: getResources().getString(R.string.hide));
-			commandCodes.add(COMMAND_HIDE);
-		}
-		if (!category.equals(CategoryManager.HIDDEN) && !category.equals(cm.getHome()) && !isHidden) {
 			commands.add(getResources().getString(R.string.setHome));
 			commandCodes.add(COMMAND_SET_HOME);
 		}
@@ -121,13 +114,6 @@ public class CategoryManagerActivity extends Activity{
 						case COMMAND_DELETE:
 							deleteCategory(category);
 							break;
-						case COMMAND_HIDE:
-							if (isHidden) {
-								cm.unhide(category);
-							} else {
-								cm.hide(category);
-							}
-							break;
 					}
 					
 				}
@@ -141,7 +127,7 @@ public class CategoryManagerActivity extends Activity{
 		builder.setPositiveButton(android.R.string.yes, 
 			new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
-					cm.removeCategory(category);
+					DatabaseHelper.deleteCategory(CategoryManagerActivity.this, category);
 					updateCategoriesList();
 					adapter.update(categoriesNames);
 				}
@@ -160,7 +146,7 @@ public class CategoryManagerActivity extends Activity{
 		builder.setPositiveButton(android.R.string.yes, 
 			new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
-					cm.clearCategory(category);
+					DatabaseHelper.clearCategory(CategoryManagerActivity.this, category);
 				}
 			}).setNegativeButton(android.R.string.no,
 			new DialogInterface.OnClickListener() {
@@ -179,9 +165,16 @@ public class CategoryManagerActivity extends Activity{
 		builder.setPositiveButton(android.R.string.yes, 
 			new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
-					if (cm.renameCategory(inputBox.getText().toString(), category)) {
+					String newName = inputBox.getText().toString();
+					if (DatabaseHelper.renameCategory(CategoryManagerActivity.this, category, newName)) {
 						updateCategoriesList();
 						adapter.update(categoriesNames);
+						if (cm.getCurCategory().equals(category)) {
+							cm.setCurCategory(newName);
+						}
+						if (cm.getHome().equals(category)) {
+							cm.setHome(newName);
+						}
 					} else {
 						Toast.makeText(CategoryManagerActivity.this, getResources().getString(R.string.note_rename_error), Toast.LENGTH_LONG).show();    				
 					}
@@ -198,7 +191,6 @@ public class CategoryManagerActivity extends Activity{
 		
 	private void appListEditor(final String catName) {
 		//Log.v(APP_TAG, "Open app edit window");
-		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
 		builder.setTitle(cm.getCategory(catName).getRepresentName(this));
@@ -210,19 +202,12 @@ public class CategoryManagerActivity extends Activity{
 				}
 			}
 		);
-		//Toast.makeText(this, "Password:" +cm.getCategoryData("All").size(), Toast.LENGTH_LONG).show();
-		ArrayList<BaseData> data = new ArrayList<BaseData>();
-		MyCache.read(this, GetApps.CACHE_NAME, data);
-		ArrayList<BaseData> shortcuts = new ArrayList<BaseData>();
-		MyCache.read(this, "shortcuts", shortcuts);
-		data.addAll(shortcuts);
+		ArrayList<BaseData> data = DatabaseHelper.getEntries(this, null);
 		Collections.sort(data, BaseData.NameComparator);
+		
 		final ArrayList<? extends BaseData> allApps = data;
-		data = null;
-		shortcuts = null;
-		final ArrayList<? extends BaseData> categoryApps = cm.getCategoryData(catName);
+		final ArrayList<? extends BaseData> categoryApps = DatabaseHelper.getEntries(this, catName);
 		final int nApps = allApps.size();
-
 		if (nApps > 0) {
 			final String[] appNames = new String[nApps];
 			final boolean[] checked = new boolean[nApps];			
@@ -231,7 +216,7 @@ public class CategoryManagerActivity extends Activity{
 				appNames[i] = allApps.get(i).name;
 				checked[i] = categoryApps.contains(allApps.get(i));
 			}
-
+				
 			final boolean[] oldChecked = checked.clone();
 
 			builder.setMultiChoiceItems(appNames, checked, 
@@ -246,9 +231,9 @@ public class CategoryManagerActivity extends Activity{
 				public void onClick(DialogInterface arg0, int arg1) {
 					for (int i = 0 ; i < nApps ; i++) {
 						if (checked[i] && ! oldChecked[i])
-							cm.addToCategory(catName, allApps.get(i));
+							DatabaseHelper.addToCategory(CategoryManagerActivity.this, allApps.get(i), catName);
 						else if (!checked[i] && oldChecked[i])
-							cm.removeFromCategory(catName, allApps.get(i));
+							DatabaseHelper.removeFromCategory(CategoryManagerActivity.this, allApps.get(i), catName);
 					}
 				}
 			});
@@ -268,7 +253,7 @@ public class CategoryManagerActivity extends Activity{
 			.setPositiveButton(android.R.string.yes, 
 			new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
-					if (!cm.addCategory(inputBox.getText().toString())) {
+					if (!DatabaseHelper.addCategory(CategoryManagerActivity.this, inputBox.getText().toString())) {
 						Toast.makeText(CategoryManagerActivity.this, getResources().getString(R.string.note_rename_error), Toast.LENGTH_LONG).show();
 					} else {
 						updateCategoriesList();

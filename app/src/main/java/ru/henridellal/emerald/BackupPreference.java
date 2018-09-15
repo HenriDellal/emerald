@@ -36,20 +36,16 @@ public class BackupPreference extends DialogPreference {
 	}
 	@Override
 	protected View onCreateDialogView() {
-		dialog = new FileLoaderDialog(this, getContext(), getKey().equals("backup")? 0:1);
+		int mode = 0;
+		if ("backup".equals(getKey())) {
+				mode = 0;
+		} else if ("restore".equals(getKey())) {
+				mode = 1;
+		} else if ("convert".equals(getKey())) {
+				mode = 2;
+		}
+		dialog = new FileLoaderDialog(this, getContext(), mode);
 		return(dialog);
 	}
 	
-	/*@Override
-	protected void onBindDialogView(View v) {
-		super.onBindDialogView(v);
-	}*/
-	@Override
-	protected void onDialogClosed(boolean positiveResult) {
-		super.onDialogClosed(positiveResult);
-		
-		/*if (positiveResult) {
-			((Options)getContext()).backupPrefs();
-		}*/
-	}
 }

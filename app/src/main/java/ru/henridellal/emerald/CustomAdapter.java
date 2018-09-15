@@ -168,6 +168,8 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 	public void update(ArrayList<BaseData> curCatData) {
 		categoryData = curCatData;
 		toDisplay = new ArrayList<BaseData>(categoryData);
+		if (!CategoryManager.HISTORY.equals(LauncherApp.getCategoryManager().getCurCategory()))
+			Collections.sort(toDisplay, comparator);
 		setSections();
 		notifyDataSetChanged();
 	}

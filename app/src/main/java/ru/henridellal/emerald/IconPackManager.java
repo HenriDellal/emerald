@@ -8,24 +8,19 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.content.SharedPreferences.Editor;
-import android.graphics.drawable.Drawable;
+import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Canvas;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.PorterDuff.Mode;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.widget.ImageView;
-import android.widget.Toast;
+//import android.widget.Toast;
 //import android.util.Log;
-
-/* Imports required by Oreo adaptive icons
- * Comment them to compile with older aapt versions
-*/
-import android.os.Build;
-import android.graphics.drawable.AdaptiveIconDrawable;
-
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -167,7 +162,7 @@ public class IconPackManager {
 	//sets icon from cache in ImageView
 	public static void setIcon(Context c, ImageView img, BaseData a) {
 		File iconFile;
-		iconFile = MyCache.getOldCustomIconFile(c, a);
+		iconFile = MyCache.getCustomIconFile(c, a);
 		if (!iconFile.exists()) {
 			iconFile = MyCache.getIconFile(c, a);
 		}

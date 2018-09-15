@@ -5,7 +5,6 @@ import android.content.Context;
 import java.util.ArrayList;
 
 public class Category {
-	private boolean isHidden;
 	private ArrayList<BaseData> entries;
 	private String name;
 	private int stringResourceId;
@@ -19,15 +18,6 @@ public class Category {
 	}
 	public boolean hasCustomName() {
 		return stringResourceId == 0;
-	}
-	public boolean isHidden() {
-		return isHidden;
-	}
-	public void hide() {
-		isHidden = true;
-	}
-	public void unhide() {
-		isHidden = false;
 	}
 	public ArrayList<BaseData> getData() {
 		return entries;
@@ -52,8 +42,5 @@ public class Category {
 	}
 	public String getName() {
 		return name;
-	}
-	public String getProps() {
-		return "hidden="+isHidden+"\n";
 	}
 }

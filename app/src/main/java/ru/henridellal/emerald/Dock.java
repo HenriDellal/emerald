@@ -1,8 +1,6 @@
 package ru.henridellal.emerald;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,16 +10,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.lang.ref.SoftReference;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.util.AttributeSet;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TableRow;
 import android.widget.Toast;
 
 public class Dock {
@@ -48,36 +40,18 @@ public class Dock {
 		buttons.add((ImageView)((Apps)context).findViewById(R.id.button4));
 		buttons.add((ImageView)((Apps)context).findViewById(R.id.button5));
 	}
-	/*
-		dockContentHolder.removeView(findViewWithTag(app));
-	*/
 	public Object getApp(int index) {
 		return ((apps.size() > index) ? apps.get(index) : null);
 	}
 	public boolean hasApp(BaseData app) {
 		return apps.contains(app);
 	}
+	
 	public void add(BaseData app) {
-		apps.add(app);
-		/*try {
-		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View v = inflater.inflate(R.layout.dock_icon_button, (ViewGroup)dockContentHolder, false);
-		ImageView img = (ImageView)v.findViewById(R.id.dock_icon);
-		img.setTag(app);
-		IconPackManager.setIcon(context, img, app);
-		ViewGroup.LayoutParams params = img.getLayoutParams();
-		//params.weight = 1.0f;
-		params.width = 48;
-		img.setLayoutParams(params);
-		img.setVisibility(View.VISIBLE);
-		//params.gravity = Gravity.CENTER_VERTICAL;
-		//item.addView(img);
-		//dockContentHolder.addView(img);
-		Toast.makeText(context, " "+(v.getWidth())+(params.width), Toast.LENGTH_LONG).show();
-		} catch (Exception e) {
-			Toast.makeText(context, " "+e, Toast.LENGTH_LONG).show();
-		}*/
-		saveApps();
+		if (DatabaseHelper.hasItem(contextRef.get(), app, null)) {
+			apps.add(app);
+			saveApps();
+		}
 	}
 	/*public void add(int position, AppData app) {
 		apps.add(position, app);
@@ -96,9 +70,7 @@ public class Dock {
 	public boolean isEmpty() {
 		return apps.size() == 0;
 	}
-	//receives data from dock file if there is one
-	public void initApps(Map<String, ? extends BaseData> map) {
-		apps = new ArrayList<BaseData>();
+	public void initApps() {
 		BufferedReader reader = null;
 		boolean needSave = false;
 		File f = new File(contextRef.get().getFilesDir(), "dock");
@@ -122,12 +94,10 @@ public class Dock {
 					apps.add(a);
 					//Toast.makeText(contextRef.get(), "shortcutdata", Toast.LENGTH_LONG).show();
 				} else {
-						data = data.trim();
-						if (data.length()>0 ) {
-							a = map.get(data);
-							if (a != null)
-								apps.add(a);
-						}
+					data = data.trim();
+					if (data.length()>0 ) {
+						apps.add(new AppData(data, ""));
+					}
 						//Toast.makeText(contextRef.get(), data, Toast.LENGTH_LONG).show();
 					needSave = true;
 				}
@@ -200,7 +170,7 @@ public class Dock {
 	public void update() {
 		for (int i=0; i<buttons.size(); i++) {
 			ImageView button = buttons.get(i);
-			if (i<apps.size() && ((Apps)contextRef.get()).hasApp(apps.get(i))) {
+			if (i<apps.size()) {
 				button.setVisibility(View.VISIBLE);
 				IconPackManager.setIcon(contextRef.get(), buttons.get(i), apps.get(i));
 				button.setTag(apps.get(i));

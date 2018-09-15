@@ -1,13 +1,15 @@
 package ru.henridellal.emerald;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.Notification;
+import android.app.ProgressDialog;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
@@ -17,14 +19,21 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.pm.LauncherApps;
+import android.content.pm.LauncherActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.AsyncTask.Status;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Process;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.InputType;
@@ -58,61 +67,17 @@ public class Apps extends Activity
 	private RelativeLayout mainLayout;
 	private GridView grid;
 	private Dock dock;
-	private Map<String,BaseData> map;
 	public SharedPreferences options;
 	public static final String PREF_APPS = "apps";
 	public static final String APP_TAG = "Emerald";
 	private CustomAdapter adapter;
 	public static final int GRID = 0;
 	public static final int LIST = 1;
-	private GetApps scanner;
 	private OnSharedPreferenceChangeListener prefListener;
-	private boolean lock, searchIsOpened, homeButtonPressed, modPressed;
-	private int historySize;
+	private boolean lock, searchIsOpened, homeButtonPressed;
 	
-	public void loadList(boolean cleanCategory) {
-		ArrayList<BaseData> data = new ArrayList<BaseData>(); 
-		MyCache.read(this, GetApps.CACHE_NAME, data);
-		loadList(data, cleanCategory);
-	}
 	public Dock getDock() {
 		return dock;
-	}
-	public boolean hasApp(BaseData app) {
-		return (map.get(app.getId()) != null);
-	}
-	/*returns map with pairs of package names 
-	and AppData related to them*/
-	private Map<String, BaseData> makeMap(ArrayList<BaseData> data) {
-		Map<String, BaseData> map = new HashMap<String, BaseData>();
-
-		for (BaseData a : data)
-			map.put(a.getId(), a);
-		return map;
-	}
-
-	public void loadList(ArrayList<BaseData> data, boolean cleanCategory) {
-		ArrayList<BaseData> shortcuts = new ArrayList<BaseData>();
-		MyCache.read(this, "shortcuts", shortcuts);
-		data.addAll(shortcuts);
-		loadList(makeMap(data), cleanCategory);
-	}
-
-	public void loadList(Map<String, BaseData> map, boolean cleanCategory) {
-		this.map = map;
-
-		if (categories == null) {
-			LauncherApp.getInstance().getCategoryManager().setInitialMap(map);
-			categories = LauncherApp.getInstance().getCategoryManager();	
-		}
-		else {
-			categories.setMap(map);
-		}
-
-		if (cleanCategory)
-			categories.cleanCategories();
-
-		loadFilteredApps();
 	}
 	
 	public void changePrefsOnRotate() {
@@ -148,37 +113,29 @@ public class Apps extends Activity
 		}
 	}
 	public void loadFilteredApps() {
-		//Log.v(APP_TAG, "Loading filtered apps");	
-		//Log.v(APP_TAG, "filtering");
-		curCatData = categories.filterApps(map);
-		//Log.v(APP_TAG, "filtered");
+		Category curCategory = categories.getCategory(categories.getCurCategory());
+		curCatData = DatabaseHelper.getEntries(this, curCategory.getName());
 		adapter.update(curCatData);
 		if (!options.getBoolean(Keys.HIDE_MAIN_BAR, false)) {
-			((Button)findViewById(R.id.category_button)).setText(categories.getCategory(categories.getCurCategory()).getRepresentName(this));
+			((Button)findViewById(R.id.category_button)).setText(curCategory.getRepresentName(this));
 		}
-		//Log.v(APP_TAG, "loadFilteredApps : finished");
+		if (null != mGetAppsThread)
+			mGetAppsThread.quit();
 	}
 	//handles history filling
-	private void addInHistory(BaseData a) {
-    //removes app from history if it is already in it
-    // to avoid duplicating
-    	//Log.v(APP_TAG, "Add app in history");
-    	if (!dock.hasApp(a)) {
-			if (categories.getCategoryData(CategoryManager.HISTORY).indexOf(a) != -1) {
-				categories.removeFromCategory(CategoryManager.HISTORY, a);
-			}
-			categories.addToHistory(a);
-	    	//removes old entries if History has maximum size
-			if (categories.getCategoryData(CategoryManager.HISTORY).size() > historySize) {
-				categories.removeFromCategory(CategoryManager.HISTORY, categories.getCategoryData(CategoryManager.HISTORY).size()-1);
-			}
-    	}
+	private void addToHistory(ShortcutData shortcut) {
+		DatabaseHelper.addToHistory(this, shortcut);
 	}
+	
+	private void addToHistory(AppData app) {
+		DatabaseHelper.addToHistory(this, app);
+	}
+
 	//launches app and adds it to history
 	public void launch(AppData a) {
 		//Log.v(APP_TAG, "User launched an app");
-		if (!categories.in(a, CategoryManager.HIDDEN))
-			addInHistory(a);
+		if (!DatabaseHelper.hasItem(this, a, CategoryManager.HIDDEN))
+			addToHistory(a);
 		Intent i = new Intent(Intent.ACTION_MAIN);
 		i.addCategory(Intent.CATEGORY_LAUNCHER);
 		i.setComponent(ComponentName.unflattenFromString(
@@ -194,14 +151,179 @@ public class Apps extends Activity
 			}
 		}
 	}
+	
 	public void launch(ShortcutData shortcut) {
 		//Log.v(APP_TAG, "User launched an app");
-		if (!categories.in(shortcut, CategoryManager.HIDDEN))
-			addInHistory(shortcut);
+		if (!DatabaseHelper.hasItem(this, shortcut, CategoryManager.HIDDEN))
+			addToHistory(shortcut);
 		try {
 			startActivity(Intent.parseUri(shortcut.getUri(), 0));
 		} catch (Exception e) {
 			Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+		}
+	}
+	
+	protected ProgressDialog progress;
+	protected boolean icons;
+	protected int appShortcut;
+	protected Handler handler, loadAppsHandler;
+	protected GetAppsThread mGetAppsThread;
+	@SuppressWarnings("deprecation")
+	public void loadAppsFromSystem(final boolean iconPackChanged) {
+		if (null != progress) {
+			try {
+				if (null != mGetAppsThread)
+					mGetAppsThread.quit();
+				progress.dismiss();
+			} catch (Exception e) {}
+		}
+		progress = new ProgressDialog(this);
+		progress.setCancelable(false);
+		progress.setMessage("Getting applications...");
+		progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		progress.setIndeterminate(true);
+		progress.show();
+		//TODO access shared preferences the other way
+		appShortcut = Integer.parseInt(options.getString(Keys.APP_SHORTCUT, "3"));
+		icons = appShortcut >= CustomAdapter.ICON;
+		// delete icons from cache if they aren't used
+		if (!icons) {
+			MyCache.deleteIcons(this);
+		}
+		handler = new Handler();
+		loadAppsHandler = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				try {
+					progress.dismiss();
+				}
+				catch (Exception e) {
+				}
+				Apps.this.loadFilteredApps();
+			}
+		};
+		Runnable appsTask;
+		if (Build.VERSION.SDK_INT >= 21) {
+			appsTask = new Runnable() {
+				protected int i;
+				protected List<LauncherActivityInfo> list;
+				@Override
+				public void run() {
+					list = ((LauncherApps)(Apps.this).getSystemService(Context.LAUNCHER_APPS_SERVICE))
+						.getActivityList(null, Process.myUserHandle());
+			
+					for (i = 0; i < list.size(); i++) {
+						handler.post(new Runnable() {
+							@Override
+							public void run() {
+								progress.setIndeterminate(false);
+								progress.setMax(list.size());
+								progress.setProgress(i);
+							}
+						});
+						
+						LauncherActivityInfo info = list.get(i);
+						ComponentName cn = info.getComponentName();
+						String component = cn.flattenToString();
+						if (!iconPackChanged && DatabaseHelper.hasApp(Apps.this, component)) {
+							continue;
+						}
+						String name = info.getLabel().toString();
+						if (name == null) {
+							name = component;
+						} else if (name.equals(Apps.this.getResources().getString(R.string.app_name))) {
+							continue;
+						}
+						// load icons
+						if (icons) {
+							// get icon file for app from cache
+							File iconFile = MyCache.getIconFile(Apps.this, component);
+							// if there is no icon for app in cache
+							if (!iconFile.exists()) {
+								writeIconToFile(iconFile, info.getIcon(0), component);
+							}
+						}
+						DatabaseHelper.insertApp(Apps.this, component, name);
+					}
+					Apps.this.options.edit().putString(Keys.PREV_APP_SHORTCUT, 
+						Apps.this.options.getString(Keys.APP_SHORTCUT, "1")).commit();
+					loadAppsHandler.sendEmptyMessage(0);
+				}
+			};
+		} else {
+			appsTask = new Runnable() {
+				protected int i;
+				protected List<ResolveInfo> list;
+				@Override
+				public void run() {
+					// use intent to get apps that can be launched
+					Intent launchIntent = new Intent(Intent.ACTION_MAIN);
+					launchIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+					PackageManager pm = Apps.this.getPackageManager();
+					list = pm.queryIntentActivities(launchIntent, 0);
+					for (i = 0; i < list.size(); i++) {
+						handler.post(new Runnable() {
+							@Override
+							public void run() {
+								progress.setIndeterminate(false);
+								progress.setMax(list.size());
+								progress.setProgress(i);
+							}
+						});
+						ResolveInfo info = list.get(i);
+						ComponentName cn = new ComponentName(info.activityInfo.packageName, 
+								info.activityInfo.name);
+						String component = cn.flattenToString();
+						String name = info.activityInfo.loadLabel(pm).toString();
+						if (!iconPackChanged && DatabaseHelper.hasApp(Apps.this, component)) {
+							continue;
+						}
+						if (name == null) {
+							name = component;
+						} else if (name.equals(Apps.this.getResources().getString(R.string.app_name))) {
+							continue;
+						}
+						if (icons) {
+							File iconFile = MyCache.getIconFile(Apps.this, component);
+							if (!iconFile.exists()) {
+								try {
+									writeIconToFile(iconFile, pm.getResourcesForActivity(cn)
+															.getDrawable(pm.getPackageInfo(
+															info.activityInfo.packageName, 
+															0).applicationInfo.icon),
+															component);
+								} catch (Exception e) {}
+							}
+						}
+						DatabaseHelper.insertApp(Apps.this, component, name);
+					}
+					Apps.this.options.edit().putString(Keys.PREV_APP_SHORTCUT, 
+						Apps.this.options.getString(Keys.APP_SHORTCUT, "1")).commit();
+					loadAppsHandler.sendEmptyMessage(0);
+				}
+			};
+		}
+		mGetAppsThread = new GetAppsThread("GetAppsThread");
+		mGetAppsThread.start();
+		mGetAppsThread.prepareHandler();
+		mGetAppsThread.postTask(appsTask);
+		
+	}
+	public static void writeIconToFile(File iconFile, Drawable d, String component) {
+		try {
+			Bitmap bmp;
+			IconPackManager ipm = LauncherApp.getInstance().getIconPackManager();
+			// get icon from icon pack
+			if (((bmp = ipm.getBitmap(component)) == null) && (d instanceof BitmapDrawable)) {
+				// edit drawable to match icon pack
+				bmp = ipm.transformDrawable(d);
+			}
+			// save icon in cache
+			FileOutputStream out = new FileOutputStream(iconFile);
+			bmp.compress(CompressFormat.PNG, 100, out);
+			out.close();
+		} catch (Exception e) {
+			iconFile.delete();
 		}
 	}
 
@@ -212,7 +334,7 @@ public class Apps extends Activity
 		cats.remove(CategoryManager.HIDDEN);
 		ArrayList<String> toRemove = new ArrayList<String>();
 		for (String category: cats) {
-			if (categories.getCategory(category).isHidden())
+			if (categories.isHidden(category))
 				toRemove.add(category);
 		}
 		cats.removeAll(toRemove);
@@ -260,7 +382,8 @@ public class Apps extends Activity
 			final boolean[] checked = new boolean[nCategories];			
 
 			for (int i = 0; i < nCategories ; i++) {
-				checked[i] = categories.in(item, editableCategoriesArray[i]);
+				checked[i] = DatabaseHelper.hasItem(this, item, editableCategoriesArray[i]);
+			//	checked[i] = categories.in(item, editableCategoriesArray[i]);
 			}
 
 			final boolean[] oldChecked = checked.clone();
@@ -276,9 +399,9 @@ public class Apps extends Activity
 				public void onClick(DialogInterface arg0, int arg1) {
 					for (int i = 0 ; i < nCategories ; i++) {
 						if (checked[i] && ! oldChecked[i])
-							categories.addToCategory(editableCategoriesArray[i], item);
+							DatabaseHelper.addToCategory(Apps.this, item, editableCategoriesArray[i]);
 						else if (!checked[i] && oldChecked[i])
-							categories.removeFromCategory(editableCategoriesArray[i], item);
+							DatabaseHelper.removeFromCategory(Apps.this, item, editableCategoriesArray[i]);
 					}
 					loadFilteredApps();
 					grid.setSelection(position);
@@ -364,7 +487,7 @@ public class Apps extends Activity
 		String[] commands = new String[]{
 			getResources().getString(R.string.editAppCategories),
 			getResources().getString(R.string.uninstall),
-			(dock.hasApp(item)) ? 
+			(dock.hasApp(item)) ?
 				getResources().getString(R.string.remove_from_dock): 
 				getResources().getString(R.string.add_to_dock),
 			getResources().getString(R.string.change_icon)
@@ -372,14 +495,14 @@ public class Apps extends Activity
 		builder.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, commands),
 		new DialogInterface.OnClickListener(){
 			public void onClick(DialogInterface di, int which) {
-				Uri uri;
 				switch(which) {
 					case 0:
 						itemEdit(item);
 						break;
-				/*	case 1:
-						startActivity(new Intent(Intent.ACTION_DELETE, uri));
-						break;*/
+					case 1:
+						DatabaseHelper.removeShortcut(Apps.this, item.getUri());
+						loadFilteredApps();
+						break;
 					case 2:
 						if (dock.hasApp(item)) {
 							dock.remove(item);
@@ -392,12 +515,6 @@ public class Apps extends Activity
 						}
 						dock.update();
 						break;
-				/*	case 3:
-						Intent intent = new Intent(Apps.this, ChangeIconActivity.class);
-						intent.putExtra(ChangeIconActivity.COMPONENT_NAME, item.getComponent());
-						intent.putExtra(ChangeIconActivity.SHORTCUT_NAME, item.getName());
-						startActivity(intent);
-						break;*/
 				}
 			}
 		});
@@ -504,7 +621,6 @@ public class Apps extends Activity
 	}
 	public void closeSearch() {
 		//Log.v(APP_TAG, "Quit search");
-		//hideKeyboard();
 		EditText text = (EditText)findViewById(R.id.textField);
 		text.setText("");
 		findViewById(R.id.searchBar).setVisibility(View.GONE);
@@ -551,6 +667,9 @@ public class Apps extends Activity
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (event.getAction() != KeyEvent.ACTION_DOWN) {
+			return false;
+		}
 		if (keyCode == KeyEvent.KEYCODE_MENU) {
 			menu();
 			return true;
@@ -571,10 +690,7 @@ public class Apps extends Activity
 			}
 			loadFilteredApps();
 			return true;
-		} else if (KeyEvent.isModifierKey(keyCode)) {
-			modPressed = !modPressed;
-			return true;
-		} else if (modPressed && getCurrentFocus().getId() != R.id.textField) {
+		} else if (event.isAltPressed()) {
 			if (keyCode >= KeyEvent.KEYCODE_1 && keyCode <= KeyEvent.KEYCODE_9) {
 				Object app = dock.getApp(keyCode-KeyEvent.KEYCODE_1);
 				if (app != null) {
@@ -597,6 +713,8 @@ public class Apps extends Activity
 				loadFilteredApps();
 			} else if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
 				openCategoriesList();
+			} else {
+				return false;
 			}
 			return true;
 		} else if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) {
@@ -630,7 +748,6 @@ public class Apps extends Activity
 	protected void onPause() {
 		//Log.v(APP_TAG, "onPause");
 		super.onPause();
-		modPressed = false;
 		if (searchIsOpened) {
 			closeSearch();
 		}
@@ -644,13 +761,13 @@ public class Apps extends Activity
 		prefListener = null;
 		super.onDestroy();
 	}
-	
-	@Override
+	/*@Override
 	protected void onNewIntent(Intent i) {
 		//Log.v(APP_TAG, "onNewIntent");
+		try {
 		homeButtonPressed = true;
 		if (categories == null) {
-			loadList(false);
+			categories = LauncherApp.getCategoryManager();
 		}
 		if (categories.getCurCategory().equals(CategoryManager.HIDDEN)) {
 			findViewById(R.id.quit_hidden_apps).setVisibility(View.GONE);
@@ -667,8 +784,11 @@ public class Apps extends Activity
 			categories.setCurCategory(categories.getHome());
 		}
 		loadFilteredApps();
+		} catch (Exception e) {
+			Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+		}
 		super.onNewIntent(i);
-	}
+	}*/
 	
 	private void layoutInit() {
 		mainLayout = new RelativeLayout(this);
@@ -685,7 +805,7 @@ public class Apps extends Activity
 		FrameLayout mainBar = (FrameLayout) layoutInflater.inflate(R.layout.main_bar, mainLayout, false);
 		grid = (GridView) layoutInflater.inflate(R.layout.apps_grid, mainLayout, false);
 		boolean kitkatNoImmersiveMode = (Build.VERSION.SDK_INT == 19 && !options.getBoolean(Keys.FULLSCREEN, false));
-		if (options.getBoolean(Keys.BOTTOM_MAIN_BAR, false)) {
+		if (options.getBoolean(Keys.BOTTOM_MAIN_BAR, true)) {
 			layoutParams = new RelativeLayout.LayoutParams(mainBar.getLayoutParams());
 			layoutParams.addRule(RelativeLayout.ABOVE, R.id.dock_bar);
 			mainBar.setLayoutParams(layoutParams);
@@ -762,6 +882,12 @@ public class Apps extends Activity
 			requestWindowFeature(Window.FEATURE_NO_TITLE);
         	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		}
+		categories = LauncherApp.getCategoryManager();
+		if (new File(MyCache.genFilename(this, "apps")).exists()) {
+			new MoveCustomIconsTask(this).execute();
+			categories.convert();
+			DatabaseConverter.convert(this);
+		}
 		super.onCreate(savedInstanceState);
 		Themer.theme = Integer.parseInt(options.getString(Keys.THEME, getResources().getString(R.string.defaultThemeValue)));
 		layoutInit();
@@ -780,7 +906,7 @@ public class Apps extends Activity
 		}
 		setRequestedOrientation(Integer.parseInt(options.getString(Keys.ORIENTATION, "2")));
 		setContentView(mainLayout);
-		options.edit().putBoolean(Keys.MESSAGE_SHOWN, false).commit();
+		options.edit().putBoolean(Keys.MESSAGE_SHOWN, true).commit();
 		prefListener = new OnSharedPreferenceChangeListener() {
 			@Override
 			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
@@ -788,16 +914,7 @@ public class Apps extends Activity
 				if (key.equals(Keys.ICON_PACK) || key.equals(Keys.TRANSFORM_DRAWABLE)) {
 					MyCache.deleteIcons(Apps.this);
 					LauncherApp.getInstance().getIconPackManager().setIconPack(sharedPreferences.getString(Keys.ICON_PACK, "default"));
-					if (scanner != null && scanner.getStatus() == AsyncTask.Status.RUNNING)
-						return;
-					scanner = new GetApps(Apps.this);
-					scanner.execute(true);
-					loadFilteredApps();
-				} else if (key.equals(Keys.DIRTY) && sharedPreferences.getBoolean(Keys.DIRTY, false)) {
-					if (scanner == null || scanner.getStatus() != AsyncTask.Status.RUNNING) {
-						scanner = new GetApps(Apps.this);
-						scanner.execute(false);
-					}
+					loadAppsFromSystem(true);
 				} else if (!sharedPreferences.getBoolean(Keys.MESSAGE_SHOWN, false) && Arrays.asList(Keys.restart).contains(key)) {
 					Toast.makeText(Apps.this, getResources().getString(R.string.restart_needed), Toast.LENGTH_LONG).show();
 					sharedPreferences.edit().putBoolean(Keys.MESSAGE_SHOWN, true).commit();
@@ -824,14 +941,10 @@ public class Apps extends Activity
 	public boolean onOptionsItemSelected(MenuItem item) {
 		//Log.v(APP_TAG, "Menu item is selected");
 		switch(item.getItemId()) {
-		//    	case R.id.scan:
-		//    		(new GetApps(this, false)).execute();
-		//    		return true;
 		case R.id.full_scan:
-			if (scanner != null && scanner.getStatus() == AsyncTask.Status.RUNNING)
-				return true;
-			scanner = new GetApps(this);
-			scanner.execute(true);
+			if (null != mGetAppsThread)
+				mGetAppsThread.quit();
+			loadAppsFromSystem(false);
 			return true;
 		case R.id.change_wallpaper:
 			startActivity(new Intent(Intent.ACTION_SET_WALLPAPER));
@@ -870,18 +983,20 @@ public class Apps extends Activity
 		
 		int appShortcut = Integer.parseInt(options.getString(Keys.APP_SHORTCUT, "3"));
 	    lock = options.getString(Keys.PASSWORD, "").length() > 0;
-	    if (!homeButtonPressed) {
+	    /*if (!homeButtonPressed) {
 	    	try {
-	    		loadList(false);
+	    		//loadList(false);
 	    	} catch (Exception e) {
 	    		Toast.makeText(Apps.this, e.toString(), Toast.LENGTH_LONG).show();
 	    	}
 	    } else {
 	    	homeButtonPressed = false;
+	    }*/
+	    if (homeButtonPressed) {
+	    	homeButtonPressed = false;
 	    }
 		boolean needReload = false;
-		
-		if (map.size() == 0) {
+		if (DatabaseHelper.isDatabaseEmpty(this)) {
 			needReload = true;
 		} else {
 			if ((Integer.parseInt(options.getString(Keys.PREV_APP_SHORTCUT, "3")) == CustomAdapter.TEXT) != (appShortcut == CustomAdapter.TEXT)) {
@@ -893,29 +1008,24 @@ public class Apps extends Activity
 				}
 			}
 		}
-
-		if ((needReload || options.getBoolean(Keys.DIRTY, false))
-			&& (scanner == null || scanner.getStatus() != Status.RUNNING)) {
-			scanner = new GetApps(this);
-			scanner.execute(false);
-		}
-		//removes the oldest result from history
-		historySize = options.getInt(Keys.HISTORY_SIZE, 10);
-		boolean historySizeChanged = false;
-		while (categories.getCategoryData(CategoryManager.HISTORY).size() > historySize) {
-			historySizeChanged = true;
-			categories.removeFromCategory(CategoryManager.HISTORY, categories.getCategoryData(CategoryManager.HISTORY).size()-1);
-		}
-		if (historySizeChanged && categories.getCurCategory().equals(CategoryManager.HISTORY)) {
+		
+		if (needReload && (mGetAppsThread == null)) {
+			loadAppsFromSystem(false);
+		} else {
 			loadFilteredApps();
 		}
-		dock.initApps(map);
+		
+		dock.initApps();
 	}
 	@Override
 	protected void onPostResume() {
 		super.onPostResume();
 		if (options.getBoolean(Keys.SHOW_KEYBOARD_ON_START, false)) {
-			openSearch();
+			grid.postDelayed(new Runnable() {
+				public void run() {
+					openSearch();
+				}
+			}, 100);
 		}
 	}
 }

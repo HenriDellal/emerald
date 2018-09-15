@@ -79,7 +79,7 @@
 	    	android:key="hide_main_bar"/>
 	    <CheckBoxPreference
 	    	android:title="@string/bottom_main_bar"
-	    	android:defaultValue="false"
+	    	android:defaultValue="true"
 	    	android:key="bottom_main_bar"/>
 	    <CheckBoxPreference
 	    	android:title="@string/stack_from_bottom"
@@ -120,13 +120,21 @@
     <ru.henridellal.emerald.LaunchActivityPreference
     	android:title="@string/categoryManager"
         android:key="category_manager"/>
-   <!--<ru.henridellal.emerald.LaunchActivityPreference
+    <!--<ru.henridellal.emerald.LaunchActivityPreference
     	android:title="@string/categoryManager"
         android:key="open_file"/>-->
    <ru.henridellal.emerald.EditIntPreference
         android:title="@string/historySize"
         android:defaultValue="@integer/history_size_default"
         android:key="history_size"/>
+   <CheckBoxPreference
+		android:title="@string/hide_history"
+	    android:defaultValue="false"
+		android:key="hide_history"/>
+	<CheckBoxPreference
+		android:title="@string/hide_unclassified"
+	    android:defaultValue="false"
+		android:key="hide_unclassified"/>
    <EditTextPreference
         android:title="@string/password"
         android:dialogTitle="@string/passwordHint"

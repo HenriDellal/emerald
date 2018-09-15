@@ -81,7 +81,7 @@ public class Themer {
 		setBarTheme(activity, options, theme);
 	}
 	public static void setWindowDecorations(Activity activity, SharedPreferences options) {
-		if (options.getBoolean(Keys.FULLSCREEN, false)) {
+		if (!options.getBoolean(Keys.FULLSCREEN, false)) {
 			activity.getWindow().setStatusBarColor(options.getInt(Keys.STATUS_BAR_BACKGROUND, 0x22000000));
 		}
 		activity.getWindow().setNavigationBarColor(options.getInt(Keys.NAV_BAR_BACKGROUND, 0x22000000));

@@ -93,6 +93,8 @@
 	<string name="close_tutorial">Close tutorial</string>
 	<string name="fullscreen_mode">Fullscreen mode</string>
 	
+	<string name="hide_history">Hide history</string>
+	<string name="hide_unclassified">Hide "Unclassified" category</string>
 	
 <string name="tutorial">Swipe left/right on the apps menu to switch categories. Click on the category name to see the categories list.
 \n
@@ -138,6 +140,11 @@
 \nCopyright 2015 Hayai Software
 \nLicensed under the Apache License 2.0.
 \nhttps://github.com/seizonsenryaku/HayaiLauncher
+\n
+\n<b>KISS Launcher</b>
+\nCopyright Neamar
+\nLicensed under GPL-v3
+\nhttps://github.com/Neamar/KISS
 \n
 \n<b>Font-Awesome</b>
 \nThe font licensed under the SIL OFL 1.1.

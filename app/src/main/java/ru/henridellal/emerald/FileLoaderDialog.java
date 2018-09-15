@@ -71,13 +71,16 @@ public class FileLoaderDialog extends ListView
 		curDirectory = Environment.getExternalStorageDirectory();
 		setFileList(curDirectory);
 		this.mode = mode;
-		if (this.mode == 0) {
+		if (this.mode != 1) {
 			Button button = new Button(context);
 			button.setText(context.getResources().getString(R.string.save_here));
 			button.setOnClickListener(new View.OnClickListener(){
 				public void onClick(View v) {
-					File chosenFile = new File(curDirectory, "emerald-launcher-preferences.txt");
-					((Options)getContext()).backupPrefs(chosenFile);
+					if (getMode() == 0) {
+						File chosenFile = new File(curDirectory, "emerald-launcher-preferences.txt");
+						((Options)getContext()).backupPrefs(chosenFile);
+						//FileUtils.copy(getContext(), getContext().getDatabasePath(Database.NAME), new File(curDirectory, Database.NAME));
+					}
 				}
 			});
 			addHeaderView(button);
@@ -86,7 +89,7 @@ public class FileLoaderDialog extends ListView
         setAdapter(adapter);
     	setOnItemClickListener(new AdapterView.OnItemClickListener() {
     		public void onItemClick(AdapterView parent, View v, int position, long id) {
-    			File chosenFile = getFile(getMode() == 0 ? position-1: position);
+    			File chosenFile = getFile(getMode() == 1 ? position: position-1);
     			if (chosenFile.isDirectory()) {
     				setCurDirectory(chosenFile);
     				setFileList(curDirectory);
@@ -94,7 +97,7 @@ public class FileLoaderDialog extends ListView
     			} else {
     				if (getMode() == 0) {
     					((Options)getContext()).backupPrefs(chosenFile);
-    				} else {
+    				} else if (getMode() == 1){
     					((Options)getContext()).restorePrefs(chosenFile);
     				}
     			}

@@ -1,11 +1,9 @@
 package ru.henridellal.emerald;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.net.URLDecoder;
@@ -13,7 +11,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Map;
 
 import android.content.Context;
@@ -35,7 +32,6 @@ public class CategoryManager {
 	private String curCategory;
 	private ArrayList<String> names;
 	private Map<String,Category> categories;
-	private Map<String, BaseData> map;
 	private SharedPreferences options;
 	private ArrayList<String> history;
 	private static final int HISTORY_MAX = 10;
@@ -44,12 +40,13 @@ public class CategoryManager {
 		contextRef = new SoftReference<Context>(context);
 		this.options = PreferenceManager.getDefaultSharedPreferences(context);
 		history = new ArrayList<String>();
-		names = new ArrayList<String>();
-		names.add(ALL);
-		names.add(UNCLASSIFIED);
-		names.add(HISTORY);
-		names.add(HIDDEN);
-		categories = new HashMap<String,Category>();
+		loadCategoriesList();
+		curCategory = options.getString(Keys.CATEGORY, ALL);
+	}
+	public void loadCategoriesList() {
+		categories = DatabaseHelper.getCategories(contextRef.get());
+		names = new ArrayList<String>(categories.keySet());
+		sortNames();
 	}
 	public String getHome() {
 		return home;
@@ -78,7 +75,7 @@ public class CategoryManager {
 					result++;
 					result = (result < names.size()-1) ? result : 0;
 				}
-				if (!categories.get(names.get(result)).isHidden()) {
+				if (!isHidden(names.get(result))) {
 					finished = true;
 				}
 			}
@@ -90,64 +87,68 @@ public class CategoryManager {
 	public Category getCategory(String categoryName) {
 		return categories.get(categoryName);
 	}
-	
-	public ArrayList<? extends BaseData> getCategoryData(String category) {
-		return categories.get(category).getData();
+	public boolean isHidden(String categoryName) {
+		if (HISTORY.equals(categoryName)) {
+			return options.getBoolean(Keys.HIDE_HISTORY, false);
+		} else if (UNCLASSIFIED.equals(categoryName)) {
+			return options.getBoolean(Keys.HIDE_UNCLASSIFIED, false);
+		} else {
+			return false;
+		}
 	}
-	/*looks for files which represent categories
-	and load them*/
-	@SuppressWarnings("deprecation")
-	public void loadCategories() {
+	public ArrayList<BaseData> getCategoryData(String category) {
+		return DatabaseHelper.getEntries(contextRef.get(), category);
+	}
+	public void convert() {
+		BufferedReader reader = null;
+		File file = new File(contextRef.get().getFilesDir() + "/categories.props");
+		ArrayList<String> hiddenCategories = new ArrayList<String>();
+		try {
+			reader = new BufferedReader(new FileReader(file));
+			
+			String d;
+			String key = null;
+			String value = null;
+			int index = -1;
+			while (null != (d = reader.readLine())) {
+				d = d.trim();
+				if (names.contains(d)) {
+					String category = d;
+					d = reader.readLine();
+					index = d.indexOf('=');
+					key = d.substring(0, index).trim();
+					value = d.substring(index+1, d.length()).trim();
+					if (key.equals("hidden")) {
+						if ("true".equals(value)) {
+							hiddenCategories.add(category);
+						}
+					}
+				}
+			}
+		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
+		}
+		
+		if (reader != null)
+			try {
+				reader.close();
+				file.delete();
+			} catch (IOException e) {
+		}
 		for (File f : contextRef.get().getFilesDir().listFiles()) {
 			//get files names and look for .cat ones
 			String n = f.getName();
 			if (n.endsWith(".cat")) {
 				String name = n.substring(0, n.length()-4);
 				name = URLDecoder.decode(name);
-				//puts entries from cache to categories
-				if (isEditable(name)) {
-					if (isCustom(name)) {
-						if (!names.contains(name)) {
-							names.add(name);
-							categories.put(name, new Category(name, getEntries(f)));
-						}
-					} else {
-						int stringResourceId = 0;
-						if (HISTORY.equals(name)) {
-							stringResourceId = R.string.category_history;
-						} else if (HIDDEN.equals(name)) {
-							stringResourceId = R.string.category_hidden;
-						}
-						categories.put(name, new Category(name, getEntries(f), stringResourceId));
-					}
-				}
-				//sets category names
+				DatabaseHelper.addCategory(contextRef.get(), name);
 			}
 		}
-		//if category has just created, it adds an empty category
-		for (String name : names) {
-			if (null == categories.get(name)) {
-				int stringResourceId = 0;
-				if (ALL.equals(name)) {
-					stringResourceId = R.string.category_all;
-				} else if (UNCLASSIFIED.equals(name)) {
-					stringResourceId = R.string.category_unclassified;
-				}
-				categories.put(name, new Category(name, new ArrayList<BaseData>(), stringResourceId));
-			}
+		if (hiddenCategories.contains("History")) {
+			options.edit().putBoolean(Keys.HIDE_HISTORY, true);
+		} else if (hiddenCategories.contains("Unclassified")) {
+			options.edit().putBoolean(Keys.HIDE_UNCLASSIFIED, true);
 		}
-		readCategoriesProps();
-	}
-	
-	public void setMap(Map<String, BaseData> map) {
-		this.map = map;
-	}
-	public void setInitialMap(Map<String, BaseData> map) {
-		setMap(map);
-		loadCategories();
-		sortNames();
-		setHome(options.getString(Keys.HOME, ALL));
-		curCategory = options.getString(Keys.CATEGORY, ALL);
 	}
 	
 	/*Sets current category and saves its name in preferences*/
@@ -196,7 +197,7 @@ public class CategoryManager {
 	
 	//returns category file
 	@SuppressWarnings("deprecation")
-	private File catPath(String category) {
+	public File catPath(String category) {
 		return new File(contextRef.get().getFilesDir()+"/"+URLEncoder.encode(category)+".cat");
 	}
 	//return category names
@@ -211,7 +212,6 @@ public class CategoryManager {
 		//update category file
 		if (data != null) {
 			data.remove(i);				
-			putEntries(catPath(cat), data);
 		}
 	}
 	public void removeFromCategory(String cat, BaseData a) {
@@ -220,7 +220,6 @@ public class CategoryManager {
 		ArrayList<BaseData> data = categories.get(cat).getData();
 		if (data != null) {
 			data.remove(a);				
-			putEntries(catPath(cat), data);
 		}
 	}
 	//adds app to category
@@ -232,7 +231,6 @@ public class CategoryManager {
 		if (data != null) {
 //			Log.d("TinyLaunch", "adding "+a.name);
 			data.add(a);	
-			putEntries(catPath(cat), data);
 		}
 	}
 	
@@ -241,7 +239,6 @@ public class CategoryManager {
 		if (data != null) {
 //			Log.d("TinyLaunch", "adding "+a.name);
 			data.add(0, a);	
-			putEntries(catPath(HISTORY), data);
 		}
 	}
 	
@@ -251,7 +248,6 @@ public class CategoryManager {
 		catPath(catName).delete();
 		categories.remove(catName);
 		names.remove(catName);
-		writeCategoriesProps();
 		if (home.equals(catName)) {
 			setHome(ALL);
 		}
@@ -266,7 +262,7 @@ public class CategoryManager {
 			removeFromCategory(cat, 0);
 		}
 	}
-	public void cleanCategory(String category) {
+	/*public void cleanCategory(String category) {
 		if (!isEditable(category))
 			return;
 		
@@ -287,16 +283,16 @@ public class CategoryManager {
 		
 		if (dirty) 
 			putEntries(catPath(category), data);
-	}
+	}*/
 	//cleans categories files from deleted apps
 	//updates category files
-	public void cleanCategories() {
+	/*public void cleanCategories() {
 		for (String c: names) {
 			cleanCategory(c);
 		}
-	}
+	}*/
 	//adds new category
-	public boolean addCategory(String c) {
+	/*public boolean addCategory(String c) {
 //		Log.v("TinyLaunch", "adding "+c);
 		if (names.contains(c)) {
 //			Log.v("TinyLaunch", "already used "+c);
@@ -310,12 +306,11 @@ public class CategoryManager {
 		categories.put(c, new Category(c, new ArrayList<BaseData>()));
 		names.add(c);
 		sortNames();
-		writeCategoriesProps();
 		return true;
-	}
+	}*/
 	//get entries of category from category file
-	private ArrayList<BaseData> getEntries(File f) {
-		ArrayList<BaseData> data = new ArrayList<BaseData>();
+	public ArrayList<String> getEntriesComponents(File f) {
+		ArrayList<String> data = new ArrayList<String>();
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new FileReader(f));
@@ -325,9 +320,7 @@ public class CategoryManager {
 			while (null != (d = reader.readLine())) {
 				d = d.trim();
 				if (d.length()>0) {
-					BaseData a = map.get(d);
-					if (a != null)
-						data.add(a);
+					data.add(d);
 				}
 			}			
 		} catch (FileNotFoundException e) {
@@ -341,85 +334,6 @@ public class CategoryManager {
 			}
 		
 		return data;
-	}
-	//writes app data into category file
-	private void putEntries(File file, ArrayList<? extends BaseData> data) {
-		BufferedWriter writer = null;
-		try {
-			writer = new BufferedWriter(new FileWriter(file));
-
-			for (BaseData a : data) 
-				writer.write(a.getId() + "\n");
-				
-		} catch (IOException e) {
-		}
-
-		if (writer != null) {
-			try {
-				writer.close();
-			} catch (IOException e) {
-			}		
-		}
-	}
-	private void readCategoriesProps() {
-		BufferedReader reader = null;
-		File file = new File(contextRef.get().getFilesDir() + "/categories.props");
-		try {
-			reader = new BufferedReader(new FileReader(file));
-			
-			String d;
-			String key = null;
-			String value = null;
-			String category = null;
-			int index = -1;
-			while (null != (d = reader.readLine())) {
-				d = d.trim();
-				if (names.contains(d)) {
-					category = d;
-					Category c = categories.get(category);
-					d = reader.readLine();
-					index = d.indexOf('=');
-					key = d.substring(0, index).trim();
-					value = d.substring(index+1, d.length()).trim();
-					if (key.equals("hidden")) {
-						if ("true".equals(value)) {
-							c.hide();
-						} else {
-							c.unhide();
-						}
-					}
-				}
-			}			
-		} catch (FileNotFoundException e) {
-		} catch (IOException e) {
-		}
-		
-		if (reader != null)
-			try {
-				reader.close();
-			} catch (IOException e) {
-			}
-	}
-	private void writeCategoriesProps() {
-		BufferedWriter writer = null;
-		File file = new File(contextRef.get().getFilesDir() + "/categories.props");
-		try {
-			writer = new BufferedWriter(new FileWriter(file));
-
-			for (Category c : categories.values()) {
-				writer.write(c.getName()+"\n");
-				writer.write(c.getProps());
-			}
-				
-		} catch (IOException e) {
-		}
-
-		if (writer != null) {
-			try {
-				writer.close();
-			} catch (IOException e) {
-			}		
-		}
 	}
 	
 	//return list of apps for default categories (All, Unclassified, Hidden)
@@ -504,11 +418,11 @@ public class CategoryManager {
 		return customNames;
 	}
 	//can be renamed and deleted or not
-	public boolean isCustom(String c) {
+	public static boolean isCustom(String c) {
 		return ! c.equals(ALL) && ! c.equals(UNCLASSIFIED) && ! c.equals(HIDDEN) && ! c.equals(HISTORY);
 	}
 	//can be filled with apps by the user
-	public boolean isEditable(String c) {
+	public static boolean isEditable(String c) {
 		return ! c.equals(ALL) && ! c.equals(UNCLASSIFIED);
 	}
 	//checks if category has an app
@@ -518,17 +432,6 @@ public class CategoryManager {
 
 	public String getCurCategory() {
 		return curCategory;
-	}
-	public void hide(String catName) {
-		if (catName.equals(getCurCategory())) {
-			setCurCategory(home);
-		}
-		categories.get(catName).hide();
-		writeCategoriesProps();
-	}
-	public void unhide(String catName) {
-		categories.get(catName).unhide();
-		writeCategoriesProps();
 	}
 	//returns true if rename was successful
 	
@@ -551,7 +454,6 @@ public class CategoryManager {
 		names.add(newName);
 		c.setName(newName);
 		sortNames();
-		writeCategoriesProps();
 		setCurCategory(ALL);
 		if (cat.equals(home)) {
 			setHome(newName);

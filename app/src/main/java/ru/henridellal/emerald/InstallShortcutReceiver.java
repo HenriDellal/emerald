@@ -1,6 +1,7 @@
 package ru.henridellal.emerald;
 
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Intent.ShortcutIconResource;
@@ -10,31 +11,33 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.widget.Toast;
-import android.util.Log;
+//import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
 
 public class InstallShortcutReceiver extends BroadcastReceiver {
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public void onReceive(Context context, Intent intent) {
 		Intent shortcutIntent = intent.getParcelableExtra(Intent.EXTRA_SHORTCUT_INTENT);
+		String uri = shortcutIntent.toUri(0);
+		if (DatabaseHelper.hasShortcut(context, uri) || isAppLink(uri)) {
+			return;
+		}
 		if (shortcutIntent.getAction() == null) {
 			shortcutIntent.setAction(Intent.ACTION_VIEW);
 		}
 		String name = intent.getStringExtra(Intent.EXTRA_SHORTCUT_NAME);
-		String uri = shortcutIntent.toUri(0);
 		Bitmap icon = intent.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON);
 		
-		String packageName, resourceName;
-		BaseData shortcutData = null;
-        if (icon != null) {
-        	shortcutData = new ShortcutData(name, uri);
-        } else {
+		String packageName = null;
+		String resourceName = null;
+		ContentValues values = new ContentValues();
+        if (icon == null) {
             ShortcutIconResource resource = intent.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE);
 
             if (resource != null) {
@@ -46,34 +49,47 @@ public class InstallShortcutReceiver extends BroadcastReceiver {
                 int id = res.getIdentifier(resourceName, "png", packageName);
                 Drawable d = res.getDrawable(id);
                 icon = ((BitmapDrawable) d).getBitmap();
+                
                 } catch (Exception e) {
                 	Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
                 }
-                shortcutData = new ShortcutData(name, uri, packageName, resourceName);
             } else {
                 //invalid shortcut
                 return;
             }
+        } else {
+        	ByteArrayOutputStream out = new ByteArrayOutputStream();
+        	icon.compress(CompressFormat.PNG, 100, out);
+        	values.put("icon", out.toString());
+        	saveIcon(context, uri, icon);
         }
-        ArrayList<BaseData> shortcuts = new ArrayList<BaseData>();
-        MyCache.read(context, "shortcuts", shortcuts);
-        if (!shortcuts.contains(shortcutData)) {
-        	shortcuts.add(shortcutData);
-        	MyCache.write(context, "shortcuts", shortcuts);
-        	if (icon != null) {
-        		saveIcon(context, icon, shortcutData);
-        	}
-        }
+		values.put("name", name);
+		values.put("uri", uri);
+		values.put("package", packageName);
+		values.put("resource", resourceName);
+		values.put("categories", "");
+		DatabaseHelper.insertShortcut(context, values);
 	}
-	private void saveIcon(Context context, Bitmap icon, BaseData shortcutData) {
+	
+	private boolean isAppLink(String uri) {
+		try {
+			Intent intent = Intent.parseUri(uri, 0);
+            if (intent.getCategories() != null && intent.getCategories().contains(Intent.CATEGORY_LAUNCHER) && Intent.ACTION_MAIN.equals(intent.getAction())) {
+            	return true;
+            }
+		} catch (Exception e) {}
+		return false;
+	}
+	
+	private void saveIcon(Context context, String uri, Bitmap icon) {
 		File file = null;
 		try {
-			file = MyCache.getIconFile(context, shortcutData);
+			file = MyCache.getShortcutIconFile(context, uri);
 			FileOutputStream out = new FileOutputStream(file);
 			icon.compress(CompressFormat.PNG, 100, out);
 			out.close();
 		} catch (Exception e) {
-		Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
+			Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
 			file.delete();
 		}
 	}
