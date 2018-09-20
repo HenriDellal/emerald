@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="appearancePrefs">Préférences d\'apparence</string>
+	<string name="portraitPrefs">Préférences du mode Portrait</string>
+	<string name="landscapePrefs">Préférences du mode paysage</string>
+	
+	<string name="home_button">Comportement du bouton Accueil</string>
+	<string name="categoryManager">Gestionnaire de catégorie</string>
+	<string name="category_all">Toutes les applications</string>
+	<string name="category_unclassified">Non classifié</string>
+	<string name="category_history">Historique</string>
+	<string name="category_hidden">Caché</string>
+	<string name="delete_category_question">Voulez-vous supprimer la catégorie ?</string>
+	<string name="clear_category_question">Voulez-vous effacer la catégorie ?</string>
+	<string name="appShortcut">Raccourci App</string>
+	<string name="iconSize">Taille de l\'icône</string>
+	<string name="textSize">Taille du texte</string>
+	<string name="fontStyle">Style de police</string>
+	<string name="columnWidth">Largeur de colonne</string>
+	<string name="verticalSpacing">Espacement vertical</string>
+	<string name="tileView">Grille</string>
+	<string name="hide_main_bar">Masquer la barre principale</string>
+	<string name="bottom_main_bar">Barre principale en bas</string>
+	<string name="show_keyboard">Afficher le clavier au démarrage</string>
+	<string name="stack_from_bottom">Collez le contenu des catégories au bas de la page</string>
+	<string name="scrollbar">Défilement rapide</string>
+	<string name="orientation">Orientation de l\'écran</string>
+	<string name="theme">Thème</string>
+	<string name="ui_colors">Couleurs de l\'interface</string>
+	<string name="appsBackground">Fenêtre Apps</string>
+	<string name="statusBarBackground">Barre de statut</string>
+	<string name="barBackground">Barre supérieure</string>
+	<string name="navBarBackground">Barre de navigation</string>
+	<string name="iconPack">Pack d\'icônes</string>
+	<string name="transformIcons">Transformer les icônes</string>
+	<string name="transformIconsSummary">Editer les icônes selon les paramètres du pack d\'icônes</string>
+	<string name="defaultIconPack">Défaut</string>
+	<string name="fullscreen">Mode plein écran</string>
+	<string name="historySize">Taille de l\'historique</string>
+	<string name="password">Mot de passe</string>
+	<string name="passwordSummary">Verrouiller les paramètres et les applications cachées</string>
+	<string name="passwordHint">Laisser vide pour désactiver le verrouillage</string>
+	<string name="searchProvider">Fournisseur de recherche</string>
+	<string name="keepInMemory">Conserver en mémoire</string>
+	<string name="backupPrefs">Préférences de sauvegarde</string>
+	<string name="successfulBackup">Sauvegarde terminée. Le fichier de sauvegarde se trouve à l\'adresse suivante</string>
+	<string name="successfulRestore">Restauré avec succès.</string>
+	<string name="restorePrefs">Restaurer les préférences</string>
+	<string name="restart">Redémarrer le lanceur</string>
+	<string name="restart_needed">Le lanceur sera redémarré</string>
+	
+	<string name="launcherSettings">Paramètres du lanceur</string>
+	
+	<string name="createCategory">Créer une catégorie</string>
+	<string name="note_rename_error">Le nom est déjà utilisé</string>
+	<string name="rename">Renommer</string>
+	<string name="editAppList">Modifier la liste des applications</string>
+	<string name="findInMarket">Trouver dans le marché des applications</string>
+	<string name="editAppCategories">Modifier les catégories d\'application</string>
+	<string name="delete">Supprimer</string>
+	<string name="hide">Cacher</string>
+	<string name="unhide">Démasquer</string>
+	
+	<string name="save_here">Sauvegarder dans ce dossier</string>
+	<string name="dock_is_full">Le dock est plein</string>
+	<string name="dock_preferences">Préférences du dock</string>
+	<string name="dock_height">Hauteur du Dock</string>
+	<string name="dock_icon_size">taille des icônes du Dock</string>
+	<string name="show_dock_in_landscape">Afficher le dock en mode paysage</string>
+	<string name="dock_background">Dock</string>
+	
+	<string name="change_wallpaper">Changer le fond d\'écran</string>
+	<string name="accessHidden">Accédez aux applications cachées</string>
+	<string name="quit_hidden_apps">Quitter les applications cachées</string>
+	<string name="fullScan">Analyse complète</string>
+	<string name="clear">Effacer</string>
+	<string name="wrong_password">Mot de passe incorrect.</string>
+	<string name="type_password">Saisissez le mot de passe</string>
+	
+	<string name="add_to_dock">Ajouter au dock</string>
+	<string name="remove_from_dock">Enlever du Dock</string>
+	<string name="reset_icon">Réinitialiser Icône</string>
+	<string name="change_icon">Modifier l\'icône</string>
+	<string name="change_icon_title">Changer l\'icône de %s</string>
+	<string name="change_icon_question">Voulez-vous changer l\'icône de %s ?</string>
+	<string name="search_icon_hint">recherche Icône par nom de paquet</string>
+	<string name="uninstall">Désinstaller</string>
+	
+	<string name="aboutTitle">A propos</string>
+	<string name="how_to_use">Comment utiliser</string>
+	<string name="close_tutorial">Fermer le tutoriel</string>
+	<string name="fullscreen_mode">Mode plein écran</string>
+	
+	<string name="hide_history">Masquer l\'historique</string>
+	<string name="hide_unclassified">Masquer la catégorie \"Non classé\"</string>
+	
+<string name="tutorial">Glissez vers la gauche/droite dans le menu des applications pour changer de catégorie. Cliquez sur le nom de la catégorie pour voir la liste des catégories.\n
+ \n
+ Ouvrez Paramètres du lanceur/Gestionnaire de catégories pour éditer les catégories.\n
+ \n
+ Cliquez sur le bouton de recherche pour effectuer une recherche dans toutes les applications (sauf celles qui sont cachées). Pour effectuer une recherche sur le Web, ouvrez Recherche, tapez .... et cliquez sur une flèche à droite du champ de texte.\n
+ \n
+ Appuyez longuement sur l\'icône d\'une application pour ouvrir le menu contextuel.\n
+ \n
+ Appuyez sur le bouton Accueil pour ouvrir la catégorie Accueil. Appuyez à nouveau sur cette touche pour ouvrir la liste de toutes les applications.\n
+ \n
+ Appuyez sur le bouton Retour pour passer à la catégorie précédemment ouverte.</string>
+</resources>
