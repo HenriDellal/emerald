@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">Emerald Launcher</string>
 	<string name="appearancePrefs">Préférences d\'apparence</string>
 	<string name="portraitPrefs">Préférences du mode Portrait</string>
 	<string name="landscapePrefs">Préférences du mode paysage</string>
@@ -106,9 +105,4 @@
  Appuyez sur le bouton Accueil pour ouvrir la catégorie Accueil. Appuyez à nouveau sur cette touche pour ouvrir la liste de toutes les applications.\n
  \n
  Appuyez sur le bouton Retour pour passer à la catégorie précédemment ouverte.</string>
-	
-
-	<!-- DEFAULT VALUES FOR SETTINGS -->
-	
-	
 </resources>
