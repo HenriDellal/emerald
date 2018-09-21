@@ -20,7 +20,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 
-public class Options extends PreferenceActivity {
+public class Options extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -32,7 +32,37 @@ public class Options extends PreferenceActivity {
 			findPreference(Keys.KEEP_IN_MEMORY).setEnabled(false);
 			findPreference(Keys.THEME).setEnabled(false);
 		}
+		PreferenceManager.getDefaultSharedPreferences(this)
+			.registerOnSharedPreferenceChangeListener(this);
 	}
+	
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+		if (key.equals(Keys.ICON_PACK) || key.equals(Keys.TRANSFORM_DRAWABLE)) {
+			MyCache.deleteIcons(this);
+			LauncherApp.getInstance().getIconPackManager().setIconPack(sharedPreferences.getString(Keys.ICON_PACK, "default"));
+			sharedPreferences.edit().putBoolean(Keys.ICON_PACK_CHANGED, true).commit();
+			//Apps.this.loadAppsFromSystem(true);
+		} else if (key.equals(Keys.APP_SHORTCUT)) {
+			int appShortcut = Integer.parseInt(sharedPreferences.getString(Keys.APP_SHORTCUT, "3"));
+			int prevAppShortcut = Integer.parseInt(sharedPreferences.getString(Keys.PREV_APP_SHORTCUT, "3"));
+			if (appShortcut >= CustomAdapter.ICON && prevAppShortcut == CustomAdapter.TEXT) {
+				sharedPreferences.edit()
+					.putBoolean(Keys.ICON_PACK_CHANGED, true)
+					.putString(Keys.PREV_APP_SHORTCUT, ((Integer)appShortcut).toString())
+					.commit();
+			} else if (appShortcut == CustomAdapter.TEXT && prevAppShortcut >= CustomAdapter.ICON) {
+				MyCache.deleteIcons(this);
+				sharedPreferences.edit()
+					.putString(Keys.PREV_APP_SHORTCUT, ((Integer)appShortcut).toString())
+					.commit();
+			}
+		} else if (!sharedPreferences.getBoolean(Keys.MESSAGE_SHOWN, false) && Arrays.asList(Keys.restart).contains(key)) {
+			Toast.makeText(this, getResources().getString(R.string.restart_needed), Toast.LENGTH_LONG).show();
+			sharedPreferences.edit().putBoolean(Keys.MESSAGE_SHOWN, true).commit();
+		}
+	}
+	
 	@Override
 	public void onBackPressed() {
 		if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Keys.MESSAGE_SHOWN, false)) {
@@ -63,8 +93,9 @@ public class Options extends PreferenceActivity {
 	}
 	
 	@Override
-	public void onStop() {
-		super.onStop();
+	public void onDestroy() {
+		PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
+		super.onDestroy();
 	}
 	
 	public void backupPrefs(File file) {

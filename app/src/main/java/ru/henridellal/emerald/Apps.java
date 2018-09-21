@@ -73,7 +73,6 @@ public class Apps extends Activity
 	private CustomAdapter adapter;
 	public static final int GRID = 0;
 	public static final int LIST = 1;
-	private OnSharedPreferenceChangeListener prefListener;
 	private boolean lock, searchIsOpened, homeButtonPressed;
 	
 	public Dock getDock() {
@@ -119,8 +118,8 @@ public class Apps extends Activity
 		if (!options.getBoolean(Keys.HIDE_MAIN_BAR, false)) {
 			((Button)findViewById(R.id.category_button)).setText(curCategory.getRepresentName(this));
 		}
-		if (null != mGetAppsThread)
-			mGetAppsThread.quit();
+		/*if (null != mGetAppsThread)
+			mGetAppsThread.quit();*/
 	}
 	//handles history filling
 	private void addToHistory(ShortcutData shortcut) {
@@ -200,6 +199,7 @@ public class Apps extends Activity
 				catch (Exception e) {
 				}
 				Apps.this.loadFilteredApps();
+				mGetAppsThread.quit();
 			}
 		};
 		Runnable appsTask;
@@ -755,10 +755,8 @@ public class Apps extends Activity
 	@Override
 	protected void onDestroy() {
 		//Log.v(APP_TAG, "onDestroy");
-		options.unregisterOnSharedPreferenceChangeListener(prefListener);
 		grid.setOnScrollListener(null);
 		grid.setOnTouchListener(null);
-		prefListener = null;
 		super.onDestroy();
 	}
 	/*@Override
@@ -907,26 +905,15 @@ public class Apps extends Activity
 		setRequestedOrientation(Integer.parseInt(options.getString(Keys.ORIENTATION, "2")));
 		setContentView(mainLayout);
 		options.edit().putBoolean(Keys.MESSAGE_SHOWN, true).commit();
-		prefListener = new OnSharedPreferenceChangeListener() {
-			@Override
-			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-					String key) {
-				if (key.equals(Keys.ICON_PACK) || key.equals(Keys.TRANSFORM_DRAWABLE)) {
-					MyCache.deleteIcons(Apps.this);
-					LauncherApp.getInstance().getIconPackManager().setIconPack(sharedPreferences.getString(Keys.ICON_PACK, "default"));
-					loadAppsFromSystem(true);
-				} else if (!sharedPreferences.getBoolean(Keys.MESSAGE_SHOWN, false) && Arrays.asList(Keys.restart).contains(key)) {
-					Toast.makeText(Apps.this, getResources().getString(R.string.restart_needed), Toast.LENGTH_LONG).show();
-					sharedPreferences.edit().putBoolean(Keys.MESSAGE_SHOWN, true).commit();
-				}
-			}
-		};
-		options.registerOnSharedPreferenceChangeListener(prefListener);
 		if (Build.VERSION.SDK_INT >= 11) {
 			if (Build.VERSION.SDK_INT >= 21) {
 				Themer.setWindowDecorations(this, options);
 			}
 			Themer.applyTheme(this, options);
+		}
+		if (options.getBoolean(Keys.ICON_PACK_CHANGED, false)) {
+			loadAppsFromSystem(true);
+			options.edit().putBoolean(Keys.ICON_PACK_CHANGED, false).commit();
 		}
 		dock = new Dock(this);
 		changePrefsOnRotate();
@@ -944,7 +931,7 @@ public class Apps extends Activity
 		case R.id.full_scan:
 			if (null != mGetAppsThread)
 				mGetAppsThread.quit();
-			loadAppsFromSystem(false);
+			loadAppsFromSystem(true);
 			return true;
 		case R.id.change_wallpaper:
 			startActivity(new Intent(Intent.ACTION_SET_WALLPAPER));
@@ -995,22 +982,9 @@ public class Apps extends Activity
 	    if (homeButtonPressed) {
 	    	homeButtonPressed = false;
 	    }
-		boolean needReload = false;
+	    
 		if (DatabaseHelper.isDatabaseEmpty(this)) {
-			needReload = true;
-		} else {
-			if ((Integer.parseInt(options.getString(Keys.PREV_APP_SHORTCUT, "3")) == CustomAdapter.TEXT) != (appShortcut == CustomAdapter.TEXT)) {
-				if (appShortcut >= CustomAdapter.ICON) {
-					needReload = true;
-				} else {
-					MyCache.deleteIcons(this);
-					options.edit().putString(Keys.PREV_APP_SHORTCUT, ((Integer)appShortcut).toString()).commit();
-				}
-			}
-		}
-		
-		if (needReload && (mGetAppsThread == null)) {
-			loadAppsFromSystem(false);
+			loadAppsFromSystem(true);
 		} else {
 			loadFilteredApps();
 		}

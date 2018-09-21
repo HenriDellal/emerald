@@ -13,6 +13,7 @@ public final class Keys {
 	public static final String APPS_WINDOW_BACKGROUND = "apps_background";
 	
 	public static final String ICON_PACK = "icon_pack";
+	public static final String ICON_PACK_CHANGED = "icon_pack_changed";
 	public static final String TRANSFORM_DRAWABLE = "transform_drawable";
 	public static final String APP_SHORTCUT = "app_shortcut";
 	public static final String PREV_APP_SHORTCUT = "prevApp_shortcut";
@@ -66,5 +67,5 @@ public final class Keys {
 		NAV_BAR_BACKGROUND, STATUS_BAR_BACKGROUND, DOCK_BACKGROUND,
 		APPS_WINDOW_BACKGROUND, SHOW_KEYBOARD_ON_START, TILE, BOTTOM_MAIN_BAR, HIDE_MAIN_BAR,
 		STACK_FROM_BOTTOM, FONT_STYLE, SCROLLBAR, THEME, ORIENTATION,
-		APP_SHORTCUT, KEEP_IN_MEMORY, PASSWORD};
+		APP_SHORTCUT, KEEP_IN_MEMORY, PASSWORD, ICON_PACK_CHANGED};
 }
