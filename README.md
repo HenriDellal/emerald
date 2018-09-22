@@ -23,6 +23,21 @@ Emerald is a simple home screen for Android phones. It aims good performance whi
 - Swipe left or right to switch categories;
 - Tap on category name to see the list of categories.
 
+## How to compile
+There are multiple options:
+- Gradle;
+- In Termux:
+
+Some packages should be installed
+`$ pkg install aapt apksigner dx`
+If your Android version is 7.0 or higher
+`$ pkg install ecj`
+Otherwise
+`$ pkg install ecj4.6`
+Then navigate to the emerald project folder and run the script (it is recommended to edit paths in it first)
+`$ chmod u+x termux-build.sh`
+`$ ./termux-build.sh`
+
 ## Questions and answers
 ##### Is it possible to use Emerald as an app drawer?
 Yes.
