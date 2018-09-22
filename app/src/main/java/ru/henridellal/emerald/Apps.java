@@ -731,6 +731,22 @@ public class Apps extends Activity
 				return false;
 			}
 			return false;
+		} else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+			if (options.getBoolean(Keys.VOLUME_BUTTONS, false)) {
+				categories.setCurCategory(categories.getCategory(CategoryManager.PREVIOUS));
+				loadFilteredApps();
+				return true;
+			} else {
+				return false;
+			}
+		} else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+			if (options.getBoolean(Keys.VOLUME_BUTTONS, false)) {
+				categories.setCurCategory(categories.getCategory(CategoryManager.NEXT));
+				loadFilteredApps();
+				return true;
+			} else {
+				return false;
+			}
 		} else {
 			return false;
 		}

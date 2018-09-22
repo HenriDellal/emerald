@@ -33,6 +33,7 @@
 	<string name="passwordHint">Leer lassen, um Sperre zu deaktivieren</string>
 	<string name="searchProvider">Suchdienstanbieter</string>
 	<string name="keepInMemory">Im Speicher behalten</string>
+	<string name="volumeButtons">Lautstärke-Tasten zum Kategorie-Wechsel verwenden</string>
 	<string name="backupPrefs">Einstellungen zur Sicherungskopie</string>
 	<string name="successfulBackup">Sicherungskopie erstellt. Die Datei befindet sich in </string>
 	<string name="successfulRestore">Sicherungskopie wiederhergestellt.</string>

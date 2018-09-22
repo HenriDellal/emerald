@@ -164,8 +164,12 @@
         android:key="restore"/>
    <CheckBoxPreference
 		android:title="@string/keepInMemory"
-	    android:defaultValue="false"
+		android:defaultValue="false"
 		android:key="keep_in_memory"/>
+   <CheckBoxPreference
+		android:title="@string/volumeButtons"
+		android:defaultValue="false"
+		android:key="volume_buttons"/>
 	<ru.henridellal.emerald.RestartPreference
     	android:title="@string/restart"
         android:key="restart"/>
