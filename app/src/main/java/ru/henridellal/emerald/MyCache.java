@@ -76,7 +76,7 @@ public class MyCache {
 				getIconFileName(data, ".png"));
 	}
 	public static String getShortcutIconFileName(String uri) {
-		return ((Integer)uri.hashCode()).toString() + ".icon.png";
+		return ((Integer)uri.hashCode()).toString() + ".png";
 	}
 	public static String getIconFileName(String id) {
 		return Uri.encode(id)+".icon.png";
@@ -123,7 +123,7 @@ public class MyCache {
 			}
 		}
 	}
-	/* removes all icons in cache */
+	/* removes applications' icons in cache */
 	public static void deleteIcons(Context c) {
 		File[] dirs = c.getCacheDir().listFiles();
 		

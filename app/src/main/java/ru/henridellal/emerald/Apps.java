@@ -73,7 +73,7 @@ public class Apps extends Activity
 	private CustomAdapter adapter;
 	public static final int GRID = 0;
 	public static final int LIST = 1;
-	private boolean lock, searchIsOpened, homeButtonPressed;
+	private boolean lock, searchIsOpened, homeButtonPressed, launcherUpdate;
 	
 	public Dock getDock() {
 		return dock;
@@ -442,6 +442,7 @@ public class Apps extends Activity
 						uri = Uri.parse("market://details?id="+ComponentName.unflattenFromString(
 							item.getComponent()).getPackageName());
 						startActivity(new Intent(Intent.ACTION_VIEW, uri));
+						loadFilteredApps();
 						break;
 					case 2:
 						itemEdit(item);
@@ -679,7 +680,6 @@ public class Apps extends Activity
 				closeSearch();
 			} else if (!isDefaultLauncher()) {
 				finish();
-				//moveTaskToBack(false);
 				return true;
 			} else {
 				if (categories.getCurCategory().equals(CategoryManager.HIDDEN)) {
@@ -759,7 +759,7 @@ public class Apps extends Activity
 		grid.setOnTouchListener(null);
 		super.onDestroy();
 	}
-	/*@Override
+	@Override
 	protected void onNewIntent(Intent i) {
 		//Log.v(APP_TAG, "onNewIntent");
 		try {
@@ -786,7 +786,7 @@ public class Apps extends Activity
 			Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
 		}
 		super.onNewIntent(i);
-	}*/
+	}
 	
 	private void layoutInit() {
 		mainLayout = new RelativeLayout(this);
@@ -885,6 +885,7 @@ public class Apps extends Activity
 			new MoveCustomIconsTask(this).execute();
 			categories.convert();
 			DatabaseConverter.convert(this);
+			launcherUpdate = true;
 		}
 		super.onCreate(savedInstanceState);
 		Themer.theme = Integer.parseInt(options.getString(Keys.THEME, getResources().getString(R.string.defaultThemeValue)));
@@ -983,13 +984,14 @@ public class Apps extends Activity
 	    	homeButtonPressed = false;
 	    }
 	    
-		if (DatabaseHelper.isDatabaseEmpty(this)) {
+		if (DatabaseHelper.isDatabaseEmpty(this) && !launcherUpdate) {
 			loadAppsFromSystem(true);
 		} else {
 			loadFilteredApps();
 		}
 		
 		dock.initApps();
+		launcherUpdate = false;
 	}
 	@Override
 	protected void onPostResume() {

@@ -42,6 +42,7 @@ public class CategoryManager {
 		history = new ArrayList<String>();
 		loadCategoriesList();
 		curCategory = options.getString(Keys.CATEGORY, ALL);
+		home = options.getString(Keys.HOME, ALL);
 	}
 	public void loadCategoriesList() {
 		categories = DatabaseHelper.getCategories(contextRef.get());
@@ -100,6 +101,7 @@ public class CategoryManager {
 		return DatabaseHelper.getEntries(contextRef.get(), category);
 	}
 	public void convert() {
+		setCurCategory(ALL);
 		BufferedReader reader = null;
 		File file = new File(contextRef.get().getFilesDir() + "/categories.props");
 		ArrayList<String> hiddenCategories = new ArrayList<String>();
@@ -168,8 +170,6 @@ public class CategoryManager {
 		String c = popCategory();
 		if (c != null) {
 			setCurCategory(c, false);
-		} else {
-			setCurCategory(home);
 		}
 	}
 	
@@ -262,52 +262,7 @@ public class CategoryManager {
 			removeFromCategory(cat, 0);
 		}
 	}
-	/*public void cleanCategory(String category) {
-		if (!isEditable(category))
-			return;
-		
-		ArrayList<? extends BaseData> data = categories.get(category).getData();
-			
-		if (data == null) 
-			return; // should not happen
-			
-		boolean dirty = false;
-		
-		for (int i = data.size() - 1 ; i >= 0 ; i--) {
-			BaseData a = data.get(i);
-			if (null == map.get(a.getId())) {
-				data.remove(i);
-				dirty = true;
-			}
-		}
-		
-		if (dirty) 
-			putEntries(catPath(category), data);
-	}*/
-	//cleans categories files from deleted apps
-	//updates category files
-	/*public void cleanCategories() {
-		for (String c: names) {
-			cleanCategory(c);
-		}
-	}*/
-	//adds new category
-	/*public boolean addCategory(String c) {
-//		Log.v("TinyLaunch", "adding "+c);
-		if (names.contains(c)) {
-//			Log.v("TinyLaunch", "already used "+c);
-			return false;
-		}
-		try {
-			catPath(c).createNewFile();
-		} catch (IOException e) {
-			return false;
-		}
-		categories.put(c, new Category(c, new ArrayList<BaseData>()));
-		names.add(c);
-		sortNames();
-		return true;
-	}*/
+	
 	//get entries of category from category file
 	public ArrayList<String> getEntriesComponents(File f) {
 		ArrayList<String> data = new ArrayList<String>();

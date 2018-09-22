@@ -164,7 +164,11 @@ public class IconPackManager {
 		File iconFile;
 		iconFile = MyCache.getCustomIconFile(c, a);
 		if (!iconFile.exists()) {
-			iconFile = MyCache.getIconFile(c, a);
+			if (a instanceof AppData) {
+				iconFile = MyCache.getIconFile(c, a);
+			} else {
+				iconFile = MyCache.getShortcutIconFile(c, ((ShortcutData)a).getUri());
+			}
 		}
 		if (iconFile.exists()){
 			try {

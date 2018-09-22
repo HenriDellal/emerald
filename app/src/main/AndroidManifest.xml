@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      android:versionCode="35"
-      android:versionName="0.5.6.2" package="ru.henridellal.emerald"
+      android:versionCode="36"
+      android:versionName="0.6.0" package="ru.henridellal.emerald"
       >
 
     <!--android:configChanges="keyboard|keyboardHidden|orientation|screenSize"-->
@@ -31,8 +31,6 @@
  		<activity android:name=".ThemerActivity" android:label="@string/ui_colors"/>
  		<activity android:name=".ChangeIconActivity" />
  		<activity android:name=".FileActivity"/>
-            <!--
-            -->
         <activity android:name=".Apps"
                   android:resizeableActivity="false"
                   android:excludeFromRecents="true"
