@@ -486,12 +486,11 @@ public class Apps extends Activity
 		builder.setCancelable(true);
 		
 		String[] commands = new String[]{
-			getResources().getString(R.string.editAppCategories),
+			getResources().getString(R.string.editCategories),
 			getResources().getString(R.string.uninstall),
 			(dock.hasApp(item)) ?
 				getResources().getString(R.string.remove_from_dock): 
-				getResources().getString(R.string.add_to_dock),
-			getResources().getString(R.string.change_icon)
+				getResources().getString(R.string.add_to_dock)
 		};
 		builder.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, commands),
 		new DialogInterface.OnClickListener(){

@@ -9,6 +9,7 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.lang.ref.SoftReference;
+
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +74,7 @@ public class Dock {
 	public void initApps() {
 		BufferedReader reader = null;
 		boolean needSave = false;
+		apps.clear();
 		File f = new File(contextRef.get().getFilesDir(), "dock");
 		try {
 			if (!f.exists()) {
@@ -87,12 +89,13 @@ public class Dock {
 				if (data.startsWith(AppData.COMPONENT)) {
 					a = new AppData();
 					a.read(reader, data);
-					apps.add(a);
+					if (DatabaseHelper.hasItem(contextRef.get(), a, null)) {
+						apps.add(a);
+					}
 				} else if (data.startsWith(ShortcutData.SHORTCUT_NAME)) {
 					a = new ShortcutData();
 					a.read(reader, data);
 					apps.add(a);
-					//Toast.makeText(contextRef.get(), "shortcutdata", Toast.LENGTH_LONG).show();
 				} else {
 					data = data.trim();
 					if (data.length()>0 ) {

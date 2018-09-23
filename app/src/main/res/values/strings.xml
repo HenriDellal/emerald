@@ -58,6 +58,7 @@
 	<string name="rename">Rename</string>
 	<string name="editAppList">Edit application list</string>
 	<string name="findInMarket">Find in app market</string>
+	<string name="editCategories">Edit categories</string>
 	<string name="editAppCategories">Edit application categories</string>
 	<string name="delete">Delete</string>
 	<string name="setHome">Set as home</string>

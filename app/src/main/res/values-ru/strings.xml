@@ -54,6 +54,7 @@
 	<string name="rename">Переименовать</string>
 	<string name="findInMarket">Найти в магазине приложений</string>
 	<string name="editAppList">Изменить список приложений</string>
+	<string name="editCategories">Изменить категории</string>
 	<string name="editAppCategories">Изменить категории приложения</string>
 	<string name="delete">Удалить</string>
 	<string name="accessHidden">Скрытые приложения</string>
