@@ -101,7 +101,6 @@ public class CategoryManager {
 		return DatabaseHelper.getEntries(contextRef.get(), category);
 	}
 	public void convert() {
-		setCurCategory(ALL);
 		BufferedReader reader = null;
 		File file = new File(contextRef.get().getFilesDir() + "/categories.props");
 		ArrayList<String> hiddenCategories = new ArrayList<String>();
@@ -137,19 +136,11 @@ public class CategoryManager {
 				file.delete();
 			} catch (IOException e) {
 		}
-		for (File f : contextRef.get().getFilesDir().listFiles()) {
-			//get files names and look for .cat ones
-			String n = f.getName();
-			if (n.endsWith(".cat")) {
-				String name = n.substring(0, n.length()-4);
-				name = URLDecoder.decode(name);
-				DatabaseHelper.addCategory(contextRef.get(), name);
-			}
-		}
+		
 		if (hiddenCategories.contains("History")) {
-			options.edit().putBoolean(Keys.HIDE_HISTORY, true);
+			options.edit().putBoolean(Keys.HIDE_HISTORY, true).commit();
 		} else if (hiddenCategories.contains("Unclassified")) {
-			options.edit().putBoolean(Keys.HIDE_UNCLASSIFIED, true);
+			options.edit().putBoolean(Keys.HIDE_UNCLASSIFIED, true).commit();
 		}
 	}
 	

@@ -53,9 +53,9 @@ public class AppData extends BaseData {
 	private String getCategoriesString() {
 		StringBuilder result = new StringBuilder();
 		for (String s: categories) {
-			result.append("-");
+			result.append("@");
 			result.append(s);
-			result.append("-");
+			result.append("@");
 		}
 		return result.toString();
 	}

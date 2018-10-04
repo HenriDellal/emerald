@@ -330,6 +330,7 @@ public class Apps extends Activity
 	private void openCategoriesList() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setCancelable(true);
+		categories.loadCategoriesList(); // TODO Remove after migration to 0.6.0
 		final ArrayList<String> cats = new ArrayList<String>(categories.getCategories());
 		cats.remove(CategoryManager.HIDDEN);
 		ArrayList<String> toRemove = new ArrayList<String>();
@@ -897,9 +898,10 @@ public class Apps extends Activity
 		}
 		categories = LauncherApp.getCategoryManager();
 		if (new File(MyCache.genFilename(this, "apps")).exists()) {
+			categories.setCurCategory(CategoryManager.ALL);
 			new MoveCustomIconsTask(this).execute();
-			categories.convert();
 			DatabaseConverter.convert(this);
+			categories.convert();
 			launcherUpdate = true;
 		}
 		super.onCreate(savedInstanceState);
