@@ -3,7 +3,6 @@ package ru.henridellal.emerald;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import android.app.Activity;
@@ -18,7 +17,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.LauncherApps;
 import android.content.pm.LauncherActivityInfo;
 import android.content.pm.PackageManager;
@@ -986,7 +984,6 @@ public class Apps extends Activity
 		super.onResume();
 		//Log.v(APP_TAG, "onResume");
 		
-		int appShortcut = Integer.parseInt(options.getString(Keys.APP_SHORTCUT, "3"));
 	    lock = options.getString(Keys.PASSWORD, "").length() > 0;
 	    /*if (!homeButtonPressed) {
 	    	try {

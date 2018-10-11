@@ -17,6 +17,7 @@
 	<string name="iconSize">Icon size</string>
 	<string name="textSize">Text size</string>
 	<string name="fontStyle">Font style</string>
+	<string name="invert_font_color">Invert font color</string>
 	<string name="columnWidth">Column width</string>
 	<string name="verticalSpacing">Vertical spacing</string>
 	<string name="tileView">Grid</string>

@@ -9,35 +9,10 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 
 public class MyCache {
 	static public final int MODE_READ = 0;
 	static public final int MODE_WRITE = 1;
-	
-	/*public static boolean write(Context c, String fname, 
-			ArrayList<BaseData> data) {
-		String path = genFilename(c, fname);
-//		Log.v("TinyLaunch", "cache write "+path+" "+data.size()+" items");
-		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(
-					path+".temp"));
-			for (BaseData a: data) {
-				a.write(writer);
-			}
-			writer.close();
-			if (!new File(path+".temp").renameTo(new File(path))) {
-				Log.e("TinyLaunch", "error renaming");
-				throw new IOException();
-			}
-//			Log.v("TinyLaunch", "wrote cache to "+path);
-		} catch (IOException e) {
-//			Log.e("TinyLaunch", ""+e);
-			new File(path+".tmp").delete();
-			return false;
-		}
-		return true;		
-	}*/
 	
 	public static void read(Context c, String fname, ArrayList<BaseData> data) {
 		try {

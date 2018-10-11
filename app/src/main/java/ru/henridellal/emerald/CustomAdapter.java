@@ -38,7 +38,7 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 	private ArrayList<String> sectionsList;
 	private HashMap<String, Integer> indexData;
 	private String[] sections;
-	private int curMode, iconSize, textSize, textColor, appShortcut;
+	private int curMode, iconSize, textSize, textColor, appShortcut, inflatedLayoutId, fontStyle;
 	boolean lock, fastScrollEnabled;
 	private ImageView img;
 	private TextView tv;
@@ -97,10 +97,7 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 		boolean isEmptyView = (convertView == null);
 		if (isEmptyView) {
 			LayoutInflater inflater = (LayoutInflater)contextRef.get().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			if (options.getBoolean(Keys.TILE, true))
-				view = inflater.inflate(R.layout.iconbutton, parent, false);
-			else
-				view = inflater.inflate(R.layout.oneline, parent, false);
+			view = inflater.inflate(inflatedLayoutId, parent, false);
 		} else {
 			view = convertView;
 		}
@@ -117,8 +114,7 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 				}
 				tv.setTextSize(textSize);
 				tv.setTextColor(textColor);
-				tv.setTypeface(Typeface.DEFAULT,
-					Integer.parseInt(options.getString(Keys.FONT_STYLE, "0")));
+				tv.setTypeface(Typeface.DEFAULT, fontStyle);
 			}
 		} else {
 			tv.setVisibility(View.GONE);
@@ -173,6 +169,15 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 		setSections();
 		notifyDataSetChanged();
 	}
+	
+	private void setTextColor() {
+		int theme = Themer.theme;
+		boolean invertFontColor = options.getBoolean(Keys.INVERT_FONT_COLOR, false);
+		textColor = (theme == Themer.LIGHT || theme == Themer.WALLPAPER_DARK || theme == Themer.DEFAULT_THEME) ?
+			(invertFontColor ? Color.WHITE : Color.BLACK) :
+			(invertFontColor ? Color.BLACK : Color.WHITE);
+	}
+	
 	public CustomAdapter(Context context) {
 		super();
 		indexData = new HashMap<String, Integer>();
@@ -183,11 +188,16 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 		searchInput = "";
 		appShortcut = Integer.parseInt(options.getString(Keys.APP_SHORTCUT, "3"));
 		lock = options.getString(Keys.PASSWORD, "").length() > 0;
-		int theme = Themer.theme;
-		textColor = (theme == Themer.LIGHT || theme == Themer.WALLPAPER_DARK || theme == Themer.DEFAULT_THEME) ? Color.BLACK : Color.WHITE;
+		setTextColor();
 		categoryData = new ArrayList<BaseData>();
 		toDisplay = new ArrayList<BaseData>();
 		onClickListener = new OnAppClickListener((Apps)context);
+		if (options.getBoolean(Keys.TILE, true)) {
+			inflatedLayoutId = R.layout.iconbutton;
+		} else {
+			inflatedLayoutId = R.layout.oneline;
+		}
+		fontStyle = Integer.parseInt(options.getString(Keys.FONT_STYLE, "0"));
 		if (lock) {
 			onLongClickListener = new View.OnLongClickListener() {
 				@Override

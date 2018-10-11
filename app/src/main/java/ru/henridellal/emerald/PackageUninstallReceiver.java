@@ -3,8 +3,6 @@ package ru.henridellal.emerald;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.LauncherApps;
-import android.content.pm.PackageManager;
 //import android.util.Log;
 
 public class PackageUninstallReceiver extends BroadcastReceiver {

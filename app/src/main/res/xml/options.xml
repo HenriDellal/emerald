@@ -116,6 +116,10 @@
 	    	android:summary="@string/transformIconsSummary"
 	    	android:defaultValue="true"
 	    	android:key="transform_drawable"/>
+	    <CheckBoxPreference
+	    	android:title="@string/invert_font_color"
+	    	android:defaultValue="false"
+	    	android:key="invert_font_color"/>
     </PreferenceScreen>
     <ru.henridellal.emerald.LaunchActivityPreference
     	android:title="@string/categoryManager"

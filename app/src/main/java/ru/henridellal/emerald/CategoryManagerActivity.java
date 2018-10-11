@@ -78,12 +78,12 @@ public class CategoryManagerActivity extends Activity{
 			commands.add(getResources().getString(R.string.setHome));
 			commandCodes.add(COMMAND_SET_HOME);
 		}
-		if (cm.isEditable(category)) {
+		if (CategoryManager.isEditable(category)) {
 			commands.add(getResources().getString(R.string.editAppList));
 			commandCodes.add(COMMAND_EDIT);
 			commands.add(getResources().getString(R.string.clear));
 			commandCodes.add(COMMAND_CLEAR);
-			if (cm.isCustom(category)) {
+			if (CategoryManager.isCustom(category)) {
 				commands.add(getResources().getString(R.string.rename));
 				commandCodes.add(COMMAND_RENAME);
 				commands.add(getResources().getString(R.string.delete));

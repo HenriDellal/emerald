@@ -20,6 +20,7 @@
 	<string name="fontStyle">Шрифт</string>
 	<string name="columnWidth">Ширина столбца</string>
 	<string name="verticalSpacing">Вертикальный отступ</string>
+	<string name="invert_font_color">Инвертировать цвет шрифта</string>
 	<string name="tileView">Сетка</string>
 	<string name="hide_main_bar">Скрыть главную панель</string>
 	<string name="bottom_main_bar">Главная панель внизу</string>
