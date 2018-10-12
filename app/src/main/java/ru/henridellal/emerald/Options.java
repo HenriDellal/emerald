@@ -1,7 +1,9 @@
 package ru.henridellal.emerald;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -10,6 +12,12 @@ import android.preference.PreferenceManager;
 import android.preference.ListPreference;
 import android.widget.Toast;
 
+import java.io.BufferedInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -71,10 +79,7 @@ public class Options extends PreferenceActivity implements SharedPreferences.OnS
 			super.onBackPressed();
 		}
 	}
-	@Override
-	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-	}
+
 	public void setIconPacksList(Map<String, String> iconPacks) {
 		ListPreference preference = (ListPreference)findPreference(Keys.ICON_PACK);
 		CharSequence[] e = new CharSequence[iconPacks.size()+1];
@@ -98,15 +103,20 @@ public class Options extends PreferenceActivity implements SharedPreferences.OnS
 		super.onDestroy();
 	}
 	
-	public void backupPrefs(File file) {
+	public void backupPrefs(Object fileOrStream, String path) {
+		OutputStream output = null;
 		List<String> backupKeys = Arrays.asList(Keys.BACKUP);
-		FileOutputStream output = null;
 		try {
-			if (!file.exists()) {
-				file.getParentFile().mkdirs();
-				file.createNewFile();
+			if (fileOrStream instanceof File) {
+				File file = (File) fileOrStream;
+				if (!file.exists()) {
+					file.getParentFile().mkdirs();
+					file.createNewFile();
+				}
+				output = new FileOutputStream(file);
+			} else {
+				output = (OutputStream) fileOrStream;
 			}
-			output = new FileOutputStream(file);
 			Set<? extends Map.Entry<? extends String, ? extends Object>> prefEntrySet = PreferenceManager.getDefaultSharedPreferences(this).getAll().entrySet();
 			for (Map.Entry<? extends String, ? extends Object> entry: prefEntrySet) {
 				String key = entry.getKey();
@@ -138,7 +148,7 @@ public class Options extends PreferenceActivity implements SharedPreferences.OnS
 			}
 			byte[] buffer = "END".getBytes();
 			output.write(buffer, 0, buffer.length);
-			Toast.makeText(this, getResources().getString(R.string.successfulBackup)+file.getPath(), Toast.LENGTH_LONG).show();
+			Toast.makeText(this, getResources().getString(R.string.successfulBackup)+path, Toast.LENGTH_LONG).show();
 		} catch (Exception e) {
 			Toast.makeText(this, "Backup failed: " + e, Toast.LENGTH_LONG).show();
 		} finally {
@@ -148,8 +158,44 @@ public class Options extends PreferenceActivity implements SharedPreferences.OnS
 			} catch (Exception ex) {}
 		}
 	}
+
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == 0) {
+			if (resultCode == Activity.RESULT_OK) {
+				if (data != null) {
+					Uri file = data.getData();
+					if (file != null) {
+						try {
+							backupPrefs(getContentResolver().openOutputStream(file), file.getPath());
+							return;
+						} catch (FileNotFoundException e) {
+							// this should *never* happen since the user just created the file
+						}
+					}
+				}
+			}
+			Toast.makeText(this, "Backup failed", Toast.LENGTH_SHORT).show();
+		} else if (requestCode == 1) {
+			if (resultCode == Activity.RESULT_OK) {
+				if (data != null) {
+					Uri file = data.getData();
+					if (file != null) {
+						try {
+							restorePrefs(new BufferedInputStream(getContentResolver().openInputStream(file)), file.getPath());
+							return;
+						} catch (FileNotFoundException e) {
+							// this should *never* happen since the user just opened the file
+						}
+					}
+				}
+			}
+			Toast.makeText(this, "Backup failed", Toast.LENGTH_SHORT).show();
+		} else {
+			super.onActivityResult(requestCode, resultCode, data);
+		}
+	}
 	
-	public void restorePrefs(File file) {
+	public void restorePrefs(Object fileOrStream, String path) {
 		List<String> backupKeys = Arrays.asList(Keys.BACKUP);
 		BufferedReader input = null;
 		SharedPreferences.Editor prefsEditor = PreferenceManager.getDefaultSharedPreferences(this).edit();
@@ -159,7 +205,11 @@ public class Options extends PreferenceActivity implements SharedPreferences.OnS
 		argTypes.add("BOOLEAN");
 		argTypes.add("FLOAT");
 		try {
-			input = new BufferedReader(new FileReader(file));
+			if (fileOrStream instanceof File) {
+				input = new BufferedReader(new FileReader((File) fileOrStream));
+			} else {
+				input = new BufferedReader(new InputStreamReader((InputStream) fileOrStream));
+			}
 			String key, value, line, prefType = null;
 			while ((line = input.readLine()).indexOf("END") == -1) {
 				if (argTypes.contains(line.trim())) {
@@ -183,7 +233,7 @@ public class Options extends PreferenceActivity implements SharedPreferences.OnS
 				}
 			}
 			prefsEditor.commit();
-			Toast.makeText(this, getResources().getString(R.string.successfulRestore)+file.getPath(), Toast.LENGTH_LONG).show();
+			Toast.makeText(this, getResources().getString(R.string.successfulRestore)+path, Toast.LENGTH_LONG).show();
 		} catch (Exception e) {
 			Toast.makeText(this, "Restore failed: "+ e, Toast.LENGTH_LONG).show();
 		} finally {

@@ -4,11 +4,9 @@
       android:versionName="0.6.0" package="ru.henridellal.emerald"
       >
 
-    <!--android:configChanges="keyboard|keyboardHidden|orientation|screenSize"-->
-
-	<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="26"/>
-	 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+     <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="26"/>
+     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="18" />
+     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="18" />
      <uses-permission android:name="com.android.launcher.permission.CREATE_SHORTCUT" />
      <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
 

@@ -34,14 +34,14 @@
 	<string name="searchProvider">Suchdienstanbieter</string>
 	<string name="keepInMemory">Im Speicher behalten</string>
 	<string name="volumeButtons">Lautstärke-Tasten zum Kategorie-Wechsel verwenden</string>
-	<string name="backupPrefs">Einstellungen zur Sicherungskopie</string>
+	<string name="backupPrefs">Einstellungen sichern</string>
 	<string name="successfulBackup">Sicherungskopie erstellt. Die Datei befindet sich in </string>
 	<string name="successfulRestore">Sicherungskopie wiederhergestellt.</string>
-	<string name="restorePrefs">Einstellungen zur Wiederherstellung</string>
+	<string name="restorePrefs">Einstellungen wiederherstellen</string>
 	<string name="restart">Neustart des Launchers</string>
 	<string name="restart_needed">Launcher wird neu gestartet</string>
 	
-	<string name="launcherSettings">Launcher Einstellungen</string>
+	<string name="launcherSettings">Launcher-Einstellungen</string>
 	
 	<string name="createCategory">Kategorie erstellen</string>
 	<string name="rename">Umbenennen</string>
@@ -61,7 +61,7 @@
 	<string name="dock_background">Dock</string>
 	<string name="change_wallpaper">Hintergrundbild ändern</string>
 	<string name="accessHidden">Verborgene Apps</string>
-	<string name="quit_hidden_apps">Verborgene Apps schliessen</string>
+	<string name="quit_hidden_apps">Verborgene Apps schließen</string>
 	<string name="fullScan">Alle Apps neu einlesen</string>
 	<string name="clear">Löschen</string>
 	<string name="wrong_password">Falsches Kennwort.</string>
@@ -73,7 +73,7 @@
 	<string name="aboutTitle">Über</string>
 	<string name="how_to_use">Hinweise zur Benutzung</string>
 	<string name="close_tutorial">Tutorial beenden</string>
-<string name="tutorial">Wischen Sie auf dem Namen der Kategorie, um zur nächsten/vorherigen Kategorie zu wechseln. Auf den Kategoriennamen klicken, um alle Kategorien zu sehen.
+	<string name="tutorial">Wischen Sie auf dem Namen der Kategorie, um zur nächsten/vorherigen Kategorie zu wechseln. Auf den Kategoriennamen klicken, um alle Kategorien zu sehen.
 \n
 \nÖffnen Sie Launcher Einstellungen -> Kategorien verwalten, um Kategorien zu ändern.
 \n
@@ -85,4 +85,24 @@
 \n
 \nDie Rücktaste drücken, um zur vorher geöffneten Kategorie zu wechseln.
 </string>
+	<string name="category_all">Alle Apps</string>
+	<string name="category_history">Letzte Apps</string>
+	<string name="category_unclassified">Unkategorisierte Apps</string>
+	<string name="category_hidden">Verborgene Apps</string>
+	<string name="delete_category_question">Möchten sie diese Kategorie wirklich löschen?</string>
+	<string name="clear_category_question">Möchten sie diese Kategorie wirklich leeren?</string>
+	<string name="invert_font_color">Schriftfarbe invertieren</string>
+	<string name="hide_main_bar">Hauptleiste verstecken</string>
+	<string name="bottom_main_bar">Hauptleiste unten</string>
+	<string name="show_keyboard">Tastatur immer öffnen</string>
+	<string name="stack_from_bottom">Kategorie-Inhalt unten anordnen</string>
+	<string name="note_rename_error">Name bereits benutzt</string>
+	<string name="reset_icon">Icon zurücksetzen</string>
+	<string name="change_icon">Icon ändern</string>
+	<string name="change_icon_title">Icon von %s ändern</string>
+	<string name="change_icon_question">Möchten sie das Icon von %s wirklich ändern?</string>
+	<string name="search_icon_hint">Icon-Suche nach Package-Name</string>
+	<string name="fullscreen_mode">Vollbild-Modus</string>
+	<string name="hide_history">\"Letzte Apps\"-Kategorie verstecken</string>
+	<string name="hide_unclassified">\"Unkategorisierte Apps\"-Kategorie verstecken</string>
 </resources>
