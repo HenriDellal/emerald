@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+	<View
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="#3333"/>
+	<ScrollView 
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 	<LinearLayout
@@ -10,13 +17,19 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:padding="10dp"
-	android:textSize="14sp"
-	android:text="@string/tutorial"/>
+	android:textSize="18sp"
+	android:text="@string/tutorial"
+	android:textColor="#FFF"
+	android:shadowColor="#333"
+	android:shadowRadius="2"/>
 	<Button
 	android:id="@+id/close_tutorial"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:text="@string/close_tutorial"
+	android:textColor="#FFF"
+	android:background="@drawable/button_background"
 	/>
 	</LinearLayout>
-</ScrollView>
+	</ScrollView>
+</FrameLayout>

@@ -18,13 +18,14 @@
 			android:layout_height="32dp"
 			android:layout_centerVertical="true"
 			android:onClick="onMyClick"
-			android:background="@drawable/menu_bg"
+			android:background="?attr/drawableMenu"
 			android:layout_alignParentLeft="true" />
 		<Button
 			android:id="@+id/category_button"
 			android:layout_width="0dp"
 			android:layout_height="40dp"
 			android:onClick="onMyClick"
+			android:textColor="?attr/launcherTextColor"
 			android:background="@drawable/button_background"
 			android:layout_toLeftOf="@+id/searchButton"
 			android:layout_toRightOf="@id/menuButton"
@@ -38,7 +39,7 @@
 			android:layout_centerVertical="true"
 			android:onClick="onMyClick"
 			android:layout_alignParentRight="true"
-			android:background="@drawable/search_bg" />
+			android:background="?attr/drawableSearch" />
 	</RelativeLayout>
 	<RelativeLayout 
 		android:id="@+id/searchBar"
@@ -52,7 +53,7 @@
 			android:layout_centerVertical="true"
 			android:visibility="gone"
 			android:layout_alignParentRight="true"
-			android:background="@drawable/web_search_bg" />
+			android:background="?attr/drawableWebSearch" />
 		<EditText
 			android:id="@+id/textField"
 			android:singleLine="true"
@@ -60,6 +61,7 @@
 			android:layout_height="wrap_content"
 			android:visibility="gone"
 			android:textSize="18sp"
+			android:textColor="?attr/launcherTextColor"
 			android:layout_alignParentLeft="true"
 			android:layout_toStartOf="@id/searchBar"
 			android:layout_toLeftOf="@id/webSearchButton" />

@@ -7,10 +7,20 @@
 	<style name="AppTheme.Light" parent="@android:style/Theme.Material.Light.NoActionBar">
 		<item name="android:windowTranslucentNavigation">true</item>
 		<item name="android:fitsSystemWindows">true</item>
+		<item name="launcherTextColor">@android:color/white</item>
+		<item name="launcherTextShadowColor">@color/lightTextShadow</item>
+		<item name="drawableMenu">@drawable/menu_bg</item>
+		<item name="drawableSearch">@drawable/search_bg</item>
+		<item name="drawableWebSearch">@drawable/web_search_bg</item>
 	</style>
 	<style name="AppTheme.Dark" parent="@android:style/Theme.Material.NoActionBar">
 		<item name="android:windowTranslucentNavigation">true</item>
 		<item name="android:fitsSystemWindows">true</item>
+		<item name="launcherTextColor">@android:color/black</item>
+		<item name="launcherTextShadowColor">@color/darkTextShadow</item>
+		<item name="drawableMenu">@drawable/menu_dark_bg</item>
+		<item name="drawableSearch">@drawable/search_dark_bg</item>
+		<item name="drawableWebSearch">@drawable/web_search_dark_bg</item>
 	</style>
 	<style name="AppTheme.Dark.Wallpaper" parent="AppTheme.Dark">
 		<item name="android:windowDrawsSystemBarBackgrounds">true</item>

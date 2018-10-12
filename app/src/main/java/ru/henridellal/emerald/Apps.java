@@ -903,7 +903,9 @@ public class Apps extends Activity
 			launcherUpdate = true;
 		}
 		super.onCreate(savedInstanceState);
-		Themer.theme = Integer.parseInt(options.getString(Keys.THEME, getResources().getString(R.string.defaultThemeValue)));
+		if (Build.VERSION.SDK_INT >= 11) {
+			Themer.applyTheme(this, options);
+		}
 		layoutInit();
 		if (options.getBoolean(Keys.SHOW_TUTORIAL, true)) {
 			startActivity(new Intent(this, TutorialActivity.class));
@@ -919,14 +921,11 @@ public class Apps extends Activity
 			notiManager.notify(0, noti);
 		}
 		setRequestedOrientation(Integer.parseInt(options.getString(Keys.ORIENTATION, "2")));
+		if (Build.VERSION.SDK_INT >= 21) {
+			Themer.setWindowDecorations(this, options);
+		}
 		setContentView(mainLayout);
 		options.edit().putBoolean(Keys.MESSAGE_SHOWN, true).commit();
-		if (Build.VERSION.SDK_INT >= 11) {
-			if (Build.VERSION.SDK_INT >= 21) {
-				Themer.setWindowDecorations(this, options);
-			}
-			Themer.applyTheme(this, options);
-		}
 		if (options.getBoolean(Keys.ICON_PACK_CHANGED, false)) {
 			loadAppsFromSystem(true);
 			options.edit().putBoolean(Keys.ICON_PACK_CHANGED, false).commit();

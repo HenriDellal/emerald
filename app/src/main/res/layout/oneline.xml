@@ -21,7 +21,7 @@ android:textSize="@dimen/text_size"
 android:gravity="left|center_vertical"
     android:paddingLeft="4sp"
     
-    android:shadowColor="#333333"
+android:shadowColor="?attr/launcherTextShadowColor"
 android:shadowRadius="2"
 android:shadowDx="1"
 android:shadowDy="1"

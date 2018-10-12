@@ -25,7 +25,7 @@
   android:name=".LauncherApp">
       
  		<activity android:name=".AboutActivity" android:label="@string/aboutTitle"/>
- 		<activity android:name=".TutorialActivity" android:label="@string/how_to_use"/>
+ 		<activity android:name=".TutorialActivity" android:label="@string/how_to_use" android:theme="@style/AppTheme.Default"/>
  		<activity android:name=".CategoryManagerActivity" android:label="@string/categoryManager"/>
  		<activity android:name=".Options" android:label="@string/launcherSettings"/>
  		<activity android:name=".ThemerActivity" android:label="@string/ui_colors"/>
