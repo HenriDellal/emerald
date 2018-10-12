@@ -1,15 +1,12 @@
 package ru.henridellal.emerald;
 
-//import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
 import android.view.View;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
-
-//required by permissions checker
-import android.os.Build;
-import android.Manifest;
-import android.content.pm.PackageManager;
 
 public class BackupPreference extends DialogPreference {
 	private FileLoaderDialog dialog;
@@ -19,33 +16,44 @@ public class BackupPreference extends DialogPreference {
 	public BackupPreference(Context c, AttributeSet attr) {
 		super(c, attr);
 	}
-	@Override
-	public void onClick() {
-		// request runtime permissions (Marshmallow+)
-        if (Build.VERSION.SDK_INT >= 23) {
-        	if ((getContext().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)
-        		|| (getContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)) {
-        		((Options)getContext()).requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
-        		return;
-        	} else {
-        		super.onClick();
-        	}
-        } else {
-        	super.onClick();
-        }
-	}
+
 	@Override
 	protected View onCreateDialogView() {
 		int mode = 0;
 		if ("backup".equals(getKey())) {
-				mode = 0;
+			mode = 0;
 		} else if ("restore".equals(getKey())) {
-				mode = 1;
-		} else if ("convert".equals(getKey())) {
-				mode = 2;
+			mode = 1;
 		}
-		dialog = new FileLoaderDialog(this, getContext(), mode);
-		return(dialog);
+		if (Build.VERSION.SDK_INT >= 19) {
+			Intent intent;
+			if (mode == 1) {
+				intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+			} else {
+				intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+			}
+
+			// Filter to only show results that can be "opened", such as
+			// a file (as opposed to a list of contacts or timezones).
+			intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+			// Create a file with the requested MIME type.
+			intent.setType("text/plain");
+			intent.putExtra(Intent.EXTRA_TITLE, "emerald-launcher-preferences.txt");
+			((Options) getContext()).startActivityForResult(intent, mode);
+			return null;
+		} else {
+			dialog = new FileLoaderDialog(this, getContext(), mode);
+			return(dialog);
+		}
 	}
-	
+
+	@Override
+	protected void showDialog(Bundle b) {
+		super.showDialog(b);
+		if (Build.VERSION.SDK_INT >= 19) {
+			// the SAF dialog is shown already
+			this.getDialog().hide();
+		}
+	}
 }
