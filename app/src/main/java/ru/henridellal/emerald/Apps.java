@@ -39,7 +39,6 @@ import android.text.TextWatcher;
 //import android.util.Log;
 import android.view.GestureDetector;
 import android.view.inputmethod.InputMethodManager;
-import android.view.LayoutInflater;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Menu;
@@ -47,14 +46,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.GridView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class Apps extends Activity
@@ -62,7 +57,6 @@ public class Apps extends Activity
 	private GestureDetector gestureDetector;
 	private CategoryManager categories;
 	private ArrayList<BaseData> curCatData;
-	private RelativeLayout mainLayout;
 	private GridView grid;
 	private Dock dock;
 	public SharedPreferences options;
@@ -802,90 +796,6 @@ public class Apps extends Activity
 		super.onNewIntent(i);
 	}
 	
-	private void layoutInit() {
-		mainLayout = new RelativeLayout(this);
-		LayoutInflater layoutInflater = (LayoutInflater) 
-			this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		
-		LinearLayout dockBar = (LinearLayout) layoutInflater.inflate(R.layout.dock_bar, mainLayout, false);
-		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(dockBar.getLayoutParams());
-		layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-		dockBar.setLayoutParams(layoutParams);
-		dockBar.setBackgroundColor(options.getInt(Keys.DOCK_BACKGROUND, 0x22000000));
-		mainLayout.addView(dockBar);
-		
-		FrameLayout mainBar = (FrameLayout) layoutInflater.inflate(R.layout.main_bar, mainLayout, false);
-		grid = (GridView) layoutInflater.inflate(R.layout.apps_grid, mainLayout, false);
-		boolean kitkatNoImmersiveMode = (Build.VERSION.SDK_INT == 19 && !options.getBoolean(Keys.FULLSCREEN, false));
-		if (options.getBoolean(Keys.BOTTOM_MAIN_BAR, true)) {
-			layoutParams = new RelativeLayout.LayoutParams(mainBar.getLayoutParams());
-			layoutParams.addRule(RelativeLayout.ABOVE, R.id.dock_bar);
-			mainBar.setLayoutParams(layoutParams);
-			mainLayout.addView(mainBar);
-			
-			if (kitkatNoImmersiveMode) {
-				View fakeStatusBar = layoutInflater.inflate(R.layout.kitkat_status_bar, mainLayout, false);
-				fakeStatusBar.setBackgroundColor(options.getInt(Keys.STATUS_BAR_BACKGROUND, 0x22000000));
-				layoutParams = new RelativeLayout.LayoutParams(fakeStatusBar.getLayoutParams());
-				layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-				fakeStatusBar.setLayoutParams(layoutParams);
-				mainLayout.addView(fakeStatusBar);
-			}
-			layoutParams = new RelativeLayout.LayoutParams(grid.getLayoutParams());
-			if (kitkatNoImmersiveMode) {
-				layoutParams.addRule(RelativeLayout.BELOW, R.id.kitkat_status_bar);
-			} else {
-				layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-			}
-			layoutParams.addRule(RelativeLayout.ABOVE, R.id.main_bar);
-			grid.setLayoutParams(layoutParams);
-			mainLayout.addView(grid);
-		} else {
-			if (!kitkatNoImmersiveMode) {
-				layoutParams = new RelativeLayout.LayoutParams(mainBar.getLayoutParams());
-				layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-			} else {
-				View fakeStatusBar = layoutInflater.inflate(R.layout.kitkat_status_bar, mainLayout, false);
-				fakeStatusBar.setBackgroundColor(options.getInt(Keys.STATUS_BAR_BACKGROUND, 0x22000000));
-				layoutParams = new RelativeLayout.LayoutParams(fakeStatusBar.getLayoutParams());
-				layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-				mainLayout.addView(fakeStatusBar);
-				
-				layoutParams = new RelativeLayout.LayoutParams(mainBar.getLayoutParams());
-				layoutParams.addRule(RelativeLayout.BELOW, R.id.kitkat_status_bar);
-			}
-			
-			mainBar.setLayoutParams(layoutParams);
-			mainLayout.addView(mainBar);
-			
-			layoutParams = new RelativeLayout.LayoutParams(grid.getLayoutParams());
-			layoutParams.addRule(RelativeLayout.ABOVE, R.id.dock_bar);
-			layoutParams.addRule(RelativeLayout.BELOW, R.id.main_bar);
-			grid.setLayoutParams(layoutParams);
-			mainLayout.addView(grid);
-		}
-		if (options.getBoolean(Keys.HIDE_MAIN_BAR, false)) {
-			mainBar.setVisibility(View.GONE);
-		}
-		mainBar.setBackgroundColor(options.getInt(Keys.BAR_BACKGROUND, 0x22000000));
-		grid.setBackgroundColor(options.getInt(Keys.APPS_WINDOW_BACKGROUND, 0));
-		if (options.getBoolean(Keys.STACK_FROM_BOTTOM, false)) {
-			grid.setStackFromBottom(true);
-		}
-		if (options.getBoolean(Keys.TILE, true)) {
-			grid.setNumColumns(GridView.AUTO_FIT);
-		}
-		adapter = new CustomAdapter(this);
-		grid.setAdapter(adapter);
-		
-		if (options.getBoolean(Keys.SCROLLBAR, false)) {
-			grid.setFastScrollEnabled(true);
-			grid.setFastScrollAlwaysVisible(true);
-			grid.setScrollBarStyle(AbsListView.SCROLLBARS_INSIDE_INSET);
-			grid.setSmoothScrollbarEnabled(true);
-		}
-	}
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//Log.v(APP_TAG, "onCreate");
@@ -906,7 +816,6 @@ public class Apps extends Activity
 		if (Build.VERSION.SDK_INT >= 11) {
 			Themer.applyTheme(this, options);
 		}
-		layoutInit();
 		if (options.getBoolean(Keys.SHOW_TUTORIAL, true)) {
 			startActivity(new Intent(this, TutorialActivity.class));
 		}
@@ -924,7 +833,10 @@ public class Apps extends Activity
 		if (Build.VERSION.SDK_INT >= 21) {
 			Themer.setWindowDecorations(this, options);
 		}
-		setContentView(mainLayout);
+		setContentView(MainLayout.get(this, options));
+		grid = (GridView) findViewById(R.id.appsGrid);
+		adapter = new CustomAdapter(this);
+		grid.setAdapter(adapter);
 		options.edit().putBoolean(Keys.MESSAGE_SHOWN, true).commit();
 		if (options.getBoolean(Keys.ICON_PACK_CHANGED, false)) {
 			loadAppsFromSystem(true);
