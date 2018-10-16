@@ -435,7 +435,6 @@ public class Apps extends Activity
 						uri = Uri.parse("market://details?id="+ComponentName.unflattenFromString(
 							item.getComponent()).getPackageName());
 						startActivity(new Intent(Intent.ACTION_VIEW, uri));
-						loadFilteredApps();
 						break;
 					case 2:
 						itemEdit(item);
@@ -443,7 +442,7 @@ public class Apps extends Activity
 					case 3:
 						uri = Uri.parse("package:"+ComponentName.unflattenFromString(
 							item.getComponent()).getPackageName());
-						startActivity(new Intent(Intent.ACTION_DELETE, uri));
+						startActivityForResult(new Intent(Intent.ACTION_DELETE, uri), 0);
 						break;
 					case 4:
 						if (dock.hasApp(item)) {
@@ -644,7 +643,7 @@ public class Apps extends Activity
 				menu();
 				break;
 			case R.id.quit_hidden_apps:
-				categories.setCurCategory(CategoryManager.ALL);
+				categories.setCurCategory(categories.getHome());
 				v.setVisibility(View.GONE);
 				hideMainBarIfNeeded();
 				loadFilteredApps();
@@ -767,6 +766,14 @@ public class Apps extends Activity
 		grid.setOnTouchListener(null);
 		super.onDestroy();
 	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == RESULT_OK) {
+			loadFilteredApps();
+		}
+	}
+	
 	@Override
 	protected void onNewIntent(Intent i) {
 		//Log.v(APP_TAG, "onNewIntent");
