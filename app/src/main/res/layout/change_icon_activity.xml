@@ -20,10 +20,17 @@
 	android:text="@string/reset_icon"
 	android:layout_alignParentLeft="true"
 	android:layout_alignParentTop="true" />
+	<Button
+	android:id="@+id/choose_icon_from_memory"
+	android:layout_width="fill_parent"
+	android:layout_height="40dp"
+	android:text="@string/choose_icon_from_memory"
+	android:layout_below="@id/reset_icon"
+	/>
 	<GridView
 	android:id="@+id/icon_grid"
 	android:layout_above="@id/icon_search_bar"
-	android:layout_below="@id/reset_icon"
+	android:layout_below="@id/choose_icon_from_memory"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:numColumns="4"

@@ -2,6 +2,7 @@ package ru.henridellal.emerald;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -24,6 +25,10 @@ import java.io.File;
 import java.io.FileFilter;
 
 public class FileActivity extends Activity {
+	public static int GET_IMAGE = 1;
+	public static int RESULT_VALID_ICON = 1;
+	public static String RESULT_PATH = "FileActivity.path";
+	
 	private File curDirectory;
 	
 	private File[] fileArray = null;
@@ -41,13 +46,12 @@ public class FileActivity extends Activity {
 	protected void setFileList(File directory) {
 		fileArray = directory.listFiles(new FileFilter() {
 			private boolean isExtensionValid(File f) {
-				/*String filePath = f.getPath();
+				String filePath = f.getPath();
 				int i = filePath.lastIndexOf('.');
 				if (i > 0 && i < filePath.length()-1) {
-					return filePath.substring(i+1).equals("xls");
+					return filePath.substring(i+1).equals("png");
 				}
-				return false;*/
-				return true;
+				return false;
 			}
 			@Override
 			public boolean accept(File f) {
@@ -64,22 +68,13 @@ public class FileActivity extends Activity {
 		files.clear();
 		Collections.addAll(files, fileArray);
 	}
-	/*protected void sortFileList() {
-		Collections.sort(new ArrayList<File>(files), new Comparator<File>() {
-			public int compare(File first, File second) {
-				return first.getName().compareTo(second.getName());
-			}
-		});
-	}*/
+	
 	@Override
     protected void onCreate(Bundle savedInstanceState)
 	{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.file_loader);
-        /*Intent intent = getIntent();
-        teamType = intent.getIntExtra(MainActivity.TEAM_TYPE, 0);*/
-		//curDirectory = Environment.getExternalStorageDirectory();
-		curDirectory = getCacheDir();
+		curDirectory = Environment.getExternalStorageDirectory();
 		setFileList(curDirectory);
         ListView fileList = (ListView)findViewById(R.id.file_list);
         adapter = new FileListAdapter(this, R.layout.file_list_item);
@@ -93,6 +88,9 @@ public class FileActivity extends Activity {
     				((FileListAdapter)parent.getAdapter()).sort();
     			} else {
     				try {
+    					Intent data = new Intent();
+    					data.putExtra(RESULT_PATH, chosenFile.getPath());
+    					setResult(RESULT_OK, data);
     					finish();
     				} catch (Exception e) {
     					Toast.makeText(FileActivity.this, ""+e, Toast.LENGTH_LONG).show();
@@ -105,8 +103,7 @@ public class FileActivity extends Activity {
     public void onBackPressed() {
     	if (curDirectory.equals(Environment.getExternalStorageDirectory())) {
     		finish();
-    	}
-    	else {
+		} else {
 	    	try {
 	    		setFileList(new File(curDirectory.getParent()));
 	    		curDirectory = new File(curDirectory.getParent());
@@ -117,7 +114,7 @@ public class FileActivity extends Activity {
     	}
     }
     
-    public boolean hasExtention(File file, String extension) {
+    public boolean hasExtension(File file, String extension) {
     	String filePath = file.getPath();
     	int i = filePath.lastIndexOf('.');
 		if (i > 0 && i < filePath.length()-1) {
@@ -147,7 +144,7 @@ public class FileActivity extends Activity {
     	private Bitmap getPreview(File file) {
     		if (file.isDirectory()) {
     			return ((BitmapDrawable)context.getResources().getDrawable(R.drawable.directory)).getBitmap();
-    		} else if (hasExtention(file, "png")){
+    		} else if (hasExtension(file, "png")){
     			return BitmapFactory.decodeFile(file.getPath());
     		} else {
     			return ((BitmapDrawable)context.getResources().getDrawable(R.drawable.document)).getBitmap();

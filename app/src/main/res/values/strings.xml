@@ -85,6 +85,7 @@
 	<string name="add_to_dock">Add to dock</string>
 	<string name="remove_from_dock">Remove from dock</string>
 	<string name="reset_icon">Reset icon</string>
+	<string name="choose_icon_from_memory">Choose from memory</string>
 	<string name="change_icon">Change icon</string>
 	<string name="change_icon_title">Change icon of %s</string>
 	<string name="change_icon_question">Do you want to change the icon of %s?</string>

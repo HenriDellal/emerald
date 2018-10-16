@@ -76,6 +76,7 @@
 	<string name="change_wallpaper">Сменить обои</string>
 	<string name="wrong_password">Неправильный пароль</string>
 	<string name="reset_icon">Сбросить иконку</string>
+	<string name="choose_icon_from_memory">Выбрать из памяти</string>
 	<string name="change_icon">Сменить иконку</string>
 	<string name="change_icon_title">Изменить иконку %s</string>
 	<string name="change_icon_question">Сменить иконку для %s?</string>
