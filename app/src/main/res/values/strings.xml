@@ -113,7 +113,7 @@
 \nPress Back button to switch to the previously opened category.
 </string>
 	
-<string name="about" translatable="false">Emerald Launcher
+<string name="about" translatable="false">Emerald Launcher (v%s)
 \n
 \nCopyright 2018 Anri Dellal
 \n
