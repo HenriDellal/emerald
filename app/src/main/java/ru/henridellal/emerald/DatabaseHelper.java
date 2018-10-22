@@ -381,7 +381,9 @@ public class DatabaseHelper {
     }
     
     public static void addToHistory(Context context, BaseData data) {
-    	reduceHistory(context);
+    	if (!hasItem(context, data, CategoryManager.HISTORY)) {
+    		reduceHistory(context);
+    	}
     	String table, columnName;
     	if (data instanceof AppData) {
     		table = "apps";
