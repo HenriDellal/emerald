@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">Emerald Launcher</string>
+	<string name="version_name">0.6.0.3</string>
 	<string name="appearancePrefs">Appearance preferences</string>
 	<string name="portraitPrefs">Portrait mode preferences</string>
 	<string name="landscapePrefs">Landscape mode preferences</string>
@@ -113,7 +114,7 @@
 \nPress Back button to switch to the previously opened category.
 </string>
 	
-<string name="about" translatable="false">Emerald Launcher
+<string name="about" translatable="false">Emerald Launcher (v%s)
 \n
 \nCopyright 2018 Anri Dellal
 \n
