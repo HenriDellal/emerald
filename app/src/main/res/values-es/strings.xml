@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Emerald Launcher</string>
+	<string name="version_name">0.6.0.3</string>
+	<string name="appearancePrefs">Preferencias de apariencia</string>
+	<string name="portraitPrefs">Preferencias del modo vertical</string>
+	<string name="landscapePrefs">Preferencias del modo horizontal</string>
+	
+	<string name="home_button">Comportamiento del botón de inicio</string>
+	<string name="categoryManager">Gestor de categorías</string>
+	<string name="category_all">Todas las aplicaciones</string>
+	<string name="category_unclassified">Sin clasificar</string>
+	<string name="category_history">Historial</string>
+	<string name="category_hidden">Ocultas</string>
+	<string name="delete_category_question">¿Quieres borrar la categoría?</string>
+	<string name="clear_category_question">¿Quieres limpiar la categoría?</string>
+	<string name="appShortcut">Acceso directo a la aplicación</string>
+	<string name="iconSize">Tamaño del icono</string>
+	<string name="textSize">Tamaño del texto</string>
+	<string name="fontStyle">Estilo de la fuente</string>
+	<string name="invert_font_color">Invertir color de la fuente</string>
+	<string name="columnWidth">Ancho de la columna</string>
+	<string name="verticalSpacing">Espaciado vertical</string>
+	<string name="tileView">Cuadrícula</string>
+	<string name="hide_main_bar">Ocultar barra principal</string>
+	<string name="bottom_main_bar">Barra principal inferior</string>
+	<string name="show_keyboard">Mostrar teclado al iniciar</string>
+	<string name="stack_from_bottom">Fijar abajo el contenido de la categoría</string>
+	<string name="scrollbar">Desplazamiento rápido</string>
+	<string name="orientation">Orientación de la pantalla</string>
+	<string name="theme">Tema</string>
+	<string name="ui_colors">Colores de la interfaz</string>
+	<string name="appsBackground">Ventana de las aplicaciones</string>
+	<string name="statusBarBackground">Barra de estado</string>
+	<string name="barBackground">Barra superior</string>
+	<string name="navBarBackground">Barra de navegación</string>
+	<string name="iconPack">Paquete de iconos</string>
+	<string name="transformIcons">Transformar iconos</string>
+	<string name="transformIconsSummary">Editar iconos según la configuración del paquete de iconos</string>
+	<string name="defaultIconPack">Por defecto</string>
+	<string name="fullscreen">Modo pantalla completa</string>
+	<string name="historySize">Tamaño del historial</string>
+	<string name="password">Contraseña</string>
+	<string name="passwordSummary">Bloquear el acceso a la configuración y las aplicaciones ocultas</string>
+	<string name="passwordHint">Dejarlo vacío para desactivar el bloqueoLeave it empty to disable lock</string>
+	<string name="searchProvider">Proveedor de búsqueda</string>
+	<string name="keepInMemory">Mantener en la memoria</string>
+	<string name="volumeButtons">Usar los botones de volumen para cambiar entre categorías</string>
+	<string name="backupPrefs">Copia de seguridad de las preferencias</string>
+	<string name="successfulBackup">Copia de seguridad finalizada. El archivo se encuentra en </string>
+	<string name="successfulRestore">Restauradas con éxito.</string>
+	<string name="restorePrefs">Restaurar preferencias</string>
+	<string name="restart">Reiniciar lanzador</string>
+	<string name="restart_needed">El lanzador será reiniciado</string>
+	
+	<string name="launcherSettings">Configuración del lanzador</string>
+	
+	<string name="createCategory">Crear categoría</string>
+	<string name="note_rename_error">El nombre ya está en uso</string>
+	<string name="rename">Renombrar</string>
+	<string name="editAppList">Editar lista de aplicaciones</string>
+	<string name="findInMarket">Encontrarla en el mercado de aplicaciones</string>
+	<string name="editCategories">Editar categorías</string>
+	<string name="editAppCategories">Editar las categorías de la aplicación</string>
+	<string name="delete">Borrar</string>
+	<string name="setHome">Establecer como inicio</string>
+	<string name="hide">Ocultar</string>
+	<string name="unhide">Mostrar</string>
+	
+	<string name="save_here">Guardar en esta carpeta</string>
+	<string name="dock_is_full">El dock está completo</string>
+	<string name="dock_preferences">Preferencias del dock</string>
+	<string name="dock_height">Altura del dock</string>
+	<string name="dock_icon_size">Tamaño de los iconos en el dock</string>
+	<string name="show_dock_in_landscape">Mostrar dock en el modo horizontal</string>
+	<string name="dock_background">Dock</string>
+	
+	<string name="change_wallpaper">Cambiar fondo de pantalla</string>
+	<string name="accessHidden">Acceder a las aplicaciones ocultas</string>
+	<string name="quit_hidden_apps">Sali de las aplicaciones ocultas</string>
+	<string name="fullScan">Escaneo completo</string>
+	<string name="clear">Limpiar</string>
+	<string name="wrong_password">Contraseña incorrecta.</string>
+	<string name="type_password">Escribe la contraseña</string>
+	
+	<string name="add_to_dock">Añadir al dock</string>
+	<string name="remove_from_dock">Eliminar del dock</string>
+	<string name="reset_icon">Restablecer icono</string>
+	<string name="choose_icon_from_memory">Elegir de la memoria</string>
+	<string name="change_icon">Cambiar icono</string>
+	<string name="change_icon_title">Cambiar icono de %s</string>
+	<string name="change_icon_question">¿Quieres cambiar el icono de %s?</string>
+	<string name="search_icon_hint">Buscar iconos por el nombre de paquete</string>
+	<string name="uninstall">Desinstalar</string>
+	
+	<string name="aboutTitle">Acerca de</string>
+	<string name="how_to_use">Cómo utilizar Emerald Launcher</string>
+	<string name="close_tutorial">Cerrar el tutorial</string>
+	<string name="fullscreen_mode">Modo pantalla completa</string>
+	
+	<string name="hide_history">Ocultar historial</string>
+	<string name="hide_unclassified">Ocultar categoría "Sin clasificar"</string>
+	
+<string name="tutorial">Desliza hacia la izquierda o hacia la derecha en el menú de aplicaciones para alternar entre categorías. Haz clic en el nombre de la categoría para ver la lista de categorías.
+\n
+\nConfiguración de Open Launcher/Gestor de categoría para editar categorías.
+\n
+\nHaz clic en el botón de búsqueda para buscar entre todas las aplicaciones (excepto las ocultas). Para buscar en la web, abre el buscador, escribe y luego haz clic en la flecha que está a la derecha del campo de texto.
+\n
+\nRealiza una pulsación larga en el icono de una aplicación para abrir menú emergente.
+\n
+\nPresiona el botón de inicio para abrir la categoría inicial. Presiona una vez más para abrir una lista con todas las aplicaciones.
+\n
+\nPresiona el botón de atrás para desplazarte a la última categoría abierta.
+</string>
+	
+<string name="about" translatable="false">Emerald Launcher (v%s)
+\n
+\nCopyright 2018 Anri Dellal
+\n
+\nLicensed under GPL-v3.0-only
+\nWant to help? Report bugs and submit suggestions via GitHub (https://www.github.com/HenriDellal/emerald) or Google Play listing(http://play.google.com/details?id=ru.henridellal.emerald).
+\n
+\n<b>Thanks to:</b>
+\n<b>TheAlaskaLinuxUser</b> (http://thealaskalinuxuser.wordpress.com) for tests and bug fixes.
+\n<b>Maxim Kerekesha</b> for Ukrainian translation.
+\n<b>Daria Szatan</b> (https://github.com/bla-ke) for Polish translation.
+\n<b>Thomas Blankenburg</b> for German translation and tests.
+\n<b>David Smit</b> (https://github.com/heycrip) for Dutch translation and continuous help.
+\n<b>Monyxie</b> (https://github.com/monyxie) for Simplified Chinese translation.
+\n<b>Fijar</b> (https://github.com/f1j4r) for Indonesian translation.
+\n<b>Lowlevel</b> (https://steemit.com/@lowlevel) for the launcher icon.
+\n<b>FliegendeWurst</b> (https://github.com/FliegendeWurst) for useful submissions.
+\n<b>unknowtech</b> (https://github.com/unknowtech) for French translation.
+\nAll contributors.
+\n
+\n<b>TinyLaunch</b>
+\nCopyright (c) 2011-12, Alexander R. Pruss
+\nLicensed under BSD-3-Clause
+\nhttps://github.com/arpruss/tinylaunch
+\n
+\n<b>CWAC ColorMixer</b>
+\nLicensed under the Apache License 2.0.
+\nhttps://github.com/commonsguy/cwac-colormixer
+\n
+\n<b>Hayai Launcher</b>
+\nCopyright 2015 Hayai Software
+\nLicensed under the Apache License 2.0.
+\nhttps://github.com/seizonsenryaku/HayaiLauncher
+\n
+\n<b>KISS Launcher</b>
+\nCopyright Neamar
+\nLicensed under GPL-v3
+\nhttps://github.com/Neamar/KISS
+\n
+\n<b>Font-Awesome</b>
+\nThe font licensed under the SIL OFL 1.1.
+\nhttp://fontawesome.io/</string>
+
+	<!-- DEFAULT VALUES FOR SETTINGS -->
+	
+	<string name="defaultThemeValue" translatable="false">1</string>
+	
+</resources>
