@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<style name="AppTheme.Default" parent="android:Theme.Wallpaper">
+        <item name="android:windowNoTitle">true</item>
+        <item name="launcherTextColor">@android:color/white</item>
+        <item name="launcherTextShadowColor">@color/lightTextShadow</item>
+        <item name="drawableMenu">@drawable/menu_bg</item>
+		<item name="drawableSearch">@drawable/search_bg</item>
+		<item name="drawableWebSearch">@drawable/web_search_bg</item>
+	</style>
+</resources>

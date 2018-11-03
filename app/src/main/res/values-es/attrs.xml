@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	
+	<attr name="launcherTextColor" format="reference"/>
+	<attr name="launcherTextShadowColor" format="reference"/>
+	<attr name="drawableMenu" format="reference"/>
+	<attr name="drawableSearch" format="reference"/>
+	<attr name="drawableWebSearch" format="reference"/>
+	
+</resources>
