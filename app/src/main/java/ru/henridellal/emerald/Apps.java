@@ -136,6 +136,8 @@ public class Apps extends Activity
 			startActivity(i);
 		} catch (ActivityNotFoundException e) {
 			Toast.makeText(this, "Activity is not found", Toast.LENGTH_LONG).show();
+			DatabaseHelper.removeApp(this, a.getComponent());
+			loadFilteredApps();
 		} finally {
 			if (searchIsOpened) {
 				closeSearch();
@@ -576,6 +578,7 @@ public class Apps extends Activity
 		//Log.v(APP_TAG, "Start searching");
 		categories.setCurCategory(CategoryManager.ALL);
 		loadFilteredApps();
+		toggleFullscreen(false);
 		if (options.getBoolean(Keys.HIDE_MAIN_BAR, false)) {
 			findViewById(R.id.main_bar).setVisibility(View.VISIBLE);
 		}
@@ -623,6 +626,7 @@ public class Apps extends Activity
 			dock.unhide();
 		}
 		searchIsOpened=false;
+		toggleFullscreen(true);
 	}
 	private void hideMainBarIfNeeded() {
 		if (options.getBoolean(Keys.HIDE_MAIN_BAR, false)) {
@@ -660,7 +664,7 @@ public class Apps extends Activity
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (event.getAction() != KeyEvent.ACTION_DOWN) {
-			return false;
+			return super.onKeyDown(keyCode, event);
 		}
 		if (keyCode == KeyEvent.KEYCODE_MENU) {
 			menu();
@@ -692,7 +696,7 @@ public class Apps extends Activity
 					}
 					return true;
 				} else {
-					return false;
+					return super.onKeyDown(keyCode, event);
 				}
 			} else if (keyCode == KeyEvent.KEYCODE_0 && !searchIsOpened) {
 				openSearch();
@@ -705,9 +709,9 @@ public class Apps extends Activity
 			} else if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
 				openCategoriesList();
 			} else {
-				return false;
+				return super.onKeyDown(keyCode, event);
 			}
-			return true;
+			return super.onKeyDown(keyCode, event);
 		} else if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) {
 			View view = getCurrentFocus();
 			if (view != null) {
@@ -719,16 +723,16 @@ public class Apps extends Activity
 					launch((ShortcutData)viewTag);
 					return true;
 				}
-				return false;
+				return super.onKeyDown(keyCode, event);
 			}
-			return false;
+			return super.onKeyDown(keyCode, event);
 		} else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
 			if (options.getBoolean(Keys.VOLUME_BUTTONS, false)) {
 				categories.setCurCategory(categories.getCategory(CategoryManager.PREVIOUS));
 				loadFilteredApps();
 				return true;
 			} else {
-				return false;
+				return super.onKeyDown(keyCode, event);
 			}
 		} else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
 			if (options.getBoolean(Keys.VOLUME_BUTTONS, false)) {
@@ -736,10 +740,10 @@ public class Apps extends Activity
 				loadFilteredApps();
 				return true;
 			} else {
-				return false;
+				return super.onKeyDown(keyCode, event);
 			}
 		} else {
-			return false;
+			return super.onKeyDown(keyCode, event);
 		}
 	}
 	
@@ -777,6 +781,14 @@ public class Apps extends Activity
 	@Override
 	protected void onNewIntent(Intent i) {
 		//Log.v(APP_TAG, "onNewIntent");
+		if (Intent.ACTION_MAIN.equals(i.getAction())) {
+			handleHomeButtonPress();
+		}
+		
+		super.onNewIntent(i);
+	}
+	
+	private void handleHomeButtonPress() {
 		try {
 		homeButtonPressed = true;
 		if (categories == null) {
@@ -800,16 +812,24 @@ public class Apps extends Activity
 		} catch (Exception e) {
 			Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
 		}
-		super.onNewIntent(i);
 	}
-	
+
+	private void toggleFullscreen(boolean enableFullscreen) {
+		if (options.getBoolean(Keys.FULLSCREEN, false)) {
+			if (enableFullscreen) {
+				getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+			} else {
+				getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+			}
+		}
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//Log.v(APP_TAG, "onCreate");
 		options = PreferenceManager.getDefaultSharedPreferences(this);
 		if (options.getBoolean(Keys.FULLSCREEN, false)) {
 			requestWindowFeature(Window.FEATURE_NO_TITLE);
-        	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		}
 		categories = LauncherApp.getCategoryManager();
 		if (new File(MyCache.genFilename(this, "apps")).exists()) {
@@ -840,6 +860,7 @@ public class Apps extends Activity
 		if (Build.VERSION.SDK_INT >= 21) {
 			Themer.setWindowDecorations(this, options);
 		}
+		toggleFullscreen(true);
 		setContentView(MainLayout.get(this, options));
 		grid = (GridView) findViewById(R.id.appsGrid);
 		adapter = new CustomAdapter(this);

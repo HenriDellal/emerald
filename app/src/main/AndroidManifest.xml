@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       android:versionCode="39"
-      android:versionName="@string/version_name" package="ru.henridellal.emerald"
+	  android:versionName="@string/version_name" package="ru.henridellal.emerald"
       >
 
      <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="26"/>
@@ -45,16 +45,12 @@
             </intent-filter>
        
         </activity>
-        <receiver android:name="PackageInstallReceiver">
+        <receiver android:name="PackageStateChangedReceiver">
         	<intent-filter>
         	<action android:name="android.intent.action.PACKAGE_INSTALL"/>
         	<action android:name="android.intent.action.PACKAGE_ADDED"/>
         	<action android:name="android.intent.action.PACKAGE_REPLACED"/>
-        	<data android:scheme="package"/>
-        	</intent-filter> 
-        </receiver>
-        <receiver android:name="PackageUninstallReceiver">
-        	<intent-filter>
+			<action android:name="android.intent.action.PACKAGE_CHANGED"/>
         	<action android:name="android.intent.action.PACKAGE_REMOVED"/>
         	<data android:scheme="package"/>
         	</intent-filter> 

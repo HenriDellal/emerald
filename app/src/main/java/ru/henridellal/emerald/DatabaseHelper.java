@@ -290,7 +290,7 @@ public class DatabaseHelper {
     
     public static void removeApp(Context context, String component) {
     	SQLiteDatabase db = getDatabase(context);
-    	db.delete("apps", "component LIKE ?", new String[]{component + "/%"});
+    	db.delete("apps", "component LIKE ?", new String[]{component + "%"});
     	db.delete("shortcuts", "uri LIKE ?", new String[]{"%" + component + "%"});
     	close();
     	MyCache.getIconFile(context, component).delete();

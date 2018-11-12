@@ -4,7 +4,8 @@
 # by S D Rausty https://sdrausty.github.io
 # Adapted from Adi Lima https://github.com/fx-adi-lima/android-tutorials
 #####################################################################
-cd ./app/src/main
+PROJECT_DIR=$HOME/emerald
+cd $PROJECT_DIR/app/src/main
 if [ ! -d "./bin" ]; then
   # Control will enter here if $DIRECTORY doesn't exist.
 mkdir ./bin
@@ -60,12 +61,11 @@ cd bin
 aapt add -f emerald.apk classes.dex
 
 echo "sign the apk"
-apksigner $HOME/emerald/test.keystore emerald.apk $HOME/emerald/emerald.apk
+apksigner $PROJECT_DIR/test.keystore emerald.apk $PROJECT_DIR/emerald.apk
 
 echo "and make it accessible to the outside world"
-cd ..
-chmod 444 emerald.apk
+cd $PROJECT_DIR
+chmod 744 emerald.apk
 
 cp emerald.apk /sdcard/Download/
 echo "emerald.apk copied to /sdcard/Download/"
-

@@ -15,12 +15,44 @@ import android.os.Process;
 import java.io.File;
 import java.util.List;
 
-public class PackageInstallReceiver extends BroadcastReceiver {
+public class PackageStateChangedReceiver extends BroadcastReceiver {
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		if (context == null)
 			return;
+		String action = intent.getAction(); 
+		if (action.equals(Intent.ACTION_PACKAGE_REMOVED)) {
+			onPackageRemove(context, intent);
+		} else if (action.equals(Intent.ACTION_PACKAGE_REPLACED)) {
+			onPackageReplace(context, intent);
+		} else {
+			onPackageAdd(context, intent);
+		}
+	}
+	
+	private void onPackageReplace(Context context, Intent intent) {
+		String component = intent.getStringExtra(Intent.EXTRA_CHANGED_COMPONENT_NAME);
+		//String component = (intent.getStringArrayExtra(Intent.EXTRA_CHANGED_COMPONENT_NAME_LIST))[0];
+
+		if (DatabaseHelper.hasApp(context, component)) {
+			DatabaseHelper.removeApp(context, component);
+
+			//onPackageRemove(context, intent);
+		} else {
+			onPackageAdd(context, intent);
+		}
+	}
+
+	private void onPackageRemove(Context context, Intent intent) {
+		if (intent.getBooleanExtra(Intent.EXTRA_REPLACING, false)) {
+			return;
+		}
+		String packageName = intent.getData().getSchemeSpecificPart();
+		DatabaseHelper.removeApp(context, packageName);
+	}
+
+	private void onPackageAdd(Context context, Intent intent) {
 		PackageManager pm = context.getPackageManager();
 		String packageName = intent.getData().getSchemeSpecificPart();
 		Intent launchIntent = pm.getLaunchIntentForPackage(packageName);

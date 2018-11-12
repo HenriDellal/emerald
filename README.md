@@ -39,7 +39,16 @@ Then navigate to the emerald project folder and run the script (it is recommende
 `$ ./termux-build.sh`
 
 ## Questions and answers
+##### I've disabled the main bar and can't access settings now. How do I open them?
+There are 2 methods to open settings without the main bar:
+- Press Recents/Menu button on the navigation bar(provided by system). Some devices may have different ways (For example, holding Back button on Galaxy phones).
+- Use [ActivityLauncher](https://github.com/butzist/ActivityLauncher). Choose All activities > Emerald Launcher > .Options
 ##### Is it possible to use Emerald as an app drawer?
 Yes.
 ##### Will Emerald Launcher support widgets?
 The launcher is most likely not to introduce widgets in future updates.
+##### Does it support physical keyboards?
+Partially. It isn't possible to do some actions (e.g. launch apps from menu), though some are available with keyboard shortcuts:
+- Alt + number to launch n-th app/shortcut from dock.
+- Alt + Up to open the categories list.
+- Alt + Left/Right to switch categories.
