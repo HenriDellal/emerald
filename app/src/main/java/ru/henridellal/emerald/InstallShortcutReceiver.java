@@ -43,13 +43,12 @@ public class InstallShortcutReceiver extends BroadcastReceiver {
             if (resource != null) {
                 packageName = resource.packageName;
                 resourceName = resource.resourceName;
-                PackageManager pm = context.getPackageManager();
+				PackageManager pm = context.getPackageManager();
                 try {
                 Resources res = pm.getResourcesForApplication(packageName);
                 int id = res.getIdentifier(resourceName, "png", packageName);
                 Drawable d = res.getDrawable(id);
                 icon = ((BitmapDrawable) d).getBitmap();
-                
                 } catch (Exception e) {
                 	Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
                 }
@@ -57,12 +56,11 @@ public class InstallShortcutReceiver extends BroadcastReceiver {
                 //invalid shortcut
                 return;
             }
-        } else {
-        	ByteArrayOutputStream out = new ByteArrayOutputStream();
-        	icon.compress(CompressFormat.PNG, 100, out);
-        	values.put("icon", out.toString());
-        	saveIcon(context, uri, icon);
         }
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		icon.compress(CompressFormat.PNG, 100, out);
+		values.put("icon", out.toString());
+		saveIcon(context, uri, icon);
 		values.put("name", name);
 		values.put("uri", uri);
 		values.put("package", packageName);
