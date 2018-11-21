@@ -25,11 +25,15 @@ public class Dock {
 	private int defaultHeight;
 	private boolean alwaysHide = false;
 	private OnAppClickListener onAppClickListener;
-	private OnAppLongClickListener onAppLongClickListener;
+	private View.OnLongClickListener onAppLongClickListener;
 	
 	public Dock(Context context) {
 		onAppClickListener = new OnAppClickListener((Apps)context);
-		onAppLongClickListener = new OnAppLongClickListener((Apps)context);
+		if (((Apps)context).options.getString(Keys.PASSWORD, "").length() > 0) {
+			onAppLongClickListener = new OnAppUnlockLongClickListener(context);
+		} else {
+			onAppLongClickListener = new OnAppLongClickListener((Apps)context);
+		}
 		contextRef = new SoftReference<Context>(context);
 		dockBar = (LinearLayout) ((Apps)context).findViewById(R.id.dock_bar);
 		defaultHeight = dockBar.getLayoutParams().height;

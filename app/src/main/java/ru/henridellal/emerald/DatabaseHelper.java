@@ -193,7 +193,7 @@ public class DatabaseHelper {
 			oldCategoryNameSQL + "%'", null);
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-			oldCategoriesList = cursor.getString(2);
+			oldCategoriesList = cursor.getString(Database.FIELD_APP_CATEGORIES);
 			newValue = oldCategoriesList.replace(oldCategoryNameSQL, newCategoryNameSQL);
 			ContentValues values = new ContentValues();
 			values.put("categories", newValue);
@@ -205,7 +205,7 @@ public class DatabaseHelper {
 			oldCategoryNameSQL + "%'", null);
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-			oldCategoriesList = cursor.getString(4);
+			oldCategoriesList = cursor.getString(Database.FIELD_SHORTCUT_CATEGORIES);
 			newValue = oldCategoriesList.replace(oldCategoryNameSQL, newCategoryNameSQL);
 			ContentValues values = new ContentValues();
 			values.put("categories", newValue);
@@ -225,6 +225,9 @@ public class DatabaseHelper {
 		db.delete("categories", "name = ?", new String[]{categoryName});
 		clearCategory(context, categoryName);
 		close();
+		CategoryManager cm = LauncherApp.getCategoryManager();
+		if (categoryName.equals(cm.getCurCategory()))
+			cm.setCurCategory(CategoryManager.ALL);
 	}
 	
 	public static void clearCategory(Context context, String categoryName) {
@@ -235,7 +238,7 @@ public class DatabaseHelper {
 			categoryNameSQL + "%'", null);
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-			oldCategoriesList = cursor.getString(2);
+			oldCategoriesList = cursor.getString(Database.FIELD_APP_CATEGORIES);
 			int startIndex = oldCategoriesList.indexOf(categoryNameSQL);
 			newValue = new StringBuilder(oldCategoriesList).delete(startIndex, startIndex+categoryNameSQL.length()).toString();
 			ContentValues values = new ContentValues();
@@ -248,12 +251,12 @@ public class DatabaseHelper {
 			categoryNameSQL + "%'", null);
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-			oldCategoriesList = cursor.getString(2);
+			oldCategoriesList = cursor.getString(Database.FIELD_SHORTCUT_CATEGORIES);
 			int startIndex = oldCategoriesList.indexOf(categoryNameSQL);
 			newValue = new StringBuilder(oldCategoriesList).delete(startIndex, startIndex+categoryNameSQL.length()).toString();
 			ContentValues values = new ContentValues();
 			values.put("categories", newValue);
-			db.update("apps", values, "categories = ?", new String[]{oldCategoriesList});
+			db.update("shortcuts", values, "categories = ?", new String[]{oldCategoriesList});
 			cursor.moveToNext();
 		}
 		cursor.close();
@@ -304,6 +307,15 @@ public class DatabaseHelper {
         new File(context.getCacheDir(), uri.hashCode()+".png").delete();
     }
     
+	public static void updateNames(Context context, ArrayList<String> components, ArrayList<String> names) {
+		SQLiteDatabase db = getDatabase(context);
+		for (int i = 0; i < components.size(); i++) {
+			ContentValues values = new ContentValues();
+			values.put("name", names.get(i));
+			db.update("apps", values, "component = ?", new String[]{components.get(i)});
+		}
+		close();
+	}
     public static boolean isDatabaseEmpty(Context context) {
     	SQLiteDatabase db = getDatabase(context);
     	boolean result = db.rawQuery("SELECT * FROM apps", null).getCount() == 0;

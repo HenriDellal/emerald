@@ -7,16 +7,13 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.preference.PreferenceManager;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
@@ -199,32 +196,7 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 		}
 		fontStyle = Integer.parseInt(options.getString(Keys.FONT_STYLE, "0"));
 		if (lock) {
-			onLongClickListener = new View.OnLongClickListener() {
-				@Override
-				public boolean onLongClick(View arg0) {
-					final View v = arg0;
-					AlertDialog.Builder builder = new AlertDialog.Builder(contextRef.get());
-					//builder.setTitle("");
-					builder.setMessage(contextRef.get().getResources().getString(R.string.type_password));
-					final EditText inputBox = new EditText(contextRef.get());
-					inputBox.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD);
-					builder.setView(inputBox);
-					builder.setPositiveButton(android.R.string.yes, 
-						new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							if (inputBox.getText().toString().equals(options.getString(Keys.PASSWORD, ""))) {
-								((Apps)contextRef.get()).itemContextMenu((AppData)v.getTag());
-							} else {
-								Toast.makeText(contextRef.get(), contextRef.get().getResources().getString(R.string.wrong_password), Toast.LENGTH_LONG).show();
-							}
-						}
-					});
-					builder.setCancelable(true);
-					builder.show();
-					return false;
-				}
-			};
+			onLongClickListener = new OnAppUnlockLongClickListener(context);
 		} else {
 			onLongClickListener = new OnAppLongClickListener((Apps)context);
 		}

@@ -45,10 +45,10 @@ public class ShortcutData extends BaseData {
 	
 	public ShortcutData(Cursor cursor) {
 		super();
-		name = cursor.getString(0);
-		uri = cursor.getString(1);
-		packageName = cursor.getString(2);
-		iconResource = cursor.getString(3);
+		name = cursor.getString(Database.FIELD_SHORTCUT_NAME);
+		uri = cursor.getString(Database.FIELD_SHORTCUT_URI);
+		packageName = cursor.getString(Database.FIELD_SHORTCUT_PACKAGE);
+		iconResource = cursor.getString(Database.FIELD_SHORTCUT_RESOURCE);
 	}
 	
 	public void read(BufferedReader reader, String firstLineOfData){

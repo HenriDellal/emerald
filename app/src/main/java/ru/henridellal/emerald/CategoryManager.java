@@ -86,7 +86,11 @@ public class CategoryManager {
 		}
 	}
 	public Category getCategory(String categoryName) {
-		return categories.get(categoryName);
+		if (categories.containsKey(categoryName)) {
+			return categories.get(categoryName);
+		} else {
+			return categories.get(ALL);
+		}
 	}
 	public boolean isHidden(String categoryName) {
 		if (HISTORY.equals(categoryName)) {
