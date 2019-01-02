@@ -1,8 +1,6 @@
 package ru.henridellal.emerald;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -29,25 +27,24 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 	
 	private View.OnClickListener onClickListener;
 	private View.OnLongClickListener onLongClickListener;
+	private ViewGroup.LayoutParams imageViewLayoutParams;
 	private SoftReference<Context> contextRef;
 	private SharedPreferences options;
 	private ArrayList<BaseData> categoryData, toDisplay;
-	private ArrayList<String> sectionsList;
 	private HashMap<String, Integer> indexData;
 	private String[] sections;
-	private int curMode, iconSize, textSize, textColor, appShortcut, inflatedLayoutId, fontStyle;
+	private int iconSize, textSize, textColor, appShortcut, inflatedLayoutId, fontStyle;
 	boolean lock, fastScrollEnabled;
-	private ImageView img;
-	private TextView tv;
 	private String searchInput;
-	private Set<String> sectionsSet;
 	private Comparator<BaseData> comparator;
 	
-	public void setIconSize(int size) {iconSize = size;}
+	public void setIconSize(int size) {
+		iconSize = size;
+		imageViewLayoutParams = null;
+	}
 	public void setTextSize(int size) {textSize = size;}
 	
 	public void filter(CharSequence searchInput) {
-		indexData.clear();
 		this.searchInput = searchInput.toString();
 		toDisplay = new ArrayList<BaseData>();
 		for (BaseData a: categoryData) {
@@ -55,28 +52,33 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 				toDisplay.add(a);
 			}
 		}
-		setSections();
 		Collections.sort(toDisplay, comparator);
+		setSections();
 		notifyDataSetChanged();
 	}
 	public void setSections() {
 		indexData.clear();
 		if (fastScrollEnabled) {
-			if (this.searchInput.equals("")) {
+			if (!searchInput.equals("") || CategoryManager.HISTORY.equals(LauncherApp.getCategoryManager().getCurCategory())) {
+				sections = new String[0];
+				return;
+			} else {
 				String ch;
-				int appIndex = 0;
-				for (BaseData a: categoryData) {
+				int sectionIndex = 0;
+				for (int i = 0; i < toDisplay.size(); i++) {
+					BaseData a = toDisplay.get(i);
 					ch = (a.name.length() > 1) ? a.name.substring(0,1).toUpperCase() : a.name;
-					indexData.put(ch, appIndex);
-					appIndex++;
+					if (!indexData.containsKey(ch)) {
+						indexData.put(ch, sectionIndex);
+						sectionIndex++;
+					}
 				}
+				Set<String> sectionsSet = indexData.keySet();
+				ArrayList<String> sectionsList = new ArrayList<String>(sectionsSet);
+				Collections.sort(sectionsList);
+				sections = new String[sectionsList.size()];
+				sectionsList.toArray(sections);
 			}
-			
-			sectionsSet = indexData.keySet();
-			sectionsList = new ArrayList<String>(sectionsSet);
-			Collections.sort(sectionsList);
-			sections = new String[sectionsList.size()];
-			sectionsList.toArray(sections);
 		}
 	}
 	
@@ -88,48 +90,61 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view;
-		BaseData a;
-
-		a = toDisplay.get(position);
+		ImageView img;
+		TextView tv;
+		BaseData a = toDisplay.get(position);
 		boolean isEmptyView = (convertView == null);
 		if (isEmptyView) {
 			LayoutInflater inflater = (LayoutInflater)contextRef.get().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(inflatedLayoutId, parent, false);
+			img = (ImageView) view.findViewById(R.id.icon);
+			tv = (TextView) view.findViewById(R.id.text);
+			switch (appShortcut) {
+				case TEXT:
+					img.setVisibility(View.GONE);
+					setTextViewParams(tv);
+					break;
+				case ICON:
+					setImageViewLayoutParams(img);
+					tv.setVisibility(View.GONE);
+					break;
+				default:
+					setImageViewLayoutParams(img);
+					setTextViewParams(tv);
+			}
+			view.setOnClickListener(onClickListener);
+			view.setOnLongClickListener(onLongClickListener);
 		} else {
 			view = convertView;
+			img = (ImageView) view.findViewById(R.id.icon);
+			tv = (TextView) view.findViewById(R.id.text);	
 		}
 		// app shortcut
 		view.setTag(a);
-		img = (ImageView) view.findViewById(R.id.icon);
-		tv = (TextView) view.findViewById(R.id.text);
-		
 		if (appShortcut != ICON) {
 			tv.setText(a.name);
-			if (isEmptyView) {
-				if (appShortcut == TEXT) {
-					img.setVisibility(View.GONE);
-				}
-				tv.setTextSize(textSize);
-				tv.setTextColor(textColor);
-				tv.setTypeface(Typeface.DEFAULT, fontStyle);
-			}
-		} else {
-			tv.setVisibility(View.GONE);
+			tv.setTextSize(textSize);
 		}
 		if (appShortcut >= ICON) {
 			IconPackManager.setIcon(contextRef.get(), img, a);
-			if (isEmptyView) {
-				img.setVisibility(View.VISIBLE);
-				ViewGroup.LayoutParams p = img.getLayoutParams();
-				p.width = iconSize;
-				p.height = iconSize;
-				img.setLayoutParams(p);
-			}
 		}
-		view.setOnClickListener(onClickListener);
-		view.setOnLongClickListener(onLongClickListener);
 		return view;
 	}
+
+	public void setTextViewParams(TextView tv) {
+		tv.setTextColor(textColor);
+		tv.setTypeface(Typeface.DEFAULT, fontStyle);
+	}
+
+	public void setImageViewLayoutParams(ImageView img) {
+		if (null == imageViewLayoutParams) {
+			imageViewLayoutParams = img.getLayoutParams();
+			imageViewLayoutParams.width = iconSize;
+			imageViewLayoutParams.height = iconSize;
+		}
+		img.setLayoutParams(imageViewLayoutParams);
+	}
+
 	public String getAppName(int position) {
 		return toDisplay.get(position).name;
 	}
