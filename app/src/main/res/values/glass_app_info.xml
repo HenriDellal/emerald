@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="glass_app_version" translatable="false">0.6.1</string>
+	<string name="glass_text">Emerald Launcher (v%s)
+\n
+\nCopyright 2017-2019 Anri Dellal
+\n
+\nLicensed under GPL-v3.0-only
+\nWant to help? Report bugs and submit suggestions via GitHub (https://www.github.com/HenriDellal/emerald) or Google Play listing(http://play.google.com/details?id=ru.henridellal.emerald )
+</string>
+	<string name="glass_feedback_url" translatable="false"></string>
+	<string name="glass_source_code_url" translatable="false">https://github.com/HenriDellal/emerald</string>
+	<string name="glass_support_url" translatable="false"></string>
+
+	<string-array name="glass_contributors_names" translatable="false">
+		<item>Daria Szatan</item>
+		<item>David Smit</item>
+		<item>Iván Hernández Cazorla</item>
+		<item>Fijar</item>
+		<item>FliegendeWurst</item>
+		<item>Lowlevel</item>
+		<item>Maxim Kerekesha</item>
+		<item>Monyxie</item>
+		<item>TheAlaskaLinuxUser</item>
+		<item>Thomas Blankenburg</item>
+		<item>Unknowtech</item>
+	</string-array>
+
+	<string-array name="glass_contributors_info">
+		<item>Polish translation</item>
+		<item>Dutch translation, continuous help</item>
+		<item>Spanish translation</item>
+		<item>Indonesian translation</item>
+		<item>Useful submissions</item>
+		<item>Launcher icon</item>
+		<item>Ukrainian translation</item>
+		<item>Simplified Chinese translation</item>
+		<item>Tests and bug fixes</item>
+		<item>German translation and tests</item>
+		<item>French translation</item>
+	</string-array>
+
+	<string-array name="glass_contributors_urls" translatable="false">
+		<item>https://github.com/bla-ke</item>
+		<item>https://github.com/heycrip</item>
+		<item>https://ivanhercaz.com</item>
+		<item>https://github.com/f1j4r</item>
+		<item>https://github.com/FliegendeWurst</item>
+		<item>https://steemit.com/@lowlevel</item>
+		<item></item>
+		<item>https://github.com/monyxie</item>
+		<item>http://thealaskalinuxuser.wordpress.com</item>
+		<item></item>
+		<item>https://github.com/unknowtech</item>
+	</string-array>
+
+	<string-array name="glass_projects_names" translatable="false">
+		<item>TinyLaunch</item>
+		<item>CWAC ColorMixer</item>
+		<item>Hayai Launcher</item>
+		<item>KISS Launcher</item>
+		<item>Font-Awesome</item>
+		<item>glass</item>
+	</string-array>
+
+	<string-array name="glass_projects_info" translatable="false">
+		<item>Copyright (c) 2011-12, Alexander R. Pruss
+\nLicensed under BSD-3-Clause</item>
+		<item>Licensed under the Apache License 2.0.</item>
+		<item>Copyright 2015 Hayai Software
+\nLicensed under the Apache License 2.0.</item>
+		<item>Copyright Neamar
+\nLicensed under GPL-v3</item>
+		<item>The font licensed under the SIL OFL 1.1.</item>
+		<item>Copyright 2019 Anri Dellal
+\nLicensed under the Apache License 2.0.</item>
+	</string-array>
+
+	<string-array name="glass_projects_urls" translatable="false">
+		<item>https://github.com/arpruss/tinylaunch</item>
+		<item>https://github.com/commonsguy/cwac-colormixer</item>
+		<item>https://github.com/seizonsenryaku/HayaiLauncher</item>
+		<item>https://github.com/Neamar/KISS</item>
+		<item>http://fontawesome.io/</item>
+		<item>https://github.com/HenriDellal/glass</item>
+	</string-array>
+
+</resources>

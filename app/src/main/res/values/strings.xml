@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">Emerald Launcher</string>
-	<string name="version_name">0.6.1</string>
 	<string name="appearancePrefs">Appearance preferences</string>
 	<string name="portraitPrefs">Portrait mode preferences</string>
 	<string name="landscapePrefs">Landscape mode preferences</string>

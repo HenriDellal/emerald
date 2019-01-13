@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       android:versionCode="40"
-	  android:versionName="@string/version_name" package="ru.henridellal.emerald"
+	  android:versionName="@string/glass_app_version" package="ru.henridellal.emerald"
       >
 
      <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="26"/>
