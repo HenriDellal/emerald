@@ -378,7 +378,6 @@ public class Apps extends Activity
 
 			for (int i = 0; i < nCategories ; i++) {
 				checked[i] = DatabaseHelper.hasItem(this, item, editableCategoriesArray[i]);
-			//	checked[i] = categories.in(item, editableCategoriesArray[i]);
 			}
 
 			final boolean[] oldChecked = checked.clone();
@@ -838,6 +837,10 @@ public class Apps extends Activity
 			DatabaseConverter.convert(this);
 			categories.convert();
 			launcherUpdate = true;
+		}
+		if (getCacheDir().listFiles().length > 0) {
+			MoveCachedIconsTask task = new MoveCachedIconsTask(this);
+			task.execute();
 		}
 		super.onCreate(savedInstanceState);
 		if (Build.VERSION.SDK_INT >= 11) {

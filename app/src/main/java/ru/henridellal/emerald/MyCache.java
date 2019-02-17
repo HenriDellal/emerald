@@ -68,13 +68,13 @@ public class MyCache {
 		}
 	}
 	public static File getShortcutIconFile(Context c, String uri) {
-		return new File(c.getCacheDir(), getShortcutIconFileName(uri));
+		return new File(c.getFilesDir(), getShortcutIconFileName(uri));
 	}
 	public static File getIconFile(Context c, String component) {
-		return new File(c.getCacheDir(), getIconFileName(component));
+		return new File(c.getFilesDir(), getIconFileName(component));
 	}
 	public static File getIconFile(Context c, BaseData data) {
-		return new File(c.getCacheDir(), getIconFileName(data));
+		return new File(c.getFilesDir(), getIconFileName(data));
 	}
 	
 	public static void deleteIcon(Context c, AppData app) {
@@ -84,7 +84,7 @@ public class MyCache {
 	}
 	/* removes icons of deleted apps */
 	public static void cleanIcons(Context c, ArrayList<BaseData> data) {
-		File[] dirs = c.getCacheDir().listFiles();
+		File[] dirs = c.getFilesDir().listFiles();
 		for (File f : dirs) {
 			boolean deleteFile = true;
 			for (BaseData a : data) {
@@ -98,9 +98,9 @@ public class MyCache {
 			}
 		}
 	}
-	/* removes applications' icons in cache */
+
 	public static void deleteIcons(Context c) {
-		File[] dirs = c.getCacheDir().listFiles();
+		File[] dirs = c.getFilesDir().listFiles();
 		
 		for (File f : dirs) {
 			String name = f.getName();
@@ -108,5 +108,6 @@ public class MyCache {
 				f.delete();
 			}
 		}
+
 	}
 }
