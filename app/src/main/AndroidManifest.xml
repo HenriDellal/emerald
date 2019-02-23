@@ -37,7 +37,8 @@
                   android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
                   android:theme="@style/AppTheme.Default"
                   android:label="@string/app_name">
-            <intent-filter>
+			<intent-filter>
+                <action android:name="ru.henridellal.emerald.open_menu" />
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.HOME" />

@@ -62,11 +62,23 @@ public class Apps extends Activity
 	public SharedPreferences options;
 	public static final String PREF_APPS = "apps";
 	public static final String APP_TAG = "Emerald";
+	public static final String ACTION_OPEN_MENU = "ru.henridellal.emerald.open_menu";
 	private CustomAdapter adapter;
 	public static final int GRID = 0;
 	public static final int LIST = 1;
 	private boolean lock, searchIsOpened, homeButtonPressed, launcherUpdate;
-	
+
+	private void addMenuShortcut() {
+		Intent menuIntent = new Intent(this, Apps.class);
+		menuIntent.setAction(ACTION_OPEN_MENU);
+		Intent shortcutIntent = new Intent();
+		shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, menuIntent);
+		shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getResources().getString(R.string.launcher_menu));
+		shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(this, R.mipmap.icon));
+		shortcutIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+		sendBroadcast(shortcutIntent);
+	}
+
 	public Dock getDock() {
 		return dock;
 	}
@@ -103,6 +115,7 @@ public class Apps extends Activity
 	    	}
 		}
 	}
+
 	public void loadFilteredApps() {
 		Category curCategory = categories.getCategory(categories.getCurCategory());
 		curCatData = DatabaseHelper.getEntries(this, curCategory.getName());
@@ -780,8 +793,11 @@ public class Apps extends Activity
 	@Override
 	protected void onNewIntent(Intent i) {
 		//Log.v(APP_TAG, "onNewIntent");
-		if (Intent.ACTION_MAIN.equals(i.getAction())) {
+		String action = i.getAction();
+		if (Intent.ACTION_MAIN.equals(action)) {
 			handleHomeButtonPress();
+		} else if (ACTION_OPEN_MENU.equals(action)) {
+			menu();
 		}
 		
 		super.onNewIntent(i);
@@ -858,6 +874,9 @@ public class Apps extends Activity
 				.build();
 			NotificationManager notiManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 			notiManager.notify(0, noti);
+		}
+		if (!DatabaseHelper.hasMenuShortcut(this) && Build.VERSION.SDK_INT < 26) {
+			addMenuShortcut();
 		}
 		setRequestedOrientation(Integer.parseInt(options.getString(Keys.ORIENTATION, "2")));
 		if (Build.VERSION.SDK_INT >= 21) {

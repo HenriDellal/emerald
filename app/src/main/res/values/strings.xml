@@ -51,7 +51,8 @@
 	<string name="restorePrefs">Restore preferences</string>
 	<string name="restart">Restart launcher</string>
 	<string name="restart_needed">Launcher will be restarted</string>
-	
+
+	<string name="launcher_menu">Launcher menu</string>
 	<string name="launcherSettings">Launcher settings</string>
 	
 	<string name="createCategory">Create category</string>

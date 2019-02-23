@@ -51,6 +51,7 @@
 	<string name="dock_background">Док</string>
 	
 	<string name="createCategory">Создать категорию</string>
+	<string name="launcher_menu">Меню лаунчера</string>
 	<string name="launcherSettings">Настройки лаунчера</string>
 	<string name="rename">Переименовать</string>
 	<string name="findInMarket">Найти в магазине приложений</string>

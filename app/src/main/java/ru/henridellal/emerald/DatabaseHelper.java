@@ -15,7 +15,7 @@ public class DatabaseHelper {
 	private static SQLiteDatabase database;
 	public static Database dbOpenHelper;
 	private static int mCounter;
-	
+
 	public static synchronized SQLiteDatabase getDatabase(Context context) {
 		mCounter++;
 		if (mCounter == 1) {
@@ -469,7 +469,16 @@ public class DatabaseHelper {
     	close();
     	return result;
     }
-    
+   
+	public static boolean hasMenuShortcut(Context context) {
+    	SQLiteDatabase db = getDatabase(context);
+    	Cursor cursor = db.rawQuery("SELECT uri FROM shortcuts WHERE uri = '%"+ Apps.ACTION_OPEN_MENU +"%'", null);
+    	boolean result = cursor.getCount() != 0;
+    	cursor.close();
+    	close();
+    	return result;
+    }
+
     public static boolean hasShortcut(Context context, String uri) {
     	SQLiteDatabase db = getDatabase(context);
     	Cursor cursor = db.rawQuery("SELECT uri FROM shortcuts WHERE uri = '"+ uri +"'", null);
