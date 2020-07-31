@@ -4,7 +4,7 @@
 	  android:versionName="@string/glass_app_version" package="ru.henridellal.emerald"
       >
 
-     <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="26"/>
+     <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="28"/>
      <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="18" />
      <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="18" />
      <uses-permission android:name="com.android.launcher.permission.CREATE_SHORTCUT" />
