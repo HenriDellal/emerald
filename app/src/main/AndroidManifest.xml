@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      android:versionCode="40"
+      android:versionCode="41"
 	  android:versionName="@string/glass_app_version" package="ru.henridellal.emerald"
       >
 

@@ -61,7 +61,7 @@ public class Apps extends Activity
 	private Dock dock;
 	public SharedPreferences options;
 	public static final String PREF_APPS = "apps";
-	public static final String APP_TAG = "Emerald";
+	public static final String APP_TAG = "ru.henridellal.emerald";
 	public static final String ACTION_OPEN_MENU = "ru.henridellal.emerald.open_menu";
 	private CustomAdapter adapter;
 	public static final int GRID = 0;
@@ -126,20 +126,12 @@ public class Apps extends Activity
 		/*if (null != mGetAppsThread)
 			mGetAppsThread.quit();*/
 	}
-	//handles history filling
-	private void addToHistory(ShortcutData shortcut) {
-		DatabaseHelper.addToHistory(this, shortcut);
-	}
-	
-	private void addToHistory(AppData app) {
-		DatabaseHelper.addToHistory(this, app);
-	}
 
 	//launches app and adds it to history
 	public void launch(AppData a) {
 		//Log.v(APP_TAG, "User launched an app");
 		if (!DatabaseHelper.hasItem(this, a, CategoryManager.HIDDEN))
-			addToHistory(a);
+			DatabaseHelper.addToHistory(this, a);
 		Intent i = new Intent(Intent.ACTION_MAIN);
 		i.addCategory(Intent.CATEGORY_LAUNCHER);
 		i.setComponent(ComponentName.unflattenFromString(
@@ -161,7 +153,7 @@ public class Apps extends Activity
 	public void launch(ShortcutData shortcut) {
 		//Log.v(APP_TAG, "User launched an app");
 		if (!DatabaseHelper.hasItem(this, shortcut, CategoryManager.HIDDEN))
-			addToHistory(shortcut);
+			DatabaseHelper.addToHistory(this, shortcut);
 		try {
 			startActivity(Intent.parseUri(shortcut.getUri(), 0));
 		} catch (Exception e) {
@@ -321,7 +313,7 @@ public class Apps extends Activity
 			Bitmap bmp;
 			IconPackManager ipm = LauncherApp.getInstance().getIconPackManager();
 			// get icon from icon pack
-			if (((bmp = ipm.getBitmap(component)) == null) && (d instanceof BitmapDrawable)) {
+			if ((bmp = ipm.getBitmap(component)) == null) {
 				// edit drawable to match icon pack
 				bmp = ipm.transformDrawable(d);
 			}
@@ -365,7 +357,7 @@ public class Apps extends Activity
 		if (!isFinishing())
 			builder.create().show();
 	}
-	//launches popup window for editing apps
+	//shows popup window for editing categories of app or shortcut
 	private void itemEdit(final BaseData item) {
 		//Log.v(APP_TAG, "Open app edit window");
 		
@@ -847,17 +839,6 @@ public class Apps extends Activity
 			requestWindowFeature(Window.FEATURE_NO_TITLE);
 		}
 		categories = LauncherApp.getCategoryManager();
-		if (new File(MyCache.genFilename(this, "apps")).exists()) {
-			categories.setCurCategory(CategoryManager.ALL);
-			new MoveCustomIconsTask(this).execute();
-			DatabaseConverter.convert(this);
-			categories.convert();
-			launcherUpdate = true;
-		}
-		if (getCacheDir().listFiles().length > 0) {
-			MoveCachedIconsTask task = new MoveCachedIconsTask(this);
-			task.execute();
-		}
 		super.onCreate(savedInstanceState);
 		if (Build.VERSION.SDK_INT >= 11) {
 			Themer.applyTheme(this, options);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<string name="glass_app_version" translatable="false">0.6.1</string>
+	<string name="glass_app_version" translatable="false">1.0</string>
 	<string name="glass_text">Emerald Launcher (v%s)
 \n
 \nCopyright 2017-2019 Anri Dellal

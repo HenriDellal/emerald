@@ -67,8 +67,8 @@ public class CategoryManager {
 	public String getCategory(byte direction) {
 		if (!curCategory.equals(HIDDEN)) {
 			int result = names.indexOf(curCategory);
-			boolean finished = false;
-			while (!finished) {
+			int startPosition = result;
+			for (int i = 0; i < names.size(); i++) {
 				if (direction == PREVIOUS) {
 					result--;
 					result = (result > -1) ? result : names.size()-2;
@@ -76,8 +76,11 @@ public class CategoryManager {
 					result++;
 					result = (result < names.size()-1) ? result : 0;
 				}
+				if (startPosition == result) {
+					return null;
+				}
 				if (!isHidden(names.get(result))) {
-					finished = true;
+					break;
 				}
 			}
 			return names.get(result);
@@ -97,55 +100,14 @@ public class CategoryManager {
 			return options.getBoolean(Keys.HIDE_HISTORY, false);
 		} else if (UNCLASSIFIED.equals(categoryName)) {
 			return options.getBoolean(Keys.HIDE_UNCLASSIFIED, false);
+		} else if (ALL.equals(categoryName)) {
+			return options.getBoolean(Keys.HIDE_ALL, false);
 		} else {
 			return false;
 		}
 	}
 	public ArrayList<BaseData> getCategoryData(String category) {
 		return DatabaseHelper.getEntries(contextRef.get(), category);
-	}
-	public void convert() {
-		BufferedReader reader = null;
-		File file = new File(contextRef.get().getFilesDir() + "/categories.props");
-		ArrayList<String> hiddenCategories = new ArrayList<String>();
-		try {
-			reader = new BufferedReader(new FileReader(file));
-			
-			String d;
-			String key = null;
-			String value = null;
-			int index = -1;
-			while (null != (d = reader.readLine())) {
-				d = d.trim();
-				if (names.contains(d)) {
-					String category = d;
-					d = reader.readLine();
-					index = d.indexOf('=');
-					key = d.substring(0, index).trim();
-					value = d.substring(index+1, d.length()).trim();
-					if (key.equals("hidden")) {
-						if ("true".equals(value)) {
-							hiddenCategories.add(category);
-						}
-					}
-				}
-			}
-		} catch (FileNotFoundException e) {
-		} catch (IOException e) {
-		}
-		
-		if (reader != null)
-			try {
-				reader.close();
-				file.delete();
-			} catch (IOException e) {
-		}
-		
-		if (hiddenCategories.contains("History")) {
-			options.edit().putBoolean(Keys.HIDE_HISTORY, true).commit();
-		} else if (hiddenCategories.contains("Unclassified")) {
-			options.edit().putBoolean(Keys.HIDE_UNCLASSIFIED, true).commit();
-		}
 	}
 	
 	/*Sets current category and saves its name in preferences*/

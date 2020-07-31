@@ -100,7 +100,8 @@
 	
 	<string name="hide_history">Hide history</string>
 	<string name="hide_unclassified">Hide "Unclassified" category</string>
-	
+	<string name="hide_all">Hide "All apps" category</string>
+
 <string name="tutorial">Swipe left/right on the apps menu to switch categories. Click on the category name to see the categories list.
 \n
 \nOpen Launcher settings/Category manager to edit categories.

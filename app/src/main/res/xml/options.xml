@@ -139,6 +139,10 @@
 		android:title="@string/hide_unclassified"
 	    android:defaultValue="false"
 		android:key="hide_unclassified"/>
+	<CheckBoxPreference
+		android:title="@string/hide_all"
+	    android:defaultValue="false"
+		android:key="hide_all"/>
    <EditTextPreference
         android:title="@string/password"
         android:dialogTitle="@string/passwordHint"

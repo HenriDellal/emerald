@@ -48,6 +48,7 @@ public final class Keys {
 	public static final String HISTORY_SIZE = "history_size";
 	public static final String HIDE_HISTORY = "hide_history";
 	public static final String HIDE_UNCLASSIFIED = "hide_unclassified";
+	public static final String HIDE_ALL = "hide_all";
 	public static final String PASSWORD = "password";
 	
 	public static final String[] BACKUP = {SHOW_TUTORIAL,
