@@ -296,6 +296,7 @@ public class DatabaseHelper {
     	db.delete("apps", "component LIKE ?", new String[]{component + "%"});
     	db.delete("shortcuts", "uri LIKE ?", new String[]{"%" + component + "%"});
     	close();
+		Dock.remove(component);
     	MyCache.getIconFile(context, component).delete();
     	MyCache.getCustomIconFile(context, component).delete();
     }

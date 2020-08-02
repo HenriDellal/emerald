@@ -18,41 +18,50 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class Dock {
-	private ArrayList<BaseData> apps;
-	private ArrayList<ImageView> buttons;
-	private SoftReference<Context> contextRef;
-	private LinearLayout dockBar;
-	private int defaultHeight;
-	private boolean alwaysHide = false;
-	private OnAppClickListener onAppClickListener;
-	private View.OnLongClickListener onAppLongClickListener;
+	private static int[] buttonIds = {
+			R.id.button1, R.id.button2,
+			R.id.button3, R.id.button4,
+			R.id.button5
+		};
+
+	private static ArrayList<BaseData> apps;
+	private static ArrayList<ImageView> buttons;
+	private static SoftReference<Context> contextRef;
+	private static LinearLayout dockBar;
+	private static int defaultHeight;
+	private static boolean alwaysHide = false;
+	private static OnAppClickListener onAppClickListener;
+	private static View.OnLongClickListener onAppLongClickListener;
 	
-	public Dock(Context context) {
-		onAppClickListener = new OnAppClickListener((Apps)context);
-		if (((Apps)context).options.getString(Keys.PASSWORD, "").length() > 0) {
+	public static void init(Context context) {
+		Apps mainActivity = (Apps) context;
+		onAppClickListener = new OnAppClickListener(mainActivity);
+		if (mainActivity.options.getString(Keys.PASSWORD, "").length() > 0) {
 			onAppLongClickListener = new OnAppUnlockLongClickListener(context);
 		} else {
-			onAppLongClickListener = new OnAppLongClickListener((Apps)context);
+			onAppLongClickListener = new OnAppLongClickListener(mainActivity);
 		}
 		contextRef = new SoftReference<Context>(context);
-		dockBar = (LinearLayout) ((Apps)context).findViewById(R.id.dock_bar);
+		dockBar = (LinearLayout) mainActivity.findViewById(R.id.dock_bar);
 		defaultHeight = dockBar.getLayoutParams().height;
 		apps = new ArrayList<BaseData>();
-		buttons = new ArrayList<ImageView>();
-		buttons.add((ImageView)((Apps)context).findViewById(R.id.button1));
-		buttons.add((ImageView)((Apps)context).findViewById(R.id.button2));
-		buttons.add((ImageView)((Apps)context).findViewById(R.id.button3));
-		buttons.add((ImageView)((Apps)context).findViewById(R.id.button4));
-		buttons.add((ImageView)((Apps)context).findViewById(R.id.button5));
+		addButtons(mainActivity);
 	}
-	public Object getApp(int index) {
+
+	private static void addButtons(Apps mainActivity) {
+		buttons = new ArrayList<ImageView>();
+		for (int i = 0; i < 5; i++)
+			buttons.add((ImageView)mainActivity.findViewById(buttonIds[i]));
+	}
+
+	public static Object getApp(int index) {
 		return ((apps.size() > index) ? apps.get(index) : null);
 	}
-	public boolean hasApp(BaseData app) {
+	public static boolean hasApp(BaseData app) {
 		return apps.contains(app);
 	}
 	
-	public void add(BaseData app) {
+	public static void add(BaseData app) {
 		if (DatabaseHelper.hasItem(contextRef.get(), app, null)) {
 			apps.add(app);
 			saveApps();
@@ -62,20 +71,29 @@ public class Dock {
 		apps.add(position, app);
 		putEntries(apps);
 	}*/
-	public void remove(BaseData app) {
+	public static void remove(BaseData app) {
 		apps.remove(app);
 		//dockContentHolder.removeView(dockContentHolder.findViewWithTag(app));
 		saveApps();
 	}
+
+	public static void remove(String component) {
+		for (BaseData app: apps) {
+			if (component.equals(app.getId())) {
+				remove(app);
+				return;
+			}
+		}
+	}
 	// returns true if all button layouts are filled
 	// must be removed after implementation of "unlimited" dock
-	public boolean isFull() {
+	public static boolean isFull() {
 		return apps.size() == buttons.size();
 	}
-	public boolean isEmpty() {
+	public static boolean isEmpty() {
 		return apps.size() == 0;
 	}
-	public void initApps() {
+	public static void initApps() {
 		BufferedReader reader = null;
 		boolean needSave = false;
 		apps.clear();
@@ -128,7 +146,7 @@ public class Dock {
 		}
 	}
 	//writes app data into dock file
-	private void saveApps() {
+	private static void saveApps() {
 		BufferedWriter writer = null;
 		try {
 			File file = new File(contextRef.get().getFilesDir(), "dock");
@@ -151,7 +169,7 @@ public class Dock {
 			}		
 		}
 	}
-	public void hide() {
+	public static void hide() {
 		if (!alwaysHide) {
 			ViewGroup.LayoutParams params = dockBar.getLayoutParams();
 			params.height = 0;
@@ -159,7 +177,7 @@ public class Dock {
 			dockBar.setVisibility(View.INVISIBLE);
 		}
 	}
-	public void unhide() {
+	public static void unhide() {
 		if (!alwaysHide) {
 			ViewGroup.LayoutParams params = dockBar.getLayoutParams();
 			params.height = defaultHeight;
@@ -167,14 +185,14 @@ public class Dock {
 			dockBar.setVisibility(View.VISIBLE);
 		}
 	}
-	public void setAlwaysHide(boolean alwaysHide) {
-		this.alwaysHide = alwaysHide;
+	public static void setAlwaysHide(boolean value) {
+		alwaysHide = value;
 	}
-	public boolean isVisible() {
+	public static boolean isVisible() {
 		return dockBar.getVisibility() == View.VISIBLE;
 	}
 	// updates the dock content after addition/deletion of icon
-	public void update() {
+	public static void update() {
 		for (int i=0; i<buttons.size(); i++) {
 			ImageView button = buttons.get(i);
 			if (i<apps.size()) {

@@ -58,7 +58,6 @@ public class Apps extends Activity
 	private CategoryManager categories;
 	private ArrayList<BaseData> curCatData;
 	private GridView grid;
-	private Dock dock;
 	public SharedPreferences options;
 	public static final String PREF_APPS = "apps";
 	public static final String APP_TAG = "ru.henridellal.emerald";
@@ -79,10 +78,6 @@ public class Apps extends Activity
 		sendBroadcast(shortcutIntent);
 	}
 
-	public Dock getDock() {
-		return dock;
-	}
-	
 	public void changePrefsOnRotate() {
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 			//Log.v(APP_TAG, "loadFilteredApps : Portrait orientation");
@@ -95,8 +90,8 @@ public class Apps extends Activity
 	    		grid.setNumColumns(1);
 	    	}
 	    	if (!(options.getBoolean(Keys.DOCK_IN_LANDSCAPE, true))) {
-	    		dock.setAlwaysHide(false);
-	    		dock.unhide();
+	    		Dock.setAlwaysHide(false);
+	    		Dock.unhide();
 	    	}
 		} else {
 			//Log.v(APP_TAG, "loadFilteredApps : orientation");
@@ -110,8 +105,8 @@ public class Apps extends Activity
 	    		grid.setColumnWidth(-1);
 	    	}
 	    	if (!(options.getBoolean(Keys.DOCK_IN_LANDSCAPE, true))) {
-	    		dock.hide();
-	    		dock.setAlwaysHide(true);
+	    		Dock.hide();
+	    		Dock.setAlwaysHide(true);
 	    	}
 		}
 	}
@@ -422,7 +417,7 @@ public class Apps extends Activity
 			getResources().getString(R.string.findInMarket),
 			getResources().getString(R.string.editAppCategories),
 			getResources().getString(R.string.uninstall),
-			(dock.hasApp(item)) ? 
+			(Dock.hasApp(item)) ? 
 				getResources().getString(R.string.remove_from_dock): 
 				getResources().getString(R.string.add_to_dock),
 			getResources().getString(R.string.change_icon)
@@ -451,16 +446,16 @@ public class Apps extends Activity
 						startActivityForResult(new Intent(Intent.ACTION_DELETE, uri), 0);
 						break;
 					case 4:
-						if (dock.hasApp(item)) {
-							dock.remove(item);
+						if (Dock.hasApp(item)) {
+							Dock.remove(item);
 						} else {
-							if (!dock.isFull()) {
-								dock.add(item);
+							if (!Dock.isFull()) {
+								Dock.add(item);
 							} else {
 								Toast.makeText(Apps.this, getResources().getString(R.string.dock_is_full), Toast.LENGTH_LONG).show();
 							}
 						}
-						dock.update();
+						Dock.update();
 						break;
 					case 5:
 						Intent intent = new Intent(Apps.this, ChangeIconActivity.class);
@@ -486,7 +481,7 @@ public class Apps extends Activity
 		String[] commands = new String[]{
 			getResources().getString(R.string.editCategories),
 			getResources().getString(R.string.uninstall),
-			(dock.hasApp(item)) ?
+			(Dock.hasApp(item)) ?
 				getResources().getString(R.string.remove_from_dock): 
 				getResources().getString(R.string.add_to_dock)
 		};
@@ -502,16 +497,16 @@ public class Apps extends Activity
 						loadFilteredApps();
 						break;
 					case 2:
-						if (dock.hasApp(item)) {
-							dock.remove(item);
+						if (Dock.hasApp(item)) {
+							Dock.remove(item);
 						} else {
-							if (!dock.isFull()) {
-								dock.add(item);
+							if (!Dock.isFull()) {
+								Dock.add(item);
 							} else {
 								Toast.makeText(Apps.this, getResources().getString(R.string.dock_is_full), Toast.LENGTH_LONG).show();
 							}
 						}
-						dock.update();
+						Dock.update();
 						break;
 				}
 			}
@@ -595,8 +590,8 @@ public class Apps extends Activity
 		findViewById(R.id.searchBar).setVisibility(View.VISIBLE);
 		text.setVisibility(View.VISIBLE);
 		findViewById(R.id.webSearchButton).setVisibility(View.VISIBLE);
-		if (dock.isVisible()) {
-			dock.hide();
+		if (Dock.isVisible()) {
+			Dock.hide();
 		}
 		text.addTextChangedListener(new TextWatcher() {
 			@Override
@@ -626,8 +621,8 @@ public class Apps extends Activity
 		findViewById(R.id.webSearchButton).setVisibility(View.GONE);
 		text.setVisibility(View.GONE);
 		hideMainBarIfNeeded();
-		if (!dock.isEmpty()) {
-			dock.unhide();
+		if (!Dock.isEmpty()) {
+			Dock.unhide();
 		}
 		searchIsOpened=false;
 		toggleFullscreen(true);
@@ -691,7 +686,7 @@ public class Apps extends Activity
 			return true;
 		} else if (event.isAltPressed()) {
 			if (keyCode >= KeyEvent.KEYCODE_1 && keyCode <= KeyEvent.KEYCODE_9) {
-				Object app = dock.getApp(keyCode-KeyEvent.KEYCODE_1);
+				Object app = Dock.getApp(keyCode-KeyEvent.KEYCODE_1);
 				if (app != null) {
 					if (app instanceof AppData) {
 						launch((AppData)app);
@@ -873,7 +868,7 @@ public class Apps extends Activity
 			loadAppsFromSystem(true);
 			options.edit().putBoolean(Keys.ICON_PACK_CHANGED, false).commit();
 		}
-		dock = new Dock(this);
+		Dock.init(this);
 		changePrefsOnRotate();
 		gestureDetector = new GestureDetector(this, new SwipeListener(this));
 		grid.setOnTouchListener(new View.OnTouchListener() {
@@ -946,7 +941,7 @@ public class Apps extends Activity
 			loadFilteredApps();
 		}
 		
-		dock.initApps();
+		Dock.initApps();
 		launcherUpdate = false;
 	}
 	@Override
