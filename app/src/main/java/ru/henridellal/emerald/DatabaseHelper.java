@@ -15,6 +15,18 @@ public class DatabaseHelper {
 	private static SQLiteDatabase database;
 	public static Database dbOpenHelper;
 	private static int mCounter;
+	private static int[] defCategoriesRes = new int[] {
+		R.string.category_all,
+		R.string.category_unclassified,
+		R.string.category_history,
+		R.string.category_hidden
+	};
+	private static String[] defCategories = new String[] {
+		CategoryManager.ALL,
+		CategoryManager.UNCLASSIFIED,
+		CategoryManager.HISTORY,
+		CategoryManager.HIDDEN
+	};
 
 	public static synchronized SQLiteDatabase getDatabase(Context context) {
 		mCounter++;
@@ -43,10 +55,9 @@ public class DatabaseHelper {
 		}
 		cursor.close();
 		close();
-		categories.put(CategoryManager.ALL, new Category(CategoryManager.ALL, new ArrayList<BaseData>(), R.string.category_all));
-		categories.put(CategoryManager.UNCLASSIFIED, new Category(CategoryManager.UNCLASSIFIED, new ArrayList<BaseData>(), R.string.category_unclassified));
-		categories.put(CategoryManager.HISTORY, new Category(CategoryManager.HISTORY, new ArrayList<BaseData>(), R.string.category_history));
-		categories.put(CategoryManager.HIDDEN, new Category(CategoryManager.HIDDEN, new ArrayList<BaseData>(), R.string.category_hidden));
+		for (int i = 0; i < 4; i++) {
+			categories.put(defCategories[i], new Category(defCategories[i], new ArrayList<BaseData>(), defCategoriesRes[i]));
+		}
 		return categories;
 	}
 	
@@ -154,7 +165,6 @@ public class DatabaseHelper {
 	}
 	
 	public static void removeFromCategory(Context context, BaseData data, String categoryName) {
-		SQLiteDatabase db = getDatabase(context);
 		String table, column;
 		if (data instanceof AppData) {
 			table = "apps";
@@ -163,9 +173,10 @@ public class DatabaseHelper {
 			table = "shortcuts";
 			column = "uri";
 		} else {
-			close();
 			return;
 		}
+
+		SQLiteDatabase db = getDatabase(context);
 		String categoryNameSQL = "@" + categoryName + "@";
 		Cursor cursor = db.rawQuery("SELECT " + column + ", categories FROM " + table + " WHERE " + column + " = '" +
 			data.getId() + "'", null);
@@ -189,30 +200,23 @@ public class DatabaseHelper {
 		String oldCategoryNameSQL = "@" + oldCategoryName + "@";
 		String newCategoryNameSQL = "@" + newCategoryName + "@";
 		String oldCategoriesList, newValue;
-		Cursor cursor = db.rawQuery("SELECT * FROM apps WHERE categories LIKE '%" +
-			oldCategoryNameSQL + "%'", null);
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			oldCategoriesList = cursor.getString(Database.FIELD_APP_CATEGORIES);
-			newValue = oldCategoriesList.replace(oldCategoryNameSQL, newCategoryNameSQL);
-			ContentValues values = new ContentValues();
-			values.put("categories", newValue);
-			db.update("apps", values, "categories = ?", new String[]{oldCategoriesList});
-			cursor.moveToNext();
+		String[] tableNames = new String[] {"apps", "shortcuts"};
+		int[] categoryFields = new int[] {Database.FIELD_APP_CATEGORIES, Database.FIELD_SHORTCUT_CATEGORIES};
+		Cursor cursor;
+		for (int i = 0; i <= 1; i++) {
+			cursor = db.rawQuery("SELECT * FROM " + tableNames[i] + " WHERE categories LIKE '%" +
+				oldCategoryNameSQL + "%'", null);
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				oldCategoriesList = cursor.getString(categoryFields[i]);
+				newValue = oldCategoriesList.replace(oldCategoryNameSQL, newCategoryNameSQL);
+				ContentValues values = new ContentValues();
+				values.put("categories", newValue);
+				db.update(tableNames[i], values, "categories = ?", new String[]{oldCategoriesList});
+				cursor.moveToNext();
+			}
+			cursor.close();
 		}
-		cursor.close();
-		cursor = db.rawQuery("SELECT * FROM shortcuts WHERE categories LIKE '%" +
-			oldCategoryNameSQL + "%'", null);
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			oldCategoriesList = cursor.getString(Database.FIELD_SHORTCUT_CATEGORIES);
-			newValue = oldCategoriesList.replace(oldCategoryNameSQL, newCategoryNameSQL);
-			ContentValues values = new ContentValues();
-			values.put("categories", newValue);
-			db.update("shortcuts", values, "categories = ?", new String[]{oldCategoriesList});
-			cursor.moveToNext();
-		}
-		cursor.close();
 		ContentValues values = new ContentValues();
 		values.put("name", newCategoryName);
 		db.update("categories", values, "name = ?", new String[]{oldCategoryName});
@@ -234,32 +238,24 @@ public class DatabaseHelper {
 		SQLiteDatabase db = getDatabase(context);
 		String categoryNameSQL = "@" + categoryName + "@";
 		String oldCategoriesList, newValue;
-		Cursor cursor = db.rawQuery("SELECT * FROM apps WHERE categories LIKE '%" +
-			categoryNameSQL + "%'", null);
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			oldCategoriesList = cursor.getString(Database.FIELD_APP_CATEGORIES);
-			int startIndex = oldCategoriesList.indexOf(categoryNameSQL);
-			newValue = new StringBuilder(oldCategoriesList).delete(startIndex, startIndex+categoryNameSQL.length()).toString();
-			ContentValues values = new ContentValues();
-			values.put("categories", newValue);
-			db.update("apps", values, "categories = ?", new String[]{oldCategoriesList});
-			cursor.moveToNext();
+		String[] tableNames = new String[] {"apps", "shortcuts"};
+		int[] categoryFields = new int[] {Database.FIELD_APP_CATEGORIES, Database.FIELD_SHORTCUT_CATEGORIES};
+		Cursor cursor;
+		for (int i = 0; i <= 1; i++) {
+			cursor = db.rawQuery("SELECT * FROM " + tableNames[i] + " WHERE categories LIKE '%" +
+				categoryNameSQL + "%'", null);
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				oldCategoriesList = cursor.getString(categoryFields[i]);
+				int startIndex = oldCategoriesList.indexOf(categoryNameSQL);
+				newValue = new StringBuilder(oldCategoriesList).delete(startIndex, startIndex+categoryNameSQL.length()).toString();
+				ContentValues values = new ContentValues();
+				values.put("categories", newValue);
+				db.update(tableNames[i], values, "categories = ?", new String[]{oldCategoriesList});
+				cursor.moveToNext();
+			}
+			cursor.close();
 		}
-		cursor.close();
-		cursor = db.rawQuery("SELECT * FROM shortcuts WHERE categories LIKE '%" +
-			categoryNameSQL + "%'", null);
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			oldCategoriesList = cursor.getString(Database.FIELD_SHORTCUT_CATEGORIES);
-			int startIndex = oldCategoriesList.indexOf(categoryNameSQL);
-			newValue = new StringBuilder(oldCategoriesList).delete(startIndex, startIndex+categoryNameSQL.length()).toString();
-			ContentValues values = new ContentValues();
-			values.put("categories", newValue);
-			db.update("shortcuts", values, "categories = ?", new String[]{oldCategoriesList});
-			cursor.moveToNext();
-		}
-		cursor.close();
 		close();
 	}
 	
@@ -440,26 +436,23 @@ public class DatabaseHelper {
     
     public static boolean hasItem(Context context, BaseData data, String categoryName) {
     	SQLiteDatabase db = getDatabase(context);
+		boolean result = false;
     	String categoryQuery = (null == categoryName) ? "'" :
     				"' AND categories LIKE '%@" + categoryName+ "@%'";
+		Cursor cursor = null;
     	if (data instanceof AppData) {
-    		Cursor cursor = db.rawQuery("SELECT component FROM apps WHERE component = '"+ data.getId()
+    		cursor = db.rawQuery("SELECT component FROM apps WHERE component = '"+ data.getId()
     					+ categoryQuery, null);
-    		boolean result = cursor.getCount() != 0;
-    		cursor.close();
-    		close();
-    		return result;
     	} else if (data instanceof ShortcutData) {
-    		Cursor cursor = db.rawQuery("SELECT uri FROM shortcuts WHERE uri = '"+ data.getId()
-    					+ categoryQuery, null);
-    		boolean result = cursor.getCount() != 0;
+    		cursor = db.rawQuery("SELECT uri FROM shortcuts WHERE uri = '"+ data.getId()
+						+ categoryQuery, null);
+		}
+		if (null != cursor) {
+			result = cursor.getCount() != 0;
     		cursor.close();
-    		close();
-    		return result;
-    	} else {
-    		close();
-    		return false;
-    	}
+		}
+		close();
+		return result;
     }
     
     public static boolean hasApp(Context context, String component) {
