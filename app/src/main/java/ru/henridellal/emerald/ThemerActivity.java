@@ -3,6 +3,7 @@ package ru.henridellal.emerald;
 import android.app.Activity;
 import android.app.WallpaperManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.BitmapDrawable;
@@ -25,21 +26,39 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import android.Manifest;
+
 import com.commonsware.cwac.colormixer.ColorMixer;
 
 public class ThemerActivity extends Activity{
-	private WallpaperManager wallpaperManager;
 	private Drawable preview;
 	private ListView list;
 	private Point realSize;
 	private SharedPreferences sharedPrefs;
 	private ColorMixer colorMixer;
 	private String key;
+	private String[] permissions = new String[] {
+		Manifest.permission.READ_EXTERNAL_STORAGE
+	};
+	
+	private boolean isPermissionGranted() {
+		return checkSelfPermission(permissions[0]) == PackageManager.PERMISSION_GRANTED;
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		wallpaperManager = WallpaperManager.getInstance(this);
-		preview = wallpaperManager.getDrawable();
+		if (Build.VERSION.SDK_INT < 23) {
+			preview = WallpaperManager.getInstance(this).getDrawable();
+		} else {
+			if (!isPermissionGranted()) {
+				requestPermissions(permissions, 0);
+			}
+			
+			if (isPermissionGranted()) {
+				preview = WallpaperManager.getInstance(this).getDrawable();
+			}
+		}
 		setContentView(R.layout.themer);
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		String[] options = new String[] {
@@ -116,9 +135,14 @@ public class ThemerActivity extends Activity{
 		int navBarHeight = (int) (48.f * density * 0.4f);
 		int dockHeight = (int) (56.f * density * 0.4f);
 		
+		Bitmap scaledBitmap;
 		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(bitmap);
-		Bitmap scaledBitmap = Bitmap.createScaledBitmap(((BitmapDrawable)preview).getBitmap(), width, height, false);
+		if (null == preview) {
+			scaledBitmap = bitmap;
+		} else {
+			scaledBitmap = Bitmap.createScaledBitmap(((BitmapDrawable)preview).getBitmap(), width, height, false);
+		}
 		canvas.drawBitmap(scaledBitmap, 0, 0, null);
 		Paint paint = new Paint();
 		// APP BACKGROUND
