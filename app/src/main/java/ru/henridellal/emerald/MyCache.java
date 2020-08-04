@@ -1,10 +1,6 @@
 package ru.henridellal.emerald;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -14,34 +10,11 @@ public class MyCache {
 	static public final int MODE_READ = 0;
 	static public final int MODE_WRITE = 1;
 	
-	public static void read(Context c, String fname, ArrayList<BaseData> data) {
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader(genFilename(c,fname)));
-			for(;;) {
-				String firstLineOfData = reader.readLine();
-				BaseData a;
-				if (firstLineOfData.startsWith(AppData.COMPONENT)) {
-					a = new AppData();
-				} else if (firstLineOfData.startsWith(ShortcutData.SHORTCUT_NAME)) {
-					a = new ShortcutData();
-				} else {
-					a = new BaseData();
-				}
-				a.read(reader, firstLineOfData);
-				data.add(a);
-			}
-		} catch (FileNotFoundException e) {
-		} catch (IOException e) {
-		} catch (NullPointerException e) {}
-	}
 	static public String genFilename(Context c, String name) {
 		File dir = c.getCacheDir();
 		return dir.getPath() + "/" + name + ".MyCache"; 
 	}
-	public static File getOldCustomIconFile(Context c, BaseData data) {
-		return new File(c.getCacheDir(),
-				Uri.encode(data.getComponent())+".custom.png");
-	}
+
 	public static File getCustomIconFile(Context c, String component) {
 		return new File(c.getFilesDir(),
 				Uri.encode(component)+".png");
