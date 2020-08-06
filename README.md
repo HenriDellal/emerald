@@ -15,8 +15,7 @@ Emerald is a simple home screen for Android phones. It aims good performance whi
 - Resizeable layout.
 
 ## To do
-- Shortcuts;
-- Oreo icons and package service;
+- Oreo+ shortcuts and package service;
 - Some bug fixes and improvements.
 
 ## How to use
@@ -29,18 +28,28 @@ There are multiple options:
 - In Termux:
 
 Some packages should be installed
+
 `$ pkg install aapt apksigner dx`
+
 If your Android version is 7.0 or higher
+
 `$ pkg install ecj`
+
 Otherwise
+
 `$ pkg install ecj4.6`
+
 Then navigate to the emerald project folder and run the script (it is recommended to edit paths in it first)
-`$ chmod u+x termux-build.sh`
-`$ ./termux-build.sh`
+
+```
+$ chmod u+x termux-build.sh
+$ ./termux-build.sh
+```
 
 ## Questions and answers
 ##### I've disabled the main bar and can't access settings now. How do I open them?
-There are 2 methods to open settings without the main bar:
+There are some methods to open settings without the main bar:
+- Use Launcher Settings shortcut (pre-Oreo only).
 - Press Recents/Menu button on the navigation bar(provided by system). Some devices may have different ways (For example, holding Back button on Galaxy phones).
 - Use [ActivityLauncher](https://github.com/butzist/ActivityLauncher). Choose All activities > Emerald Launcher > .Options
 ##### Is it possible to use Emerald as an app drawer?
