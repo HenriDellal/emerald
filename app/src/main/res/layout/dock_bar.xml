@@ -3,7 +3,8 @@
 	android:id="@+id/dock_bar"
 	android:layout_width="fill_parent"
 	android:layout_height="@dimen/dock_height"
-	android:background="#2000">
+	android:background="#2000"
+	android:focusableInTouchMode="false">
 	<ImageView
 		android:id="@+id/button1"
 		android:layout_width="0dp"
@@ -12,7 +13,8 @@
 		android:layout_weight="1"
 		android:visibility="invisible"
 		android:layout_alignParentLeft="true"
-		android:layout_alignParentTop="true" />
+		android:layout_alignParentTop="true"
+		android:background="@drawable/button_background" />
 	<ImageView
 		android:id="@+id/button2"
 		android:layout_width="0dp"
@@ -20,7 +22,8 @@
 		android:layout_gravity="center_vertical"
 		android:layout_weight="1"
 		android:visibility="gone"
-		android:layout_toRightOf="@id/button1" />
+		android:layout_toRightOf="@id/button1"
+		android:background="@drawable/button_background" />
 	<ImageView
 		android:id="@+id/button3"
 		android:layout_width="0dp"
@@ -28,7 +31,8 @@
 		android:layout_gravity="center_vertical"
 		android:layout_weight="1"
 		android:visibility="gone"
-		android:layout_toRightOf="@id/button2" />
+		android:layout_toRightOf="@id/button2"
+		android:background="@drawable/button_background" />
 	<ImageView
 		android:id="@+id/button4"
 		android:layout_width="0dp"
@@ -36,7 +40,8 @@
 		android:layout_gravity="center_vertical"
 		android:layout_weight="1"
 		android:visibility="gone"
-		android:layout_toRightOf="@id/button3" />
+		android:layout_toRightOf="@id/button3"
+		android:background="@drawable/button_background" />
 	<ImageView
 		android:id="@+id/button5"
 		android:layout_width="0dp"
@@ -44,5 +49,6 @@
 		android:layout_gravity="center_vertical"
 		android:layout_weight="1"
 		android:visibility="gone"
-		android:layout_toRightOf="@id/button4" />
+		android:layout_toRightOf="@id/button4"
+		android:background="@drawable/button_background" />
 </LinearLayout>

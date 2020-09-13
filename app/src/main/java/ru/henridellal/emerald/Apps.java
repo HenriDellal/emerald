@@ -46,6 +46,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -603,6 +604,24 @@ public class Apps extends Activity
 				adapter.filter(s);
 			}
 		});
+		text.setOnKeyListener(new View.OnKeyListener() {
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				if (event.getAction() != KeyEvent.ACTION_DOWN) {
+					return false;
+				}
+				// allow arrow up/down to focus the grid of apps
+				if (keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+					grid.requestFocus();
+					return true;
+				}
+				// On enter, search the internet
+				if (keyCode == KeyEvent.KEYCODE_ENTER) {
+					searchInWeb(text.getText().toString());
+					return true;
+				}
+				return false;
+			}
+		});
 		View.OnClickListener onClick = new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -646,10 +665,7 @@ public class Apps extends Activity
 				menu();
 				break;
 			case R.id.quit_hidden_apps:
-				categories.setCurCategory(categories.getHome());
-				v.setVisibility(View.GONE);
-				hideMainBarIfNeeded();
-				loadFilteredApps();
+				toggleHiddenCategory();
 				break;
 		}
 	}
@@ -665,10 +681,28 @@ public class Apps extends Activity
 		if (event.getAction() != KeyEvent.ACTION_DOWN) {
 			return super.onKeyDown(keyCode, event);
 		}
-		if (keyCode == KeyEvent.KEYCODE_MENU) {
+		if (keyCode == KeyEvent.KEYCODE_MENU || keyCode == KeyEvent.KEYCODE_BUTTON_SELECT) {
 			menu();
 			return true;
-		} else if (keyCode == KeyEvent.KEYCODE_BACK) {
+		} else if (keyCode == KeyEvent.KEYCODE_INFO || keyCode == KeyEvent.KEYCODE_BUTTON_Y) {
+			View view = getCurrentFocus();
+			if (view instanceof GridView) {
+				view = ((GridView) view).getSelectedView();
+			}
+			if (view != null) {
+				Object viewTag = view.getTag();
+				if (viewTag instanceof AppData) {
+					itemContextMenu((AppData)viewTag);
+					return true;
+				} else if (viewTag instanceof ShortcutData) {
+					itemContextMenu((ShortcutData)viewTag);
+					return true;
+				}
+				return super.onKeyDown(keyCode, event);
+			}
+			return super.onKeyDown(keyCode, event);
+		} else if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE
+			|| keyCode == KeyEvent.KEYCODE_BUTTON_B) {
 			//Log.v(APP_TAG, "BACK pressed");
 			if (searchIsOpened) {
 				closeSearch();
@@ -707,12 +741,20 @@ public class Apps extends Activity
 				loadFilteredApps();
 			} else if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
 				openCategoriesList();
+			} else if (keyCode == KeyEvent.KEYCODE_O && !lock) {
+				startActivity(new Intent(this, Options.class));
+			} else if (keyCode == KeyEvent.KEYCODE_H && !lock) {
+				toggleHiddenCategory();
 			} else {
 				return super.onKeyDown(keyCode, event);
 			}
 			return super.onKeyDown(keyCode, event);
-		} else if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) {
+		} else if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER
+				||	keyCode == KeyEvent.KEYCODE_BUTTON_A || keyCode == KeyEvent.KEYCODE_BUTTON_1) {
 			View view = getCurrentFocus();
+			if (view instanceof GridView) {
+				view = ((GridView) view).getSelectedView();
+			}
 			if (view != null) {
 				Object viewTag = view.getTag();
 				if (viewTag instanceof AppData) {
@@ -741,6 +783,20 @@ public class Apps extends Activity
 			} else {
 				return super.onKeyDown(keyCode, event);
 			}
+		} else if (keyCode == KeyEvent.KEYCODE_BUTTON_L1 || keyCode == KeyEvent.KEYCODE_BUTTON_L2
+				|| keyCode == KeyEvent.KEYCODE_BUTTON_THUMBL|| keyCode == KeyEvent.KEYCODE_PAGE_DOWN) {
+			categories.setCurCategory(categories.getCategory(CategoryManager.PREVIOUS));
+			loadFilteredApps();
+			return true;
+		} else if (keyCode == KeyEvent.KEYCODE_BUTTON_R1 || keyCode == KeyEvent.KEYCODE_BUTTON_R2
+				|| keyCode == KeyEvent.KEYCODE_BUTTON_THUMBR || keyCode == KeyEvent.KEYCODE_PAGE_UP) {
+			categories.setCurCategory(categories.getCategory(CategoryManager.NEXT));
+			loadFilteredApps();
+			return true;
+		} else if (event.isPrintingKey() && !searchIsOpened) {
+			openSearch(); // search as you type
+			EditText text = findViewById(R.id.textField);
+			return text.onKeyDown(keyCode, event);
 		} else {
 			return super.onKeyDown(keyCode, event);
 		}
@@ -767,6 +823,7 @@ public class Apps extends Activity
 		//Log.v(APP_TAG, "onDestroy");
 		grid.setOnScrollListener(null);
 		grid.setOnTouchListener(null);
+		grid.setOnItemClickListener(null);
 		super.onDestroy();
 	}
 	
@@ -826,6 +883,27 @@ public class Apps extends Activity
 		}
 	}
 
+	private void toggleHiddenCategory() {
+		if (categories.getCurCategory() == CategoryManager.HIDDEN) {
+			categories.setCurCategory(categories.getHome());
+			findViewById(R.id.quit_hidden_apps).setVisibility(View.GONE);
+			hideMainBarIfNeeded();
+			loadFilteredApps();
+		} else {
+			categories.setCurCategory(CategoryManager.HIDDEN);
+			findViewById(R.id.searchBar).setVisibility(View.GONE);
+			findViewById(R.id.tabs).setVisibility(View.GONE);
+			if (options.getBoolean(Keys.HIDE_MAIN_BAR, false)) {
+				findViewById(R.id.main_bar).setVisibility(View.VISIBLE);
+			}
+			findViewById(R.id.quit_hidden_apps).setVisibility(View.VISIBLE);
+			if (searchIsOpened) {
+				closeSearch();
+			}
+			loadFilteredApps();
+		}
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//Log.v(APP_TAG, "onCreate");
@@ -876,6 +954,12 @@ public class Apps extends Activity
 				return gestureDetector.onTouchEvent(event);
 			}
 		});
+		grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+				view.callOnClick();
+			}
+		});
 	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -893,17 +977,7 @@ public class Apps extends Activity
 			startActivity(new Intent(this, Options.class));
 			return true;
 		case R.id.access_hidden:
-			categories.setCurCategory(CategoryManager.HIDDEN);
-			findViewById(R.id.searchBar).setVisibility(View.GONE);
-			findViewById(R.id.tabs).setVisibility(View.GONE);
-			if (options.getBoolean(Keys.HIDE_MAIN_BAR, false)) {
-				findViewById(R.id.main_bar).setVisibility(View.VISIBLE);
-			}
-			findViewById(R.id.quit_hidden_apps).setVisibility(View.VISIBLE);
-			if (searchIsOpened) {
-				closeSearch();
-			}
-			loadFilteredApps();
+			toggleHiddenCategory();
 			return true;
 		default:
 			return false;

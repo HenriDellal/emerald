@@ -6,6 +6,7 @@
     android:gravity="center"
     android:clickable="true"
     android:background="@drawable/button_background"
+    android:paddingTop="4dp"
     >
 <ImageView 
 android:id="@+id/icon"
@@ -19,7 +20,6 @@ android:layout_width="fill_parent"
 android:layout_height="wrap_content"
 android:gravity="top|center_horizontal"
 android:textSize="@dimen/text_size"
-android:paddingBottom="4dp"
 android:shadowColor="?attr/launcherTextShadowColor"
 android:shadowRadius="2"
 android:shadowDx="1"

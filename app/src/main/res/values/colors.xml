@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <color name="lightTextShadow">#333</color>    
-<color name="darkTextShadow">#bbb</color>    
-<color name="selector">#4000</color>    
-<color name="dropdownTextColor">#fff</color>    
+<color name="darkTextShadow">#bbb</color>
+<color name="focused">#8888</color>
+<color name="selector">#4000</color>
+<color name="dropdownTextColor">#fff</color>
 <color name="dropdownBackground">#000</color>    
 </resources>

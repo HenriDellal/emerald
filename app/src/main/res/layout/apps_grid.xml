@@ -3,6 +3,8 @@
 	android:id="@+id/appsGrid"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
+	android:descendantFocusability="blocksDescendants"
+	android:listSelector="@drawable/button_background"
 	android:numColumns="auto_fit"
 	android:columnWidth="@dimen/column_width"
 	android:verticalSpacing="@dimen/vertical_spacing"
