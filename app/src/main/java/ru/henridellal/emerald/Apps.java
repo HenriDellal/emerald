@@ -745,6 +745,10 @@ public class Apps extends Activity
 				startActivity(new Intent(this, Options.class));
 			} else if (keyCode == KeyEvent.KEYCODE_H && !lock) {
 				toggleHiddenCategory();
+			} else if (keyCode == KeyEvent.KEYCODE_R && !lock) {
+				if (null != mGetAppsThread)
+					mGetAppsThread.quit();
+				loadAppsFromSystem(true);
 			} else {
 				return super.onKeyDown(keyCode, event);
 			}
