@@ -11,10 +11,8 @@ public class OnAppClickListener implements View.OnClickListener {
 	
 	@Override
 	public void onClick(View arg0) {
-		if (arg0.getTag() instanceof AppData) {
-			appsRef.get().launch((AppData)arg0.getTag());
-		} else if (arg0.getTag() instanceof ShortcutData) {
-			appsRef.get().launch((ShortcutData)arg0.getTag());
+		if (arg0.getTag() instanceof BaseData) {
+			appsRef.get().launch((BaseData)arg0.getTag());
 		}
 	}
 }

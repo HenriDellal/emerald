@@ -1,6 +1,9 @@
 package ru.henridellal.emerald;
 
+import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -68,6 +71,19 @@ public class ShortcutData extends BaseData {
 		.append(this.uri)
 		.append("\n").toString());
 	}
+
+	@Override
+	public Intent getLaunchIntent(Context context) {
+		if (!DatabaseHelper.hasItem(context, this, CategoryManager.HIDDEN))
+			DatabaseHelper.addToHistory(context, this);
+		try {
+			return Intent.parseUri(getUri(), 0);
+		} catch (Exception e) {
+			Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
+			return null;
+		}
+	}
+
 	@Override
 	public int hashCode() {
 		return getUri().hashCode();

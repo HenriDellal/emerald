@@ -23,7 +23,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
@@ -124,38 +123,25 @@ public class Apps extends Activity
 	}
 
 	//launches app and adds it to history
-	public void launch(AppData a) {
-		//Log.v(APP_TAG, "User launched an app");
-		if (!DatabaseHelper.hasItem(this, a, CategoryManager.HIDDEN))
-			DatabaseHelper.addToHistory(this, a);
-		Intent i = new Intent(Intent.ACTION_MAIN);
-		i.addCategory(Intent.CATEGORY_LAUNCHER);
-		i.setComponent(ComponentName.unflattenFromString(
-				a.getComponent()));
-		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+	public boolean launch(BaseData item) {
+		Intent i = item.getLaunchIntent(this);
+		if (i == null) {
+			return false;
+		}
 		try {
 			startActivity(i);
 		} catch (ActivityNotFoundException e) {
 			Toast.makeText(this, "Activity is not found", Toast.LENGTH_LONG).show();
-			DatabaseHelper.removeApp(this, a.getComponent());
+			DatabaseHelper.removeApp(this, item.getComponent());
 			loadFilteredApps();
 		} finally {
 			if (searchIsOpened) {
 				closeSearch();
 			}
 		}
+		return true;
 	}
-	
-	public void launch(ShortcutData shortcut) {
-		//Log.v(APP_TAG, "User launched an app");
-		if (!DatabaseHelper.hasItem(this, shortcut, CategoryManager.HIDDEN))
-			DatabaseHelper.addToHistory(this, shortcut);
-		try {
-			startActivity(Intent.parseUri(shortcut.getUri(), 0));
-		} catch (Exception e) {
-			Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
-		}
-	}
+
 	
 	protected ProgressDialog progress;
 	protected boolean icons;
@@ -515,7 +501,7 @@ public class Apps extends Activity
 		if (!isFinishing())
 			builder.create().show();
 	}
-	
+
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		//Log.v(APP_TAG, "Configuration changed");
@@ -685,22 +671,14 @@ public class Apps extends Activity
 			menu();
 			return true;
 		} else if (keyCode == KeyEvent.KEYCODE_INFO || keyCode == KeyEvent.KEYCODE_BUTTON_Y) {
-			View view = getCurrentFocus();
-			if (view instanceof GridView) {
-				view = ((GridView) view).getSelectedView();
+			BaseData item = getFocusedLaunchItem();
+			if (item instanceof AppData) {
+				itemContextMenu((AppData) item);
+				return true;
+			} else if (item instanceof ShortcutData) {
+				itemContextMenu((ShortcutData) item);
+				return true;
 			}
-			if (view != null) {
-				Object viewTag = view.getTag();
-				if (viewTag instanceof AppData) {
-					itemContextMenu((AppData)viewTag);
-					return true;
-				} else if (viewTag instanceof ShortcutData) {
-					itemContextMenu((ShortcutData)viewTag);
-					return true;
-				}
-				return super.onKeyDown(keyCode, event);
-			}
-			return super.onKeyDown(keyCode, event);
 		} else if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE
 			|| keyCode == KeyEvent.KEYCODE_BUTTON_B) {
 			//Log.v(APP_TAG, "BACK pressed");
@@ -721,15 +699,8 @@ public class Apps extends Activity
 		} else if (event.isAltPressed()) {
 			if (keyCode >= KeyEvent.KEYCODE_1 && keyCode <= KeyEvent.KEYCODE_9) {
 				Object app = Dock.getApp(keyCode-KeyEvent.KEYCODE_1);
-				if (app != null) {
-					if (app instanceof AppData) {
-						launch((AppData)app);
-					} else if (app instanceof ShortcutData) {
-						launch((ShortcutData)app);
-					}
+				if (app instanceof BaseData && launch((BaseData) app)) {
 					return true;
-				} else {
-					return super.onKeyDown(keyCode, event);
 				}
 			} else if (keyCode == KeyEvent.KEYCODE_0 && !searchIsOpened) {
 				openSearch();
@@ -749,43 +720,24 @@ public class Apps extends Activity
 				if (null != mGetAppsThread)
 					mGetAppsThread.quit();
 				loadAppsFromSystem(true);
-			} else {
-				return super.onKeyDown(keyCode, event);
 			}
-			return super.onKeyDown(keyCode, event);
 		} else if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER
 				||	keyCode == KeyEvent.KEYCODE_BUTTON_A || keyCode == KeyEvent.KEYCODE_BUTTON_1) {
-			View view = getCurrentFocus();
-			if (view instanceof GridView) {
-				view = ((GridView) view).getSelectedView();
+			BaseData item = getFocusedLaunchItem();
+			if (item != null && launch(item)) {
+				return true;
 			}
-			if (view != null) {
-				Object viewTag = view.getTag();
-				if (viewTag instanceof AppData) {
-					launch((AppData)viewTag);
-					return true;
-				} else if (viewTag instanceof ShortcutData) {
-					launch((ShortcutData)viewTag);
-					return true;
-				}
-				return super.onKeyDown(keyCode, event);
-			}
-			return super.onKeyDown(keyCode, event);
 		} else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
 			if (options.getBoolean(Keys.VOLUME_BUTTONS, false)) {
 				categories.setCurCategory(categories.getCategory(CategoryManager.PREVIOUS));
 				loadFilteredApps();
 				return true;
-			} else {
-				return super.onKeyDown(keyCode, event);
 			}
 		} else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
 			if (options.getBoolean(Keys.VOLUME_BUTTONS, false)) {
 				categories.setCurCategory(categories.getCategory(CategoryManager.NEXT));
 				loadFilteredApps();
 				return true;
-			} else {
-				return super.onKeyDown(keyCode, event);
 			}
 		} else if (keyCode == KeyEvent.KEYCODE_BUTTON_L1 || keyCode == KeyEvent.KEYCODE_BUTTON_L2
 				|| keyCode == KeyEvent.KEYCODE_BUTTON_THUMBL|| keyCode == KeyEvent.KEYCODE_PAGE_DOWN) {
@@ -801,9 +753,8 @@ public class Apps extends Activity
 			openSearch(); // search as you type
 			EditText text = findViewById(R.id.textField);
 			return text.onKeyDown(keyCode, event);
-		} else {
-			return super.onKeyDown(keyCode, event);
 		}
+		return super.onKeyDown(keyCode, event);
 	}
 	
 	@Override
@@ -850,7 +801,21 @@ public class Apps extends Activity
 		
 		super.onNewIntent(i);
 	}
-	
+
+	private BaseData getFocusedLaunchItem() {
+		View view = getCurrentFocus();
+		if (view instanceof GridView) {
+			view = ((GridView) view).getSelectedView();
+		}
+		if (view != null) {
+			Object viewTag = view.getTag();
+			if (viewTag instanceof BaseData) {
+				return (AppData)viewTag;
+			}
+		}
+		return null;
+	}
+
 	private void handleHomeButtonPress() {
 		try {
 		homeButtonPressed = true;
@@ -888,11 +853,10 @@ public class Apps extends Activity
 	}
 
 	private void toggleHiddenCategory() {
-		if (categories.getCurCategory() == CategoryManager.HIDDEN) {
+		if (CategoryManager.HIDDEN.equals(categories.getCurCategory())) {
 			categories.setCurCategory(categories.getHome());
 			findViewById(R.id.quit_hidden_apps).setVisibility(View.GONE);
 			hideMainBarIfNeeded();
-			loadFilteredApps();
 		} else {
 			categories.setCurCategory(CategoryManager.HIDDEN);
 			findViewById(R.id.searchBar).setVisibility(View.GONE);
@@ -901,11 +865,11 @@ public class Apps extends Activity
 				findViewById(R.id.main_bar).setVisibility(View.VISIBLE);
 			}
 			findViewById(R.id.quit_hidden_apps).setVisibility(View.VISIBLE);
-			if (searchIsOpened) {
-				closeSearch();
-			}
-			loadFilteredApps();
 		}
+		if (searchIsOpened) {
+			closeSearch();
+		}
+		loadFilteredApps();
 	}
 
 	@Override

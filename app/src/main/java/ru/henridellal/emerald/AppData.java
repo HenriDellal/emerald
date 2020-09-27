@@ -1,6 +1,9 @@
 package ru.henridellal.emerald;
 
+import android.content.ComponentName;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 
 import java.io.BufferedReader;
@@ -15,7 +18,7 @@ public class AppData extends BaseData {
 	public static final String NAME = "N";
 	
 	private ArrayList<String> categories;
-	
+
 	@Override
 	public boolean equals(Object a) {
 		if (! (a instanceof AppData))
@@ -25,15 +28,7 @@ public class AppData extends BaseData {
 		}
 		return component.equals( ((AppData)a).component );
 	}
-	
-	@Override
-	public int hashCode() {
-		if (component == null)
-			return "NULL null NULL".hashCode();
-		else
-			return (component).hashCode();
-	}
-	
+
 	public AppData() {
 		super();
 		categories = new ArrayList<String>();
@@ -82,6 +77,18 @@ public class AppData extends BaseData {
 		.append(NAME)
 		.append(this.name)
 		.append("\n").toString());
+	}
+
+	public Intent getLaunchIntent(Context context) {
+		//Log.v(APP_TAG, "User launched an app");
+		if (!DatabaseHelper.hasItem(context, this, CategoryManager.HIDDEN))
+			DatabaseHelper.addToHistory(context, this);
+		Intent i = new Intent(Intent.ACTION_MAIN);
+		i.addCategory(Intent.CATEGORY_LAUNCHER);
+		i.setComponent(ComponentName.unflattenFromString(getComponent()));
+		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+
+		return i;
 	}
 
 }

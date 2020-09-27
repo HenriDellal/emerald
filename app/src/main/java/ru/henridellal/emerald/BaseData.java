@@ -1,11 +1,14 @@
 package ru.henridellal.emerald;
 
+import android.content.Context;
+import android.content.Intent;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.Comparator;
 
-public class BaseData implements Comparable<BaseData> {
+public abstract class BaseData implements Comparable<BaseData> {
 	//component is a package name
 	protected String component;
 	
@@ -59,6 +62,8 @@ public class BaseData implements Comparable<BaseData> {
 	public int compareTo(BaseData arg0) {
 		return arg0.name.compareToIgnoreCase(this.name);
 	}
+
+	abstract public Intent getLaunchIntent(Context context);
 	
 	@Override
 	public int hashCode() {
