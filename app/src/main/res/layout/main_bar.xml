@@ -12,14 +12,16 @@
 		android:id="@+id/tabs"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content" >
-		<Button 
+		<ImageButton
 			android:id="@+id/menuButton"
+			android:contentDescription="@string/launcher_menu"
 			android:layout_width="32dp"
 			android:layout_height="32dp"
 			android:layout_centerVertical="true"
 			android:onClick="onMyClick"
-			android:background="?attr/drawableMenu"
-			android:layout_alignParentLeft="true" />
+			android:layout_alignParentLeft="true"
+			android:src="?attr/drawableMenu"
+			android:background="@drawable/button_background" />
 		<Button
 			android:id="@+id/category_button"
 			android:layout_width="0dp"
@@ -32,14 +34,16 @@
 			android:layout_marginLeft="5dp"
 			android:layout_marginRight="5dp"
 			android:layout_centerVertical="true" />
-		<Button 
+		<ImageButton
 			android:id="@+id/searchButton"
+			android:contentDescription="@android:string/search_go"
 			android:layout_width="32dp"
 			android:layout_height="32dp"
 			android:layout_centerVertical="true"
 			android:onClick="onMyClick"
 			android:layout_alignParentRight="true"
-			android:background="?attr/drawableSearch" />
+			android:src="?attr/drawableSearch"
+			android:background="@drawable/button_background" />
 	</RelativeLayout>
 	<RelativeLayout 
 		android:id="@+id/searchBar"
@@ -63,7 +67,7 @@
 			android:textSize="18sp"
 			android:textColor="?attr/launcherTextColor"
 			android:layout_alignParentLeft="true"
-			android:layout_toStartOf="@id/searchBar"
+			android:layout_alignParentStart="true"
 			android:layout_toLeftOf="@id/webSearchButton" />
 	</RelativeLayout>
 	<Button 
