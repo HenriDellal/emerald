@@ -30,6 +30,7 @@ public class Themer {
 				break;
 		}
 	}
+
 	public static void setWindowDecorations(Activity activity, SharedPreferences options) {
 		if (!options.getBoolean(Keys.FULLSCREEN, false)) {
 			activity.getWindow().setStatusBarColor(options.getInt(Keys.STATUS_BAR_BACKGROUND, 0x22000000));

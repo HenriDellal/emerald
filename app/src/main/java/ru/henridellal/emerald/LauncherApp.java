@@ -17,6 +17,7 @@ public class LauncherApp extends Application {
 	public static CategoryManager getCategoryManager() {
 		return cm;
 	}
+
 	@Override
 	public void onCreate() {
 		super.onCreate();

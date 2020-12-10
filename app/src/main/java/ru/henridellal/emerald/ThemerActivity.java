@@ -30,17 +30,25 @@ import android.Manifest;
 
 import com.commonsware.cwac.colormixer.ColorMixer;
 
-public class ThemerActivity extends Activity{
+public class ThemerActivity extends Activity implements AdapterView.OnItemClickListener {
 	private Drawable preview;
 	private ListView list;
 	private Point realSize;
 	private SharedPreferences sharedPrefs;
 	private ColorMixer colorMixer;
 	private String key;
-	private String[] permissions = new String[] {
+	private final String[] permissions = new String[] {
 		Manifest.permission.READ_EXTERNAL_STORAGE
 	};
-	
+
+	private final String[] keys = new String[] {
+		Keys.APPS_WINDOW_BACKGROUND,
+		Keys.STATUS_BAR_BACKGROUND,
+		Keys.BAR_BACKGROUND,
+		Keys.DOCK_BACKGROUND,
+		Keys.NAV_BAR_BACKGROUND
+	};
+
 	private boolean isPermissionGranted() {
 		return checkSelfPermission(permissions[0]) == PackageManager.PERMISSION_GRANTED;
 	}
@@ -71,25 +79,7 @@ public class ThemerActivity extends Activity{
 		colorMixer = (ColorMixer)(findViewById(R.id.color_mixer));
 		list = (ListView)findViewById(R.id.ui_settings);
 		list.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, options));
-		list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			final String[] keys = new String[] {
-				Keys.APPS_WINDOW_BACKGROUND,
-				Keys.STATUS_BAR_BACKGROUND,
-				Keys.BAR_BACKGROUND,
-				Keys.DOCK_BACKGROUND,
-				Keys.NAV_BAR_BACKGROUND
-			};
-			@Override
-    		public void onItemClick(AdapterView parent, View v, int position, long id) {
-    			int initialColor = 0;
-    			key = keys[position];
-    			initialColor = sharedPrefs.getInt(key, (position > 0) ? 0x22000000 : 0);
-    			colorMixer.setColor(initialColor);
-    			findViewById(R.id.color_mixer_panel).setVisibility(View.VISIBLE);
-    			findViewById(R.id.color_mixer_holder).setVisibility(View.VISIBLE);
-    			findViewById(R.id.ui_settings).setVisibility(View.GONE);
-    		}
-    	});
+		list.setOnItemClickListener(this);
     	Button applyButton = (Button)findViewById(R.id.color_mixer_apply);
     	View.OnClickListener onClick = new View.OnClickListener() {
     		public void onClick(View v) {
@@ -108,6 +98,7 @@ public class ThemerActivity extends Activity{
 		realSize = new Point();
 		((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRealSize(realSize);
 	}
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -123,7 +114,18 @@ public class ThemerActivity extends Activity{
 			super.onBackPressed();
 		}
 	}
-	
+
+	@Override
+	public void onItemClick(AdapterView parent, View v, int position, long id) {
+		int initialColor = 0;
+		key = keys[position];
+		initialColor = sharedPrefs.getInt(key, (position > 0) ? 0x22000000 : 0);
+		colorMixer.setColor(initialColor);
+		findViewById(R.id.color_mixer_panel).setVisibility(View.VISIBLE);
+		findViewById(R.id.color_mixer_holder).setVisibility(View.VISIBLE);
+		findViewById(R.id.ui_settings).setVisibility(View.GONE);
+	}
+
 	private void setPreview() {
 		ImageView uiPreview = (ImageView)findViewById(R.id.ui_preview);
 		int width = (int)(realSize.x*0.4f);
@@ -175,27 +177,5 @@ public class ThemerActivity extends Activity{
 		canvas.drawRect(0, height-navBarHeight-dockHeight, width, height-navBarHeight, paint);
 		
 		uiPreview.setImageBitmap(bitmap);
-	}
-	public class OptionsAdapter extends ArrayAdapter<String> {
-		public OptionsAdapter(Context context, int resource) {
-			super(context, resource);
-		}
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			View v;
-			final int i = position;
-			if (convertView == null) {
-				LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				v = inflater.inflate(R.layout.iconbutton, parent, false);
-			} else {
-				v = convertView;
-			}
-			v.setOnClickListener(new View.OnClickListener() {
-				public void onClick(View view) {
-					Toast.makeText(ThemerActivity.this, " "+i, Toast.LENGTH_LONG).show();
-				}
-			});
-			return v;
-		}
 	}
 }

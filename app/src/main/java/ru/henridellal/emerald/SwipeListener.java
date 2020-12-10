@@ -8,10 +8,12 @@ import java.lang.ref.SoftReference;
 public class SwipeListener extends GestureDetector.SimpleOnGestureListener {
 	private SoftReference<Apps> appsRef;
 	private float density;
+
 	public SwipeListener(Apps apps) {
 		appsRef = new SoftReference<Apps>(apps);
 		density = apps.getResources().getDisplayMetrics().density;
 	}
+
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 		float deltaX = e1.getX() - e2.getX();

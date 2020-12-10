@@ -28,34 +28,34 @@ import android.preference.DialogPreference;
 public class FileLoaderDialog extends ListView {
 	File curDirectory;
 	int mode;
+
 	public int getMode() {
 		return mode;
 	}
+
 	private FileListAdapter getListAdapter() {
 		return adapter;
 	}
+
 	ListView fileList;
 	File[] fileArray = null;
 	ArrayList<File> files = new ArrayList<File>();
 	FileListAdapter adapter;
+
 	protected void setCurDirectory(File f) {
 		curDirectory = f;
 	}
-	protected void setFile(int position, File f) {
-		files.set(position, f);
-	}
+
 	protected File getFile(int position) {
 		return files.get(position);
 	}
-	public ListView getFileListView(){
-		return fileList;
-	}
+
 	protected void setFileList(File directory) {
 		fileArray = directory.listFiles(new FileFilter() {
 			private boolean isExtensionValid(File f) {
 				String filePath = f.getPath();
 				int i = filePath.lastIndexOf('.');
-				return (i > 0 && i < filePath.length()-1) ? filePath.substring(i+1).equals("txt") : false;
+				return (i > 0 && i < filePath.length() - 1) && filePath.substring(i + 1).equals("txt");
 			}
 			@Override
 			public boolean accept(File f) {
@@ -105,6 +105,7 @@ public class FileLoaderDialog extends ListView {
 			}
 		});
 	}
+
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event) {
 		if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
@@ -128,7 +129,7 @@ public class FileLoaderDialog extends ListView {
 	public class FileListAdapter extends BaseAdapter {
 		int resource;
 		Context context;
-		//View.OnClickListener onClickListener;
+
 		public void sort() {
 			Collections.sort(files, new Comparator<File>() {
 				@Override
@@ -145,6 +146,7 @@ public class FileLoaderDialog extends ListView {
 			this.context = context;
 			sort();
 		}
+
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View v = null;
@@ -159,6 +161,7 @@ public class FileLoaderDialog extends ListView {
 
 			return v;
 		}
+
 		@Override
 		public int getCount() {
 			return files.size();

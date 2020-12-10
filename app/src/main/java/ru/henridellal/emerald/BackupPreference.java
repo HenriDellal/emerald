@@ -10,9 +10,6 @@ import android.util.AttributeSet;
 
 public class BackupPreference extends DialogPreference {
 	private FileLoaderDialog dialog;
-	public BackupPreference(Context c) {
-		this(c, null);
-	}
 	public BackupPreference(Context c, AttributeSet attr) {
 		super(c, attr);
 	}

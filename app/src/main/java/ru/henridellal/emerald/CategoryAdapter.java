@@ -10,6 +10,7 @@ public class CategoryAdapter extends ArrayAdapter<String> {
 	public CategoryAdapter(Context context, int resource, List<String> categoryNames) {
 		super(context, resource, categoryNames);
 	}
+
 	public void update(ArrayList<String> content) {
 		clear();
 		addAll(content);

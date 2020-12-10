@@ -107,5 +107,4 @@ public class MainLayout {
 		grid.setScrollBarStyle(AbsListView.SCROLLBARS_INSIDE_INSET);
 		grid.setSmoothScrollbarEnabled(true);
 	}
-	
 }

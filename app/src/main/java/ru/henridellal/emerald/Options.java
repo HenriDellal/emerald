@@ -209,7 +209,7 @@ public class Options extends PreferenceActivity implements SharedPreferences.OnS
 				input = new BufferedReader(new InputStreamReader((InputStream) fileOrStream));
 			}
 			String key, value, line, prefType = null;
-			while ((line = input.readLine()).indexOf("END") == -1) {
+			while (!(line = input.readLine()).contains("END")) {
 				if (argTypes.contains(line.trim())) {
 					prefType = line.trim();
 					continue;
@@ -220,13 +220,13 @@ public class Options extends PreferenceActivity implements SharedPreferences.OnS
 					continue;
 				}
 				value = line.substring(index+1, line.length()).trim();
-				if (prefType.indexOf("STRING") == 0) {
+				if (prefType.startsWith("STRING")) {
 						prefsEditor.putString(key, value);
-				} else if (prefType.indexOf("INTEGER") == 0) {
+				} else if (prefType.startsWith("INTEGER")) {
 						prefsEditor.putInt(key, Integer.parseInt(value));
-				} else if (prefType.indexOf("BOOLEAN") == 0) {
+				} else if (prefType.startsWith("BOOLEAN")) {
 						prefsEditor.putBoolean(key, "true".equals(value));
-				} else if (prefType.indexOf("FLOAT") == 0) {
+				} else if (prefType.startsWith("FLOAT")) {
 						prefsEditor.putFloat(key, Float.parseFloat(value));
 				}
 			}
@@ -240,7 +240,7 @@ public class Options extends PreferenceActivity implements SharedPreferences.OnS
 				Intent i = getIntent();
 				finish();
 				startActivity(i);
-			} catch (Exception ex) {}
+			} catch (Exception ignored) {}
 		}
 	}
 }

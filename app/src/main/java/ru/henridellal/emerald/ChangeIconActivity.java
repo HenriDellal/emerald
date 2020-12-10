@@ -39,6 +39,7 @@ public class ChangeIconActivity extends Activity implements View.OnClickListener
 	private GridView iconGrid;
 	private IconGridAdapter iconGridAdapter;
 	private String component;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -60,17 +61,15 @@ public class ChangeIconActivity extends Activity implements View.OnClickListener
 		iconSearchBar.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void afterTextChanged(Editable s) {}
+
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
 			@Override
 			public void onTextChanged(CharSequence s, int start, int count, int after) {
 				iconGridAdapter.filter(s);
 			}
 		});
-	}
-	@Override
-	protected void onResume() {
-		super.onResume();
 	}
 	
 	@Override
@@ -129,7 +128,7 @@ public class ChangeIconActivity extends Activity implements View.OnClickListener
 				dst.close();
 				src.close();
 			}
-		} catch (Exception e) {}
+		} catch (Exception ignored) {}
 	}
 	
 	public void saveCustomIcon(String appComponent, String iconComponent) {

@@ -75,7 +75,7 @@ public class InstallShortcutReceiver extends BroadcastReceiver {
             if (intent.getCategories() != null && intent.getCategories().contains(Intent.CATEGORY_LAUNCHER) && Intent.ACTION_MAIN.equals(intent.getAction())) {
             	return true;
             }
-		} catch (Exception e) {}
+		} catch (Exception ignored) {}
 		return false;
 	}
 	

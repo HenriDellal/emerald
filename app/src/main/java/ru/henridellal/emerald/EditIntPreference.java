@@ -18,7 +18,7 @@ public class EditIntPreference extends DialogPreference {
 
 	@Override
 	protected View onCreateDialogView() {
-		tv=new EditText(getContext());
+		tv = new EditText(getContext());
 		return(tv);
 	}
 	

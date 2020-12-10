@@ -42,6 +42,7 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 		iconSize = size;
 		imageViewLayoutParams = null;
 	}
+
 	public void setTextSize(int size) {textSize = size;}
 	
 	public void filter(CharSequence searchInput) {
@@ -56,6 +57,7 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 		setSections();
 		notifyDataSetChanged();
 	}
+
 	public void setSections() {
 		indexData.clear();
 		if (fastScrollEnabled) {
@@ -144,10 +146,6 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 		}
 		img.setLayoutParams(imageViewLayoutParams);
 	}
-
-	public String getAppName(int position) {
-		return toDisplay.get(position).name;
-	}
 		
 	public int getPositionForSection(int sectionIndex) {
 		return indexData.get(sections[sectionIndex]);
@@ -172,7 +170,8 @@ public class CustomAdapter extends BaseAdapter implements SectionIndexer
 	@Override
 	public long getItemId(int position) {
 		return 0;
-	}			
+	}
+
 	public void update(ArrayList<BaseData> curCatData) {
 		categoryData = curCatData;
 		toDisplay = new ArrayList<BaseData>(categoryData);

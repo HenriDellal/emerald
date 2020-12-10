@@ -26,7 +26,6 @@ import java.io.FileFilter;
 
 public class FileActivity extends Activity {
 	public static int GET_IMAGE = 1;
-	public static int RESULT_VALID_ICON = 1;
 	public static String RESULT_PATH = "FileActivity.path";
 	
 	private File curDirectory;
@@ -36,9 +35,6 @@ public class FileActivity extends Activity {
 	private FileListAdapter adapter=null;
 	protected void setCurDirectory(File f) {
 		curDirectory = f;
-	}
-	protected void setFile(int position, File f) {
-		files.set(position, f);
 	}
 	protected File getFile(int position) {
 		return files.get(position);
@@ -99,6 +95,7 @@ public class FileActivity extends Activity {
     		}
     	});
     }
+
     @Override
     public void onBackPressed() {
     	if (curDirectory.equals(Environment.getExternalStorageDirectory())) {
@@ -122,9 +119,11 @@ public class FileActivity extends Activity {
 		}
 		return false;
     }
+
     public class FileListAdapter extends BaseAdapter {
     	int resource;
     	Context context;
+
     	public void sort() {
     		Collections.sort(files, new Comparator<File>() {
     			@Override
@@ -135,12 +134,14 @@ public class FileActivity extends Activity {
     		});
     		notifyDataSetChanged();
     	}
+
     	public FileListAdapter(Context context, int resource) {
     		super();
     		this.resource = resource;
     		this.context = context;
     		sort();
     	}
+
     	private Bitmap getPreview(File file) {
     		if (file.isDirectory()) {
     			return ((BitmapDrawable)context.getResources().getDrawable(R.drawable.directory)).getBitmap();
@@ -150,6 +151,7 @@ public class FileActivity extends Activity {
     			return ((BitmapDrawable)context.getResources().getDrawable(R.drawable.document)).getBitmap();
     		}
     	}
+
     	@Override
     	public View getView(int position, View convertView, ViewGroup parent) {
     		View v;
@@ -164,6 +166,7 @@ public class FileActivity extends Activity {
     		
     		return v;
     	}
+
     	@Override
 		public int getCount() {
 			return files.size();

@@ -41,16 +41,21 @@ public abstract class BaseData implements Comparable<BaseData> {
 		this.component = component;
 		this.name = name;
 	}
+
 	public String getComponent() {
 		return this.component;
 	}
+
 	public String getName() {
 		return this.name;
 	}
+
 	public void read(BufferedReader reader, String firstLineOfData) {}
+
 	public void write(BufferedWriter reader) throws IOException {
 		throw new IOException();
 	}
+
 	protected String readLine(BufferedReader reader, String key) throws IOException {
 		String line = reader.readLine();
 		if (line == null || !line.startsWith(key))

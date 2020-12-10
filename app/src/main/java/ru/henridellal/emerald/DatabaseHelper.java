@@ -62,7 +62,8 @@ public class DatabaseHelper {
 	}
 	
 	public static boolean hasCategory(SQLiteDatabase db, String categoryName) {
-		Cursor cursor = db.rawQuery("SELECT * FROM categories WHERE name = '" + categoryName +"'", null);
+		String query = String.format("SELECT * FROM categories WHERE name = '%s'", categoryName);
+		Cursor cursor = db.rawQuery(query, null);
 		boolean categoryExists = ((cursor.getCount() != 0) || !CategoryManager.isCustom(categoryName));
 		cursor.close();
 		return categoryExists;
@@ -81,24 +82,7 @@ public class DatabaseHelper {
 		close();
 		return true;
 	}
-	
-	public static void addAppToCategory(Context context, String component, String categoryName) {
-		SQLiteDatabase db = getDatabase(context);
-		String categoryNameSQL = "@" + categoryName + "@";
-		String table, column;
-		table = "apps";
-		column = "component";
-		Cursor cursor = db.rawQuery("SELECT "+ column + ", categories FROM " + table + " WHERE " + column + " = '" +
-			component + "'", null);
-		cursor.moveToFirst();
-		String categoriesList = cursor.getString(1);
-		ContentValues values = new ContentValues();
-		values.put("categories", categoriesList.concat(categoryNameSQL));
-		db.update(table, values, column + " = ?", new String[]{cursor.getString(0)});
-		cursor.close();
-		close();
-	}
-	
+
 	public static void addToCategory(Context context, BaseData data, String categoryName) {
 		SQLiteDatabase db = getDatabase(context);
 		String table, column;
@@ -112,22 +96,22 @@ public class DatabaseHelper {
 			close();
 			return;
 		}
-		String categoryNameSQL = "@" + categoryName + "@";
-		Cursor cursor = db.rawQuery("SELECT "+ column + ", categories FROM " + table + " WHERE " + column + " = '" +
-			data.getId() + "'", null);
+
+		String query = String.format("SELECT %s, categories FROM %s WHERE %s = '%s'", column, table, column, data.getId());
+		Cursor cursor = db.rawQuery(query, null);
 		cursor.moveToFirst();
 		String categoriesList = cursor.getString(1);
 		ContentValues values = new ContentValues();
-		values.put("categories", categoriesList.concat(categoryNameSQL));
+		values.put("categories", categoriesList.concat("@" + categoryName + "@"));
 		db.update(table, values, column + " = ?", new String[]{cursor.getString(0)});
 		cursor.close();
 		close();
 	}
 	
 	public static void removeAppFromCategory(Context context, String id, String categoryName) {
+		String query = String.format("SELECT component, categories FROM apps WHERE component = '%s'", id);
 		SQLiteDatabase db = getDatabase(context);
-		Cursor cursor = db.rawQuery("SELECT component, categories FROM apps WHERE component = '" +
-			id + "'", null);
+		Cursor cursor = db.rawQuery(query, null);
 		if (!cursor.moveToFirst()) {
 			cursor.close();
 			close();
@@ -145,9 +129,9 @@ public class DatabaseHelper {
 	}
 	
 	public static void removeShortcutFromCategory(Context context, String id, String categoryName) {
+		String query = String.format("SELECT uri, categories FROM shortcuts WHERE uri = '%s'", id);
 		SQLiteDatabase db = getDatabase(context);
-		Cursor cursor = db.rawQuery("SELECT uri, categories FROM shortcuts WHERE uri = '" +
-			id + "'", null);
+		Cursor cursor = db.rawQuery(query, null);
 		if (!cursor.moveToFirst()) {
 			cursor.close();
 			close();
@@ -178,8 +162,8 @@ public class DatabaseHelper {
 
 		SQLiteDatabase db = getDatabase(context);
 		String categoryNameSQL = "@" + categoryName + "@";
-		Cursor cursor = db.rawQuery("SELECT " + column + ", categories FROM " + table + " WHERE " + column + " = '" +
-			data.getId() + "'", null);
+		String query = String.format("SELECT %s, categories FROM %s WHERE %s = '%s'", column, table, column, data.getId());
+		Cursor cursor = db.rawQuery(query, null);
 		cursor.moveToFirst();
 		String oldCategoriesList = cursor.getString(1);
 		int startIndex = oldCategoriesList.indexOf(categoryNameSQL);
@@ -199,13 +183,13 @@ public class DatabaseHelper {
 		}
 		String oldCategoryNameSQL = "@" + oldCategoryName + "@";
 		String newCategoryNameSQL = "@" + newCategoryName + "@";
-		String oldCategoriesList, newValue;
+		String query, oldCategoriesList, newValue;
 		String[] tableNames = new String[] {"apps", "shortcuts"};
 		int[] categoryFields = new int[] {Database.FIELD_APP_CATEGORIES, Database.FIELD_SHORTCUT_CATEGORIES};
 		Cursor cursor;
 		for (int i = 0; i <= 1; i++) {
-			cursor = db.rawQuery("SELECT * FROM " + tableNames[i] + " WHERE categories LIKE '%" +
-				oldCategoryNameSQL + "%'", null);
+			query = String.format("SELECT * FROM %s WHERE categories LIKE '%%@%s@%%'", tableNames[i], oldCategoryName);
+			cursor = db.rawQuery(query, null);
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
 				oldCategoriesList = cursor.getString(categoryFields[i]);
@@ -237,13 +221,13 @@ public class DatabaseHelper {
 	public static void clearCategory(Context context, String categoryName) {
 		SQLiteDatabase db = getDatabase(context);
 		String categoryNameSQL = "@" + categoryName + "@";
-		String oldCategoriesList, newValue;
+		String query, oldCategoriesList, newValue;
 		String[] tableNames = new String[] {"apps", "shortcuts"};
 		int[] categoryFields = new int[] {Database.FIELD_APP_CATEGORIES, Database.FIELD_SHORTCUT_CATEGORIES};
 		Cursor cursor;
 		for (int i = 0; i <= 1; i++) {
-			cursor = db.rawQuery("SELECT * FROM " + tableNames[i] + " WHERE categories LIKE '%" +
-				categoryNameSQL + "%'", null);
+			query = String.format("SELECT * FROM %s WHERE categories LIKE '%%%s%%'", tableNames[i], categoryNameSQL);
+			cursor = db.rawQuery(query, null);
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
 				oldCategoriesList = cursor.getString(categoryFields[i]);
@@ -270,15 +254,7 @@ public class DatabaseHelper {
 		}
 		close();
 	}
-	
-	public static void insertApp(Context context, AppData app) {
-		SQLiteDatabase db = getDatabase(context);
-		if (!hasApp(context, app.getComponent())) {
-			db.insert("apps", null, app.getContentValues());
-		}
-		close();
-	}
-	
+
 	public static void insertShortcut(Context context, ContentValues values) {
         SQLiteDatabase db = getDatabase(context);
         if (!hasShortcut(context, values.getAsString("uri"))) {
@@ -303,19 +279,12 @@ public class DatabaseHelper {
         close();
         new File(context.getCacheDir(), uri.hashCode()+".png").delete();
     }
-    
-	public static void updateNames(Context context, ArrayList<String> components, ArrayList<String> names) {
-		SQLiteDatabase db = getDatabase(context);
-		for (int i = 0; i < components.size(); i++) {
-			ContentValues values = new ContentValues();
-			values.put("name", names.get(i));
-			db.update("apps", values, "component = ?", new String[]{components.get(i)});
-		}
-		close();
-	}
+
     public static boolean isDatabaseEmpty(Context context) {
     	SQLiteDatabase db = getDatabase(context);
-    	boolean result = db.rawQuery("SELECT * FROM apps", null).getCount() == 0;
+    	Cursor cursor = db.rawQuery("SELECT * FROM apps", null);
+		boolean result = cursor.getCount() == 0;
+    	cursor.close();
     	close();
     	return result;
     }
@@ -412,15 +381,6 @@ public class DatabaseHelper {
     
     }
     
-    public static boolean hasUri(Context context, String uri, String categoryName) {
-    	SQLiteDatabase db = getDatabase(context);
-    	Cursor cursor = db.rawQuery("SELECT uri FROM shortcuts WHERE uri = '"+ uri+ "' AND categories LIKE '%@" + categoryName+ "@%'", null);
-    	boolean result = cursor.getCount() != 0;
-    	cursor.close();
-    	close();
-    	return result;
-    }
-    
     public static boolean hasComponent(Context context, String component, String categoryName) {
     	SQLiteDatabase db = getDatabase(context);
     	Cursor cursor = db.rawQuery("SELECT component FROM apps WHERE component = '"+ component+ "' AND categories LIKE '%@" + categoryName+ "@%'", null);
@@ -456,29 +416,26 @@ public class DatabaseHelper {
     }
     
     public static boolean hasApp(Context context, String component) {
+		String query = String.format("SELECT component FROM apps WHERE component = '%s'", component);
+		SQLiteDatabase db = getDatabase(context);
+		Cursor cursor = db.rawQuery(query, null);
+		boolean result = cursor.getCount() != 0;
+		cursor.close();
+		close();
+		return result;
+	}
+
+    public static boolean hasShortcut(Context context, String uri) {
+		String query = String.format("SELECT uri FROM shortcuts WHERE uri = '%s'", uri);
     	SQLiteDatabase db = getDatabase(context);
-    	Cursor cursor = db.rawQuery("SELECT component FROM apps WHERE component = '"+ component+ "'", null);
-    	boolean result = cursor.getCount() != 0;
-    	cursor.close();
-    	close();
-    	return result;
-    }
-   
-	public static boolean hasMenuShortcut(Context context) {
-    	SQLiteDatabase db = getDatabase(context);
-    	Cursor cursor = db.rawQuery("SELECT uri FROM shortcuts WHERE uri = '%"+ Apps.ACTION_OPEN_MENU +"%'", null);
+    	Cursor cursor = db.rawQuery(query, null);
     	boolean result = cursor.getCount() != 0;
     	cursor.close();
     	close();
     	return result;
     }
 
-    public static boolean hasShortcut(Context context, String uri) {
-    	SQLiteDatabase db = getDatabase(context);
-    	Cursor cursor = db.rawQuery("SELECT uri FROM shortcuts WHERE uri = '"+ uri +"'", null);
-    	boolean result = cursor.getCount() != 0;
-    	cursor.close();
-    	close();
-    	return result;
-    }
+	public static boolean hasMenuShortcut(Context context) {
+		return hasShortcut(context, Apps.ACTION_OPEN_MENU);
+	}
 }

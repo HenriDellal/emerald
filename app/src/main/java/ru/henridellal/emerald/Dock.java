@@ -67,13 +67,9 @@ public class Dock {
 			saveApps();
 		}
 	}
-	/*public void add(int position, AppData app) {
-		apps.add(position, app);
-		putEntries(apps);
-	}*/
+
 	public static void remove(BaseData app) {
 		apps.remove(app);
-		//dockContentHolder.removeView(dockContentHolder.findViewWithTag(app));
 		saveApps();
 	}
 
@@ -85,14 +81,16 @@ public class Dock {
 			}
 		}
 	}
-	// returns true if all button layouts are filled
-	// must be removed after implementation of "unlimited" dock
+
+	// TODO remove after implementation of "unlimited" dock
 	public static boolean isFull() {
 		return apps.size() == buttons.size();
 	}
+
 	public static boolean isEmpty() {
 		return apps.size() == 0;
 	}
+
 	public static void initApps() {
 		BufferedReader reader = null;
 		boolean needSave = false;
@@ -145,6 +143,7 @@ public class Dock {
 			saveApps();
 		}
 	}
+
 	//writes app data into dock file
 	private static void saveApps() {
 		BufferedWriter writer = null;
@@ -169,6 +168,7 @@ public class Dock {
 			}		
 		}
 	}
+
 	public static void hide() {
 		if (!alwaysHide) {
 			ViewGroup.LayoutParams params = dockBar.getLayoutParams();
@@ -177,6 +177,7 @@ public class Dock {
 			dockBar.setVisibility(View.INVISIBLE);
 		}
 	}
+
 	public static void unhide() {
 		if (!alwaysHide) {
 			ViewGroup.LayoutParams params = dockBar.getLayoutParams();
@@ -185,17 +186,20 @@ public class Dock {
 			dockBar.setVisibility(View.VISIBLE);
 		}
 	}
+
 	public static void setAlwaysHide(boolean value) {
 		alwaysHide = value;
 	}
+
 	public static boolean isVisible() {
 		return dockBar.getVisibility() == View.VISIBLE;
 	}
+
 	// updates the dock content after addition/deletion of icon
 	public static void update() {
-		for (int i=0; i<buttons.size(); i++) {
+		for (int i = 0; i < buttons.size(); i++) {
 			ImageView button = buttons.get(i);
-			if (i<apps.size()) {
+			if (i < apps.size()) {
 				button.setVisibility(View.VISIBLE);
 				IconPackManager.setIcon(contextRef.get(), buttons.get(i), apps.get(i));
 				button.setTag(apps.get(i));

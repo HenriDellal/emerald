@@ -143,11 +143,33 @@ public class Apps extends Activity
 	}
 
 	
-	protected ProgressDialog progress;
+	static protected ProgressDialog progress;
 	protected boolean icons;
 	protected int appShortcut;
-	protected Handler handler, loadAppsHandler;
-	protected GetAppsThread mGetAppsThread;
+	static protected Handler handler;
+	static protected AppsTaskHandler loadAppsHandler;
+	static protected GetAppsThread mGetAppsThread;
+
+	public AppsTaskHandler getAppsTaskHandler() {
+		return loadAppsHandler;
+	}
+
+	static class AppsTaskHandler extends Handler {
+		Apps activity;
+		AppsTaskHandler(Apps activity) {
+			this.activity = activity;
+		}
+		@Override
+		public void handleMessage(Message msg) {
+			try {
+				progress.dismiss();
+			}
+			catch (Exception ignored) {}
+			activity.loadFilteredApps();
+			mGetAppsThread.quit();
+		}
+	}
+
 	@SuppressWarnings("deprecation")
 	public void loadAppsFromSystem(final boolean iconPackChanged) {
 		if (null != progress) {
@@ -171,118 +193,12 @@ public class Apps extends Activity
 			MyCache.deleteIcons(this);
 		}
 		handler = new Handler();
-		loadAppsHandler = new Handler() {
-			@Override
-			public void handleMessage(Message msg) {
-				try {
-					progress.dismiss();
-				}
-				catch (Exception e) {
-				}
-				Apps.this.loadFilteredApps();
-				mGetAppsThread.quit();
-			}
-		};
+		loadAppsHandler = new AppsTaskHandler(this);
 		Runnable appsTask;
 		if (Build.VERSION.SDK_INT >= 21) {
-			appsTask = new Runnable() {
-				protected int i;
-				protected List<LauncherActivityInfo> list;
-				@Override
-				public void run() {
-					list = ((LauncherApps)(Apps.this).getSystemService(Context.LAUNCHER_APPS_SERVICE))
-						.getActivityList(null, Process.myUserHandle());
-			
-					for (i = 0; i < list.size(); i++) {
-						handler.post(new Runnable() {
-							@Override
-							public void run() {
-								progress.setIndeterminate(false);
-								progress.setMax(list.size());
-								progress.setProgress(i);
-							}
-						});
-						
-						LauncherActivityInfo info = list.get(i);
-						ComponentName cn = info.getComponentName();
-						String component = cn.flattenToString();
-						if (!iconPackChanged && DatabaseHelper.hasApp(Apps.this, component)) {
-							continue;
-						}
-						String name = info.getLabel().toString();
-						if (name == null) {
-							name = component;
-						} else if (name.equals(Apps.this.getResources().getString(R.string.app_name))) {
-							continue;
-						}
-						// load icons
-						if (icons) {
-							// get icon file for app from cache
-							File iconFile = MyCache.getIconFile(Apps.this, component);
-							// if there is no icon for app in cache
-							if (!iconFile.exists()) {
-								writeIconToFile(iconFile, info.getIcon(0), component);
-							}
-						}
-						DatabaseHelper.insertApp(Apps.this, component, name);
-					}
-					Apps.this.options.edit().putString(Keys.PREV_APP_SHORTCUT, 
-						Apps.this.options.getString(Keys.APP_SHORTCUT, "1")).commit();
-					loadAppsHandler.sendEmptyMessage(0);
-				}
-			};
+			appsTask = new AppsTaskLollipop(this, icons, iconPackChanged);
 		} else {
-			appsTask = new Runnable() {
-				protected int i;
-				protected List<ResolveInfo> list;
-				@Override
-				public void run() {
-					// use intent to get apps that can be launched
-					Intent launchIntent = new Intent(Intent.ACTION_MAIN);
-					launchIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-					PackageManager pm = Apps.this.getPackageManager();
-					list = pm.queryIntentActivities(launchIntent, 0);
-					for (i = 0; i < list.size(); i++) {
-						handler.post(new Runnable() {
-							@Override
-							public void run() {
-								progress.setIndeterminate(false);
-								progress.setMax(list.size());
-								progress.setProgress(i);
-							}
-						});
-						ResolveInfo info = list.get(i);
-						ComponentName cn = new ComponentName(info.activityInfo.packageName, 
-								info.activityInfo.name);
-						String component = cn.flattenToString();
-						String name = info.activityInfo.loadLabel(pm).toString();
-						if (!iconPackChanged && DatabaseHelper.hasApp(Apps.this, component)) {
-							continue;
-						}
-						if (name == null) {
-							name = component;
-						} else if (name.equals(Apps.this.getResources().getString(R.string.app_name))) {
-							continue;
-						}
-						if (icons) {
-							File iconFile = MyCache.getIconFile(Apps.this, component);
-							if (!iconFile.exists()) {
-								try {
-									writeIconToFile(iconFile, pm.getResourcesForActivity(cn)
-															.getDrawable(pm.getPackageInfo(
-															info.activityInfo.packageName, 
-															0).applicationInfo.icon),
-															component);
-								} catch (Exception e) {}
-							}
-						}
-						DatabaseHelper.insertApp(Apps.this, component, name);
-					}
-					Apps.this.options.edit().putString(Keys.PREV_APP_SHORTCUT, 
-						Apps.this.options.getString(Keys.APP_SHORTCUT, "1")).commit();
-					loadAppsHandler.sendEmptyMessage(0);
-				}
-			};
+			appsTask = new AppsTask(this, icons, iconPackChanged);
 		}
 		mGetAppsThread = new GetAppsThread("GetAppsThread");
 		mGetAppsThread.start();
@@ -883,19 +799,12 @@ public class Apps extends Activity
 		super.onCreate(savedInstanceState);
 		if (Build.VERSION.SDK_INT >= 11) {
 			Themer.applyTheme(this, options);
+			if (options.getBoolean(Keys.KEEP_IN_MEMORY, false)) {
+				PersistentNotification.setNotification(this);
+			}
 		}
 		if (options.getBoolean(Keys.SHOW_TUTORIAL, true)) {
 			startActivity(new Intent(this, TutorialActivity.class));
-		}
-		if (Build.VERSION.SDK_INT >= 11 && options.getBoolean(Keys.KEEP_IN_MEMORY, false)) {
-			Notification noti = new Notification.Builder(this)
-				.setContentTitle(getResources().getString(R.string.app_name))
-				.setContentText(" ")
-				.setSmallIcon(R.mipmap.icon)
-			//	.setLargeIcon(new Bitmap(Bitmap.ARGB_8888))
-				.build();
-			NotificationManager notiManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-			notiManager.notify(0, noti);
 		}
 		if (!DatabaseHelper.hasMenuShortcut(this) && Build.VERSION.SDK_INT < 26) {
 			addMenuShortcut();

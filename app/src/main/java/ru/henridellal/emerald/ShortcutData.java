@@ -17,20 +17,20 @@ public class ShortcutData extends BaseData {
 	
 	
 	private String uri, packageName, iconResource;
+
 	@Override
 	public String getId() {
 		return uri;
 	}
+
 	public String getUri() {
 		return uri;
 	}
+
 	public ShortcutData() {
 		super();
 	}
-	public ShortcutData(String name, String uri, String packageName, String resourceName) {
-		this(name, uri);
-		this.component = packageName +"/"+resourceName;
-	}
+
 	public ShortcutData(String name, String uri) {
 		super(null, name);
 		this.uri = uri;

@@ -11,14 +11,17 @@ import android.widget.EditText;
 public class SearchPreference extends DialogPreference {
 	private String searchValue;
 	private TypedArray searchProviders;
+
 	public SearchPreference(Context c) {
 		super(c);
 		searchProviders = getContext().getResources().obtainTypedArray(R.array.search_values);
 	}
+
 	public SearchPreference(Context c, AttributeSet attr) {
 		super(c, attr);
 		searchProviders = getContext().getResources().obtainTypedArray(R.array.search_values);
 	}
+
 	private void showCustomSearchDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 		final EditText inputField = new EditText(getContext());
@@ -35,6 +38,7 @@ public class SearchPreference extends DialogPreference {
 		);
 		builder.create().show();
 	}
+
 	private int getValueIndex() {
 		for (int i = 1; i < searchProviders.length(); i++) {
 			if (searchProviders.getString(i).equals(searchValue)) {
@@ -43,6 +47,7 @@ public class SearchPreference extends DialogPreference {
 		}
 		return 0;
 	}
+
 	@Override
 	protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
 		builder.setTitle(getContext().getResources().getString(R.string.searchProvider));
@@ -57,6 +62,7 @@ public class SearchPreference extends DialogPreference {
 				}
 			});
 	}
+
 	@Override
 	protected void onDialogClosed(boolean positiveResult) {
 		super.onDialogClosed(positiveResult);
@@ -64,6 +70,7 @@ public class SearchPreference extends DialogPreference {
 			persistString(searchValue);
 		}
 	}
+
 	@Override
 	protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
 		searchValue = (restoreValue ? getPersistedString(searchValue) : defaultValue.toString());

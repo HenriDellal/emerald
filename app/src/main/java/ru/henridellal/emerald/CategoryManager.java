@@ -16,7 +16,6 @@ import java.util.Map;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-//import android.util.Log;
 
 public class CategoryManager {
 	public static final String ALL = "All";
@@ -44,14 +43,17 @@ public class CategoryManager {
 		curCategory = options.getString(Keys.CATEGORY, ALL);
 		home = options.getString(Keys.HOME, ALL);
 	}
+
 	public void loadCategoriesList() {
 		categories = DatabaseHelper.getCategories(contextRef.get());
 		names = new ArrayList<String>(categories.keySet());
 		sortNames();
 	}
+
 	public String getHome() {
 		return home;
 	}
+
 	public void setHome(String catName) {
 		if (haveCategory(catName)) {
 			home = catName;
@@ -88,6 +90,7 @@ public class CategoryManager {
 			return null;
 		}
 	}
+
 	public Category getCategory(String categoryName) {
 		if (categories.containsKey(categoryName)) {
 			return categories.get(categoryName);
@@ -95,6 +98,7 @@ public class CategoryManager {
 			return categories.get(ALL);
 		}
 	}
+
 	public boolean isHidden(String categoryName) {
 		if (HISTORY.equals(categoryName)) {
 			return options.getBoolean(Keys.HIDE_HISTORY, false);
@@ -106,9 +110,6 @@ public class CategoryManager {
 			return false;
 		}
 	}
-	public ArrayList<BaseData> getCategoryData(String category) {
-		return DatabaseHelper.getEntries(contextRef.get(), category);
-	}
 	
 	/*Sets current category and saves its name in preferences*/
 	public void setCurCategory(String category) {
@@ -116,12 +117,12 @@ public class CategoryManager {
 	}
 	
 	public void setCurCategory(String category, boolean push) {
-		//Log.v("TinyLaunch", "setCur "+category+" "+push);
 		if (push)
 			pushCategory(curCategory);
 		curCategory = category;
 		options.edit().putString(Keys.CATEGORY, category).commit();
 	}
+
 	//sets previously chosen category as current
 	public void prevCategory() {
 		String c = popCategory();
@@ -138,147 +139,24 @@ public class CategoryManager {
 		//Log.v("TinyLaunch", "push "+c);
 		history.add(c);
 	}
+
 	//returns (pops) previously chosen category from history
 	private String popCategory() {
 		while (history.size() > 0) {
 			String c = history.get(history.size()-1);
 			history.remove(history.size()-1);
 			if (names.contains(c)) {
-				//Log.v("TinyLaunch", "pop "+history.size()+" "+c);
 				return c;
 			}
 		}
 		return home;
-//		return null;
 	}
-	
-	//returns category file
-	@SuppressWarnings("deprecation")
-	public File catPath(String category) {
-		return new File(contextRef.get().getFilesDir()+"/"+URLEncoder.encode(category)+".cat");
-	}
+
 	//return category names
 	public ArrayList<String> getCategories() {
 		return names;
 	}
-	//removes an app reference from category
-	public void removeFromCategory(String cat, int i) {
-		if (!isEditable(cat))
-			return;
-		ArrayList<? extends BaseData> data = categories.get(cat).getData();
-		//update category file
-		if (data != null) {
-			data.remove(i);				
-		}
-	}
-	public void removeFromCategory(String cat, BaseData a) {
-		if (!isEditable(cat))
-			return;
-		ArrayList<BaseData> data = categories.get(cat).getData();
-		if (data != null) {
-			data.remove(a);				
-		}
-	}
-	//adds app to category
-	public void addToCategory(String cat, BaseData a) {
-		if (!isEditable(cat))
-			return;
-		
-		ArrayList<BaseData> data = categories.get(cat).getData();
-		if (data != null) {
-//			Log.d("TinyLaunch", "adding "+a.name);
-			data.add(a);	
-		}
-	}
-	
-	public void addToHistory(BaseData a) {
-		ArrayList<BaseData> data = categories.get(HISTORY).getData();
-		if (data != null) {
-//			Log.d("TinyLaunch", "adding "+a.name);
-			data.add(0, a);	
-		}
-	}
-	
-	public void removeCategory(String catName) {
-		if (!isCustom(catName))
-			return;
-		catPath(catName).delete();
-		categories.remove(catName);
-		names.remove(catName);
-		if (home.equals(catName)) {
-			setHome(ALL);
-		}
-		setCurCategory(home);
-	}
-	//makes the current category empty
-	public void clearCategory(String cat) {
-    	if (!isEditable(cat))
-			return;
-		int s = categories.get(cat).getData().size();
-		for (int i = 0; i < s; i++) {
-			removeFromCategory(cat, 0);
-		}
-	}
-	
-	//get entries of category from category file
-	public ArrayList<String> getEntriesComponents(File f) {
-		ArrayList<String> data = new ArrayList<String>();
-		BufferedReader reader = null;
-		try {
-			reader = new BufferedReader(new FileReader(f));
-			
-			String d;
-			
-			while (null != (d = reader.readLine())) {
-				d = d.trim();
-				if (d.length()>0) {
-					data.add(d);
-				}
-			}			
-		} catch (FileNotFoundException e) {
-		} catch (IOException e) {
-		}
-		
-		if (reader != null)
-			try {
-				reader.close();
-			} catch (IOException e) {
-			}
-		
-		return data;
-	}
-	
-	//return list of apps for default categories (All, Unclassified, Hidden)
-	public ArrayList<BaseData> filterApps(Map<String,? extends BaseData> map) {
-		ArrayList<BaseData> data = new ArrayList<BaseData>();
-		
-		if (!isEditable(curCategory)) {
-			data.addAll(map.values());
-			if (UNCLASSIFIED.equals(curCategory)) {
-				for (Category c : categories.values()) {
-					if (!c.getName().equals(HISTORY)) {
-						data.removeAll(c.getData());
-					}
-				}
-			} else {
-				ArrayList<BaseData> c = categories.get(HIDDEN).getData();
-				if (c != null)
-					data.removeAll(c);
-			}
-		}
-		else {
-			ArrayList<BaseData> c = categories.get(curCategory).getData();
-			//Log.v("TinyLaunch", "filtering via "+curCategory+" "+c.size());
-			if (c != null) {
-				data.addAll(c);
-			}
-		}
-		//if (customSorting) {}
-		if (!curCategory.equals(HISTORY))
-			Collections.sort(data, BaseData.NameComparator);
-		
-		return data;		
-	}
+
 	//sorts categories in specific order
 	//All > custom categories > Unclassified > History > Hidden
 	public void sortNames() {
@@ -344,36 +222,5 @@ public class CategoryManager {
 
 	public String getCurCategory() {
 		return curCategory;
-	}
-	//returns true if rename was successful
-	
-	public boolean renameCategory(String newName, String cat) {
-		if (newName.equals(cat))
-			return true;
-		
-		if (names.contains(newName)) {
-//			Log.v("TinyLaunch", "already used "+c);
-			return false;
-		}
-		
-		if (!catPath(cat).renameTo(catPath(newName)))
-			return false;
-
-		Category c = categories.get(cat);
-		categories.remove(cat);
-		categories.put(newName, c);
-		names.remove(cat);
-		names.add(newName);
-		c.setName(newName);
-		sortNames();
-		setCurCategory(ALL);
-		if (cat.equals(home)) {
-			setHome(newName);
-		}
-		return true;
-	}
-
-	public void clearHistory() {
-		history = new ArrayList<String>();
 	}
 }
