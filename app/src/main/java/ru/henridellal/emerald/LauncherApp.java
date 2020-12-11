@@ -3,6 +3,10 @@ package ru.henridellal.emerald;
 import android.app.Application;
 import android.preference.PreferenceManager;
 
+import ru.henridellal.emerald.data.CategoryManager;
+import ru.henridellal.emerald.preference.Keys;
+import ru.henridellal.emerald.util.IconPackManager;
+
 public class LauncherApp extends Application {
 	private static LauncherApp singleton;
 	public static LauncherApp getInstance() {

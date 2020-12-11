@@ -9,47 +9,47 @@
 	        android:title="@string/appShortcut"
 	        android:key="app_shortcut"/>
 	    <PreferenceScreen android:title="@string/portraitPrefs">
-		    <ru.henridellal.emerald.EditIntPreference
+		    <ru.henridellal.emerald.preference.EditIntPreference
 		        android:title="@string/iconSize"
 		        android:defaultValue="@integer/icon_size_default"
 		        android:key="icon_size"/>
-		    <ru.henridellal.emerald.EditIntPreference
+		    <ru.henridellal.emerald.preference.EditIntPreference
 		        android:title="@string/textSize"
 		        android:defaultValue="@integer/text_size_default"
 		        android:key="text_size"/>
-		    <ru.henridellal.emerald.EditIntPreference
+		    <ru.henridellal.emerald.preference.EditIntPreference
 		        android:title="@string/columnWidth"
 		        android:defaultValue="@integer/column_width_default"
 		        android:key="column_width"/>
-		    <ru.henridellal.emerald.EditIntPreference
+		    <ru.henridellal.emerald.preference.EditIntPreference
 		        android:title="@string/verticalSpacing"
 		        android:defaultValue="@integer/vertical_spacing_default"
 		        android:key="vertical_spacing"/>
 	    </PreferenceScreen>
 	    <PreferenceScreen android:title="@string/landscapePrefs">
-		    <ru.henridellal.emerald.EditIntPreference
+		    <ru.henridellal.emerald.preference.EditIntPreference
 		        android:title="@string/iconSize"
 		        android:defaultValue="@integer/icon_size_land_default"
 		        android:key="icon_size_land"/>
-		    <ru.henridellal.emerald.EditIntPreference
+		    <ru.henridellal.emerald.preference.EditIntPreference
 		        android:title="@string/textSize"
 		        android:defaultValue="@integer/text_size_land_default"
 		        android:key="text_size_land"/>
-		    <ru.henridellal.emerald.EditIntPreference
+		    <ru.henridellal.emerald.preference.EditIntPreference
 		        android:title="@string/columnWidth"
 		        android:defaultValue="@integer/column_width_land_default"
 		        android:key="column_width_land"/>
-		    <ru.henridellal.emerald.EditIntPreference
+		    <ru.henridellal.emerald.preference.EditIntPreference
 		    	android:title="@string/verticalSpacing"
 		        android:defaultValue="@integer/vertical_spacing_land_default"
 		        android:key="vertical_spacing_land"/>
 	    </PreferenceScreen>
 	    <PreferenceScreen android:title="@string/dock_preferences">
-	    	<!--<ru.henridellal.emerald.EditIntPreference
+	    	<!--<ru.henridellal.emerald.preference.EditIntPreference
 		    	android:title="@string/dock_height"
 			    android:defaultValue="@integer/dock_height_default"
 			    android:key="dock_height"/>
-			<ru.henridellal.emerald.EditIntPreference
+			<ru.henridellal.emerald.preference.EditIntPreference
 		    	android:title="@string/dock_icon_size"
 			    android:defaultValue="@integer/dock_icon_size_default"
 			    android:key="dock_icon_size"/>-->
@@ -58,7 +58,7 @@
 	    		android:defaultValue="true"
 	    		android:key="show_dock_in_landscape"/>
 	    </PreferenceScreen>
-	    <ru.henridellal.emerald.LaunchActivityPreference
+	    <ru.henridellal.emerald.preference.LaunchActivityPreference
 	    	android:title="@string/ui_colors"
 	        android:key="themer"/>
 	    <CheckBoxPreference
@@ -121,13 +121,13 @@
 	    	android:defaultValue="false"
 	    	android:key="invert_font_color"/>
     </PreferenceScreen>
-    <ru.henridellal.emerald.LaunchActivityPreference
+    <ru.henridellal.emerald.preference.LaunchActivityPreference
     	android:title="@string/categoryManager"
         android:key="category_manager"/>
-    <!--<ru.henridellal.emerald.LaunchActivityPreference
+    <!--<ru.henridellal.emerald.preference.LaunchActivityPreference
     	android:title="@string/categoryManager"
         android:key="open_file"/>-->
-   <ru.henridellal.emerald.EditIntPreference
+   <ru.henridellal.emerald.preference.EditIntPreference
         android:title="@string/historySize"
         android:defaultValue="@integer/history_size_default"
         android:key="history_size"/>
@@ -149,7 +149,7 @@
    	 android:summary="@string/passwordSummary"
         android:defaultValue=""
         android:key="password"/>
-    <ru.henridellal.emerald.LaunchActivityPreference
+    <ru.henridellal.emerald.preference.LaunchActivityPreference
     	android:title="@string/aboutTitle"
         android:key="about"/>
     <ListPreference
@@ -158,16 +158,16 @@
 	    android:entryValues="@array/home_button_values"
 	    android:title="@string/home_button"
 	    android:key="home_button"/>
-    <ru.henridellal.emerald.SearchPreference
+    <ru.henridellal.emerald.preference.SearchPreference
 	    android:defaultValue="https://duckduckgo.com/?q="
 	    android:entries="@array/search_entries"
 	    android:entryValues="@array/search_values"
 	    android:title="@string/searchProvider"
 	    android:key="search_provider"/>
-    <ru.henridellal.emerald.BackupPreference
+    <ru.henridellal.emerald.preference.BackupPreference
     	android:title="@string/backupPrefs"
         android:key="backup"/>
-    <ru.henridellal.emerald.BackupPreference
+    <ru.henridellal.emerald.preference.BackupPreference
     	android:title="@string/restorePrefs"
         android:key="restore"/>
    <CheckBoxPreference
@@ -178,7 +178,7 @@
 		android:title="@string/volumeButtons"
 		android:defaultValue="false"
 		android:key="volume_buttons"/>
-	<ru.henridellal.emerald.RestartPreference
+	<ru.henridellal.emerald.preference.RestartPreference
     	android:title="@string/restart"
         android:key="restart"/>
 </PreferenceScreen>

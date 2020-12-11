@@ -1,0 +1,29 @@
+package ru.henridellal.emerald.activity;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.View;
+import android.widget.Button;
+
+import ru.henridellal.emerald.preference.Keys;
+import ru.henridellal.emerald.R;
+
+public class TutorialActivity extends Activity{
+
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.tutorial);
+		((Button)findViewById(R.id.close_tutorial)).setOnClickListener(
+		new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				PreferenceManager.getDefaultSharedPreferences(TutorialActivity.this)
+					.edit()
+					.putBoolean(Keys.SHOW_TUTORIAL, false)
+					.commit();
+				TutorialActivity.this.finish();
+			}
+		});
+	}
+}

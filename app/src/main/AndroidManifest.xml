@@ -24,14 +24,14 @@
   android:icon="@mipmap/icon"
   android:name=".LauncherApp">
       
- 		<activity android:name=".AboutActivity" android:label="@string/aboutTitle"/>
- 		<activity android:name=".TutorialActivity" android:label="@string/how_to_use" android:theme="@style/AppTheme.Default"/>
- 		<activity android:name=".CategoryManagerActivity" android:label="@string/categoryManager"/>
- 		<activity android:name=".Options" android:label="@string/launcherSettings"/>
- 		<activity android:name=".ThemerActivity" android:label="@string/ui_colors"/>
- 		<activity android:name=".ChangeIconActivity" />
- 		<activity android:name=".FileActivity"/>
-        <activity android:name=".Apps"
+ 		<activity android:name=".activity.AboutActivity" android:label="@string/aboutTitle"/>
+ 		<activity android:name=".activity.TutorialActivity" android:label="@string/how_to_use" android:theme="@style/AppTheme.Default"/>
+ 		<activity android:name=".activity.CategoryManagerActivity" android:label="@string/categoryManager"/>
+ 		<activity android:name=".activity.Options" android:label="@string/launcherSettings"/>
+ 		<activity android:name=".activity.ThemerActivity" android:label="@string/ui_colors"/>
+ 		<activity android:name=".activity.ChangeIconActivity" />
+ 		<activity android:name=".activity.FileActivity"/>
+        <activity android:name=".activity.Apps"
                   android:resizeableActivity="false"
                   android:excludeFromRecents="true"
                   android:launchMode="singleInstance"
@@ -48,7 +48,7 @@
             </intent-filter>
        
         </activity>
-        <receiver android:name="PackageStateChangedReceiver">
+        <receiver android:name=".receiver.PackageStateChangedReceiver">
         	<intent-filter>
         	<action android:name="android.intent.action.PACKAGE_INSTALL"/>
         	<action android:name="android.intent.action.PACKAGE_ADDED"/>
@@ -59,7 +59,7 @@
         	</intent-filter> 
         </receiver>
         <!--<service android:name=".PackageService"/>-->
-        <receiver android:name="InstallShortcutReceiver"
+        <receiver android:name=".receiver.InstallShortcutReceiver"
         	android:permission="com.android.launcher.permission.INSTALL_SHORTCUT"
         	>
             <intent-filter>
