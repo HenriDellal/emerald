@@ -31,6 +31,8 @@ public class Themer {
 			case WALLPAPER_DARK:
 				activity.setTheme(R.style.AppTheme_Dark_Wallpaper);
 				break;
+			default:
+				return;
 		}
 	}
 

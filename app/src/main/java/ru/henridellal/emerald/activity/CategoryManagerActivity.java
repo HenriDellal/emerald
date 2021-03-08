@@ -3,6 +3,7 @@ package ru.henridellal.emerald.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.InputType;
 import android.widget.AdapterView;
@@ -81,19 +82,20 @@ public class CategoryManagerActivity extends Activity{
 		builder.setTitle(cm.getCategory(category).getRepresentName(this));
 		ArrayList<String> commands = new ArrayList<String>();
 		final ArrayList<Integer> commandCodes = new ArrayList<Integer>();
+		Resources res = getResources();
 		if (!category.equals(CategoryManager.HIDDEN) && !category.equals(cm.getHome())) {
-			commands.add(getResources().getString(R.string.setHome));
+			commands.add(res.getString(R.string.setHome));
 			commandCodes.add(COMMAND_SET_HOME);
 		}
 		if (CategoryManager.isEditable(category)) {
-			commands.add(getResources().getString(R.string.editAppList));
+			commands.add(res.getString(R.string.editAppList));
 			commandCodes.add(COMMAND_EDIT);
-			commands.add(getResources().getString(R.string.clear));
+			commands.add(res.getString(R.string.clear));
 			commandCodes.add(COMMAND_CLEAR);
 			if (CategoryManager.isCustom(category)) {
-				commands.add(getResources().getString(R.string.rename));
+				commands.add(res.getString(R.string.rename));
 				commandCodes.add(COMMAND_RENAME);
-				commands.add(getResources().getString(R.string.delete));
+				commands.add(res.getString(R.string.delete));
 				commandCodes.add(COMMAND_DELETE);
 			}
 		}

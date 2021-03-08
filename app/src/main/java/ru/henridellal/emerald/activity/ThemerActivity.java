@@ -6,6 +6,7 @@ import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.Bitmap;
@@ -70,13 +71,14 @@ public class ThemerActivity extends Activity implements AdapterView.OnItemClickL
 			}
 		}
 		setContentView(R.layout.themer);
+		Resources res = getResources();
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		String[] options = new String[] {
-			getResources().getString(R.string.appsBackground),
-			getResources().getString(R.string.statusBarBackground),
-			getResources().getString(R.string.barBackground),
-			getResources().getString(R.string.dock_background),
-			getResources().getString(R.string.navBarBackground)
+				res.getString(R.string.appsBackground),
+				res.getString(R.string.statusBarBackground),
+				res.getString(R.string.barBackground),
+				res.getString(R.string.dock_background),
+				res.getString(R.string.navBarBackground)
 		};
 		colorMixer = (ColorMixer)(findViewById(R.id.color_mixer));
 		list = (ListView)findViewById(R.id.ui_settings);

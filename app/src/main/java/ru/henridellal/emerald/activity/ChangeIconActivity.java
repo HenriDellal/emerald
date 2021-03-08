@@ -151,8 +151,9 @@ public class ChangeIconActivity extends Activity implements View.OnClickListener
 	}
 	
 	private void initResetButton() {
-		((Button)findViewById(R.id.reset_icon)).setEnabled(true);
-		((Button)findViewById(R.id.reset_icon)).setOnClickListener(this);
+		Button resetButton = (Button)findViewById(R.id.reset_icon);
+		resetButton.setEnabled(true);
+		resetButton.setOnClickListener(this);
 	}
 	
 	public class IconGridAdapter extends BaseAdapter {

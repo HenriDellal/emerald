@@ -104,7 +104,11 @@ public class DatabaseHelper {
 
 		String query = String.format("SELECT %s, categories FROM %s WHERE %s = '%s'", column, table, column, data.getId());
 		Cursor cursor = db.rawQuery(query, null);
-		cursor.moveToFirst();
+		if (!cursor.moveToFirst()) {
+			cursor.close();
+			close();
+			return;
+		}
 		String categoriesList = cursor.getString(1);
 		ContentValues values = new ContentValues();
 		values.put("categories", categoriesList.concat("@" + categoryName + "@"));

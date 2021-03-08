@@ -17,6 +17,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -94,36 +95,47 @@ public class Apps extends Activity
 	}
 
 	public void changePrefsOnRotate() {
-		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+		Resources res = getResources();
+		float density = res.getDisplayMetrics().density;
+		int iconSize, textSize, verticalSpacing, columnWidth;
+		boolean hideDockInLandscape = !(options.getBoolean(Keys.DOCK_IN_LANDSCAPE, true));
+
+		if (res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 			//Log.v(APP_TAG, "loadFilteredApps : Portrait orientation");
-			adapter.setIconSize((int)(options.getInt(Keys.ICON_SIZE, getResources().getInteger(R.integer.icon_size_default)) * getResources().getDisplayMetrics().density));
-	    	adapter.setTextSize((int)(options.getInt(Keys.TEXT_SIZE, getResources().getInteger(R.integer.text_size_default)) * getResources().getDisplayMetrics().density));
-	    	grid.setVerticalSpacing((int)(options.getInt(Keys.VERTICAL_SPACING, getResources().getInteger(R.integer.vertical_spacing_default)) * getResources().getDisplayMetrics().density));
+			iconSize = (int)(options.getInt(Keys.ICON_SIZE, res.getInteger(R.integer.icon_size_default)) * density);
+			textSize = (int)(options.getInt(Keys.TEXT_SIZE, res.getInteger(R.integer.text_size_default)) * density);
+	    	verticalSpacing = (int)(options.getInt(Keys.VERTICAL_SPACING, res.getInteger(R.integer.vertical_spacing_default)) * density);
+
 	    	if (options.getBoolean(Keys.TILE, true)) {
-	    		grid.setColumnWidth((int)(options.getInt(Keys.COLUMN_WIDTH, getResources().getInteger(R.integer.column_width_default)) * getResources().getDisplayMetrics().density));
+	    		columnWidth = (int)(options.getInt(Keys.COLUMN_WIDTH, res.getInteger(R.integer.column_width_default)) * density);
+	    		grid.setColumnWidth(columnWidth);
 			} else {
 	    		grid.setNumColumns(1);
 	    	}
-	    	if (!(options.getBoolean(Keys.DOCK_IN_LANDSCAPE, true))) {
+	    	if (hideDockInLandscape) {
 	    		Dock.setAlwaysHide(false);
 	    		Dock.unhide();
 	    	}
 		} else {
 			//Log.v(APP_TAG, "loadFilteredApps : orientation");
-	    	adapter.setIconSize((int)(options.getInt(Keys.ICON_SIZE_LANDSCAPE, getResources().getInteger(R.integer.icon_size_land_default)) * getResources().getDisplayMetrics().density));
-			adapter.setTextSize((int)(options.getInt(Keys.TEXT_SIZE_LANDSCAPE, getResources().getInteger(R.integer.text_size_land_default)) * getResources().getDisplayMetrics().density));
-			grid.setVerticalSpacing((int)(options.getInt(Keys.VERTICAL_SPACING_LANDSCAPE, getResources().getInteger(R.integer.vertical_spacing_land_default)) * getResources().getDisplayMetrics().density));
+			iconSize = (int)(options.getInt(Keys.ICON_SIZE_LANDSCAPE, res.getInteger(R.integer.icon_size_land_default)) * density);
+			textSize = (int)(options.getInt(Keys.TEXT_SIZE_LANDSCAPE, res.getInteger(R.integer.text_size_land_default)) * density);
+			verticalSpacing = (int)(options.getInt(Keys.VERTICAL_SPACING_LANDSCAPE, res.getInteger(R.integer.vertical_spacing_land_default)) * density);
 	    	if (options.getBoolean(Keys.TILE, true)) {
-	    		grid.setColumnWidth((int)(options.getInt(Keys.COLUMN_WIDTH_LANDSCAPE, getResources().getInteger(R.integer.column_width_land_default)) * getResources().getDisplayMetrics().density));
+				columnWidth = (int)(options.getInt(Keys.COLUMN_WIDTH_LANDSCAPE, res.getInteger(R.integer.column_width_land_default)) * density);
 	    	} else {
 	    		grid.setNumColumns(2);
-	    		grid.setColumnWidth(-1);
+	    		columnWidth = -1;
 	    	}
-	    	if (!(options.getBoolean(Keys.DOCK_IN_LANDSCAPE, true))) {
+			grid.setColumnWidth(columnWidth);
+	    	if (hideDockInLandscape) {
 	    		Dock.hide();
 	    		Dock.setAlwaysHide(true);
 	    	}
 		}
+		adapter.setIconSize(iconSize);
+		adapter.setTextSize(textSize);
+		grid.setVerticalSpacing(verticalSpacing);
 	}
 
 	public void loadFilteredApps() {
@@ -322,19 +334,19 @@ public class Apps extends Activity
 		//Log.v(APP_TAG, "Open app edit window");
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
+		Resources res = getResources();
 		builder.setTitle(item.getName());
 		builder.setCancelable(true);
 		
 		String[] commands = new String[]{
-			getResources().getString(R.string.aboutTitle),
-			getResources().getString(R.string.findInMarket),
-			getResources().getString(R.string.editAppCategories),
-			getResources().getString(R.string.uninstall),
+			res.getString(R.string.aboutTitle),
+				res.getString(R.string.findInMarket),
+			res.getString(R.string.editAppCategories),
+			res.getString(R.string.uninstall),
 			(Dock.hasApp(item)) ? 
-				getResources().getString(R.string.remove_from_dock): 
-				getResources().getString(R.string.add_to_dock),
-			getResources().getString(R.string.change_icon)
+				res.getString(R.string.remove_from_dock):
+				res.getString(R.string.add_to_dock),
+			res.getString(R.string.change_icon)
 		};
 		builder.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, commands),
 		new DialogInterface.OnClickListener(){
@@ -388,16 +400,16 @@ public class Apps extends Activity
 		//Log.v(APP_TAG, "Open app edit window");
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
+		Resources res = getResources();
 		builder.setTitle(item.getName());
 		builder.setCancelable(true);
 		
 		String[] commands = new String[]{
-			getResources().getString(R.string.editCategories),
-			getResources().getString(R.string.uninstall),
+				res.getString(R.string.editCategories),
+				res.getString(R.string.uninstall),
 			(Dock.hasApp(item)) ?
-				getResources().getString(R.string.remove_from_dock): 
-				getResources().getString(R.string.add_to_dock)
+					res.getString(R.string.remove_from_dock):
+					res.getString(R.string.add_to_dock)
 		};
 		builder.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, commands),
 		new DialogInterface.OnClickListener(){

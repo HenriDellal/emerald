@@ -34,14 +34,14 @@ public class EditIntPreference extends DialogPreference {
 	protected void onDialogClosed(boolean positiveResult) {
 		super.onDialogClosed(positiveResult);
 
-		if (positiveResult) {
-			if (callChangeListener(tv.getText())) {
-				try {
-					lastValue = Integer.parseInt(tv.getText().toString());
-					persistInt(lastValue);
-				} catch (Exception e) {
-					Toast.makeText(getContext(), "This value is not an integer", Toast.LENGTH_LONG).show();
-				}
+		String value = tv.getText().toString();
+		if (positiveResult && callChangeListener(value)) {
+			try {
+				lastValue = Integer.valueOf(value);
+				persistInt(lastValue);
+			} catch (Exception e) {
+				e.printStackTrace();
+				Toast.makeText(getContext(), "This value is not an integer", Toast.LENGTH_LONG).show();
 			}
 		}
 	}
